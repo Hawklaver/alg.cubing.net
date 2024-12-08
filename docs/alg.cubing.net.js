@@ -245,6 +245,12 @@ algxControllers.controller("algxController", [
     if ("speed" in search) {
       $scope.speed = search["speed"];
     }
+
+    initParameter("anchor", "start", [
+      { id: "start", name: "anchored at start" },
+      { id: "end", name: "anchored at end" },
+    ]);
+
     $scope.nextView = function () {
       // TODO: Is there a better way to do view cycling?
       var idx = $scope.view_list.indexOf($scope.view);
@@ -373,6 +379,7 @@ algxControllers.controller("algxController", [
       setWithDefault("title", $scope.title);
       setWithDefault("speed", $scope.speed);
       setWithDefault("view", $scope.view.id);
+      setWithDefault("anchor", $scope.anchor.id);
       setWithDefault("fbclid", null); // Remove Facebook tracking ID
       //TODO: Update sharing links
 
@@ -633,6 +640,7 @@ algxControllers.controller("algxController", [
 
       $("#currentMove").attr("max", algo.length);
 
+      /*
       function followSelection(apply, debKind) {
         selectionStart = document.getElementById("algorithm").selectionStart;
         for (var i = 0; i < algo.length; i++) {
@@ -670,6 +678,15 @@ algxControllers.controller("algxController", [
       });
 
       followSelection(false);
+      */
+
+      if ($scope.anchor.id === "end") {
+        $scope.current_move = algo.length;
+        twistyScene.setPosition(algo.length);
+      } else {
+        $scope.current_move = 0;
+        twistyScene.setPosition(0);
+      }
 
       // twistyScene.play.reset();
       twistyScene.addListener("animating", function (animating) {
@@ -717,6 +734,7 @@ algxControllers.controller("algxController", [
       "speed",
       "hint_stickers",
       "hollow",
+      "anchor",
     ].map(function (prop) {
       $scope.$watch(prop, $scope.twisty_init);
     });
