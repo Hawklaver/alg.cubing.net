@@ -78,6 +78,7 @@ algxControllers.controller("algxController", [
     }
 
     initParameter("puzzle", "3x3x3", [
+      { id: "1x1x1", name: "1x1x1", group: "Cube", dimension: 1 },
       { id: "2x2x2", name: "2x2x2", group: "Cube", dimension: 2 },
       { id: "3x3x3", name: "3x3x3", group: "Cube", dimension: 3 },
       { id: "4x4x4", name: "4x4x4", group: "Cube", dimension: 4 },
@@ -94,7 +95,6 @@ algxControllers.controller("algxController", [
       { id: "15x15x15", name: "15x15x15", group: "Cube", dimension: 15 },
       { id: "16x16x16", name: "16x16x16", group: "Cube", dimension: 16 },
       { id: "17x17x17", name: "17x17x17", group: "Cube", dimension: 17 }, // Over the top!
-      { id: "1x1x1", name: "1x1x1", group: "Fun", dimension: 1 },
     ]);
 
     initParameter("stage", "full", [
