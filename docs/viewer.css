@@ -1,7 +1,6 @@
 #display-wrapper {
   background-color: #EAEAEA;
-  background-image: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
-    linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
+  background-image: repeating-conic-gradient(from 0deg, DimGray 0deg 90deg, DarkGray 90deg 180deg);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
 
