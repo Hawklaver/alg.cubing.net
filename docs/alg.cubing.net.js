@@ -187,7 +187,11 @@ algxControllers.controller("algxController", [
         custom: true,
       },
     ]);
-    $scope.custom_scheme = "";
+    $scope.custom_scheme_default = "";
+    $scope.custom_scheme = $scope.custom_scheme_default;
+    if ("custom_scheme" in search) {
+      $scope.custom_scheme = search["custom_scheme"].slice(0, 6);
+    }
 
     $scope.speed = 1;
     $scope.current_move = "0";
@@ -357,6 +361,7 @@ algxControllers.controller("algxController", [
       setWithDefault("puzzle", $scope.puzzle.id);
       setWithDefault("type", $scope.type.id);
       setWithDefault("scheme", $scope.scheme.id);
+      setWithDefault("custom_scheme", $scope.custom_scheme);
       setWithDefault("stage", $scope.stage.id);
       setWithDefault("title", $scope.title);
       setWithDefault("speed", $scope.speed);
@@ -398,7 +403,7 @@ algxControllers.controller("algxController", [
     function colorList(str) {
       var out = [];
       var outLight = [];
-      var str2 = ("x" + str).split("");
+      var str2 = ("x" + str + "xxxxxx").slice(0, 7).split("");
       var reorder = [0, 6, 3, 1, 2, 4, 5];
       for (var i in str2) {
         out.push(colorMap[str2[reorder[i]]]);
@@ -455,7 +460,7 @@ algxControllers.controller("algxController", [
         stickerBorder: false,
         doubleSided: !$scope.hint_stickers,
         // "borderWidth": 1,
-        colors: colorList($scope.scheme.scheme),
+        colors: colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme),
       });
 
       try {
@@ -700,6 +705,7 @@ algxControllers.controller("algxController", [
       "stage",
       "type",
       "scheme",
+      "custom_scheme",
       "title",
       "speed",
       "hint_stickers",
