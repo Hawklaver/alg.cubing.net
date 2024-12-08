@@ -424,8 +424,10 @@ twisty.scene = function(options) {
       var prevTime = model.time;
       var prevPosition = model.position;
 
+      var speedCoef = 1 / (0.5 * (Math.abs(model.moveList[Math.floor(model.position)].amount) + 1));
+
       model.time = Date.now();
-      model.position = prevPosition + (model.time - prevTime) * control.speed * 1.5 / 1000;
+      model.position = prevPosition + (model.time - prevTime) * control.speed * speedCoef * 1.5 / 1000;
 
       if (Math.floor(model.position) > Math.floor(prevPosition)) {
         // If we finished a move, snap to the beginning of the next. (Will never skip a move.)
