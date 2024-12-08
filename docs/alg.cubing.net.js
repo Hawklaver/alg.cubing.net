@@ -99,11 +99,10 @@ algxControllers.controller("algxController", [
 
     initParameter("stage", "full", [
       { id: "full", name: "Full", group: "Stage" },
-      { id: "cross", name: "Cross", group: "Fridrich" },
-      { id: "F2L", name: "F2L", group: "Fridrich" },
-      { id: "LL", name: "LL", group: "Fridrich" },
-      { id: "OLL", name: "OLL", group: "Fridrich" },
-      { id: "PLL", name: "PLL", group: "Fridrich" },
+      { id: "cross", name: "Cross", group: "CFOP" },
+      { id: "F2L", name: "F2L", group: "CFOP" },
+      { id: "OLL", name: "OLL", group: "CFOP" },
+      { id: "PLL", name: "PLL", group: "CFOP" },
       { id: "CLS", name: "CLS", group: "MGLS" },
       { id: "ELS", name: "ELS", group: "MGLS" },
       { id: "L6E", name: "L6E", group: "Roux" },
