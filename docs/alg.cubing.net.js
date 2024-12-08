@@ -592,6 +592,7 @@ algxControllers.controller("algxController", [
       $("#pause").unbind("click");
       $("#forward").unbind("click");
       $("#skip").unbind("click");
+      $("#viewer canvas").unbind("dblclick");
       $(document).unbind("selectionchange");
 
       var start = gettingCurrentMove(twistyScene.play.start);
@@ -615,6 +616,8 @@ algxControllers.controller("algxController", [
       });
       $("#forward").click(gettingCurrentMove(twistyScene.play.forward));
       $("#skip").click(gettingCurrentMove(twistyScene.play.skip));
+
+      $("#viewer canvas").dblclick($scope.twisty_init);
 
       $("#currentMove").attr("max", algo.length);
 
