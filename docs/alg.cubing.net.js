@@ -367,34 +367,6 @@ algxControllers.controller("algxController", [
       $scope.share_forum_short =
         '[URL="' + $scope.share_url + '"]' + $scope.alg + "[/URL]";
       $scope.share_forum_long = forumLinkText($scope.share_url);
-      $scope.goToTwizzle = async () => {
-        const cubingAlg = await globalThis.algPromise
-        const { TwistyPlayer } = await globalThis.twistyPromise;
-
-        const theAlg = alg.cube.toCubingJSAlg(alg.cube.fromString($scope.alg), { alg: cubingAlg });
-        const theSetup = alg.cube.toCubingJSAlg(alg.cube.fromString($scope.setup), { alg: cubingAlg });
-
-        const config = {
-          alg: theAlg,
-          experimentalSetupAlg: theSetup,
-          puzzle: $scope.puzzle.id,
-          experimentalStickering: $scope.stage.id,
-        };
-        if (["algorithm", "reconstruction-end-with-setup"].includes($scope.type.id)) {
-          config.experimentalSetupAnchor = "end";
-        }
-        const player = new TwistyPlayer(config);
-        if ($scope.title) {
-          player.experimentalTitle = $scope.title
-        }
-
-        const url = await player.experimentalModel.twizzleLink();
-        console.log(url);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.click();
-      }
     };
 
     var colorMap = {
@@ -749,10 +721,6 @@ algxControllers.controller("algxController", [
     $scope.algDebounce = function (event) {
       $scope.algDelayed = event == "delayed";
     };
-
-    $("#twizzle").click(async () => {
-      $scope.goToTwizzle();
-    });
 
     function displayToast(message) {
       $("#toast")
