@@ -179,6 +179,14 @@ algxControllers.controller("algxController", [
         custom: false,
       },
       {
+        id: "white-face-down",
+        name: "White Face Down",
+        type: "Color Scheme",
+        scheme: "brogwy",
+        display: "White Face Down",
+        custom: false,
+      },
+      {
         id: "custom",
         name: "Custom:",
         type: "Color Scheme",
