@@ -64,7 +64,7 @@ algxControllers.controller("algxController", [
       for (var param in param_defaults) {
         $scope[param] = param_defaults[param];
       }
-      $scope.speed = 1;
+      $scope.speed = $scope.speed_default;
       $scope.clear();
     };
 
@@ -229,6 +229,11 @@ algxControllers.controller("algxController", [
       $scope.title = search["title"];
     }
 
+    $scope.speed_default = 1;
+    $scope.speed = $scope.speed_default;
+    if ("speed" in search) {
+      $scope.speed = search["speed"];
+    }
     $scope.nextView = function () {
       // TODO: Is there a better way to do view cycling?
       var idx = $scope.view_list.indexOf($scope.view);
@@ -354,6 +359,7 @@ algxControllers.controller("algxController", [
       setWithDefault("scheme", $scope.scheme.id);
       setWithDefault("stage", $scope.stage.id);
       setWithDefault("title", $scope.title);
+      setWithDefault("speed", $scope.speed);
       setWithDefault("view", $scope.view.id);
       setWithDefault("fbclid", null); // Remove Facebook tracking ID
       //TODO: Update sharing links
@@ -692,6 +698,7 @@ algxControllers.controller("algxController", [
       "type",
       "scheme",
       "title",
+      "speed",
       "hint_stickers",
       "hollow",
     ].map(function (prop) {
