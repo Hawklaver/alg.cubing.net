@@ -385,10 +385,14 @@ algxControllers.controller("algxController", [
 
       // TODO: Inject playback view into parameters properly.
       // Right now it's fine because the view paramater is hidden in editor view, which is the only time you see a forum link.
-      $scope.share_url = "https://alg.cubing.net" + $location.url();
+      $scope.share_url = location.origin + $location.url();
       if ($location.url().indexOf("?") !== -1) {
         $scope.share_url += "&view=playback";
       }
+      var embedUrl = new URL($scope.share_url);
+      embedUrl.searchParams.set("view", "fullscreen");
+      $scope.embed_url = embedUrl.href;
+      $scope.embed_text = `<iframe src="${$scope.embed_url}" frameborder="0"></iframe>`;
       $scope.share_forum_short =
         '[URL="' + $scope.share_url + '"]' + $scope.alg + "[/URL]";
       $scope.share_forum_long = forumLinkText($scope.share_url);
@@ -782,6 +786,22 @@ algxControllers.controller("algxController", [
         .fadeOut(2500);
     }
 
+    $("#copyEmbed").on("click", function (event) {
+      clipboard
+        .copy({
+          "text/plain": $scope.embed_text,
+        })
+        .then(
+          function () {
+            displayToast("The embed text has been copied to your clipboard.");
+          },
+          function () {
+            displayErrorToast(
+              "ERROR: Could not copy the embed text.<br>(Your browser might not support web clipboard API yet.)"
+            );
+          }
+        );
+    });
     $("#copyShort").on("click", function (event) {
       clipboard
         .copy({

@@ -94,7 +94,7 @@ html, textarea {
   margin: 0.2em;
 }
 
-#info .section.buttons, #info .section#share {
+#info .section.buttons, #info .section#share, #info .section#embed {
   padding: 0;
 }
 
@@ -271,8 +271,9 @@ input.current_scheme[readonly] {
 }
 
 textarea.sharetext {
-  height: 2.5em;
-  resize: none
+  resize: vertical;
+  min-height: min-content;
+  field-sizing: content;
 }
 
 #toast {
