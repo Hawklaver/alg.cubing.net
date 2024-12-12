@@ -401,17 +401,17 @@ algxControllers.controller("algxController", [
       g: 0x00ff00,
       o: 0xff8800,
       r: 0xff0000,
-      x: 0x444444,
+      x: 0x222222,
     };
 
     var lightColorMap = {
-      y: 0xdddd00,
-      w: 0xcccccc,
-      b: 0x000099,
-      g: 0x00bb00,
-      o: 0xbb6600,
-      r: 0xaa0000,
-      x: 0x333333,
+      y: 0x888800,
+      w: 0x888888,
+      b: 0x000088,
+      g: 0x008800,
+      o: 0x884400,
+      r: 0x880000,
+      x: 0x111111,
     };
 
     function colorList(str) {
@@ -701,10 +701,10 @@ algxControllers.controller("algxController", [
         #cc181e " +
             ($scope.current_move / $("#currentMove").attr("max")) * 100 +
             "%, \
-        #AAA " +
+        #000 " +
             ($scope.current_move / $("#currentMove").attr("max")) * 100 +
             "%, \
-        #AAA 100%)",
+        #000 100%)",
         });
         var idx = twistyScene.getPosition();
         var val = parseFloat($scope.current_move);

@@ -4,6 +4,7 @@
 }
 
 html, body {
+  color: #fff;
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -33,7 +34,7 @@ html, textarea {
   overflow-y: auto;
   overflow-x: hidden;
   z-index: -5;
-  background: rgb(255, 245, 235);
+  background: #000;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -67,29 +68,25 @@ html, textarea {
 #info h2 {
   font-size: 20px;
   padding: 5px 10px;
-  /*background: rgba(50, 0, 0, 0.2);*/
-  background: rgba(240, 230, 220, 1);
+  background: #222;
   font-variant: small-caps;
   border-top: 1px solid #888;
 }
 
 #info select {
+  color: #fff;
   font-size: 1em;
-  background: rgba(255, 250, 245, 1);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #000;
   margin: 0px 0px;
-
-  -webkit-appearance: none;
-
   border-radius: 0px;
   padding: 4px;
   cursor: context-menu;
 }
 
 #info button {
-  -webkit-appearance: none;
-  background: rgba(255, 250, 245, 1);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #fff;
+  background: #000;
+  border: 1px solid #222;
   font-size: 1em;
   padding: 0.4em 0.6em;
   width: 8em;
@@ -110,17 +107,9 @@ html, textarea {
 #info #info-section.section.buttons button {width: 25%;}
 
 
-#info select:hover, #info button:hover {
-  background: rgba(255, 127, 0, 0.3);
-  border: 1px solid #888;
-  /*box-shadow: 0px 0px 2px rgba(255, 127, 0, 1);*/
-  color: #840;
+#info select:is(:hover, :focus), #info button:hover {
+  background: #444;
   cursor: pointer;
-}
-
-#info select:active, #info button:active {
-  background: rgb(255, 255, 255);
-  border: 1px solid #888;
 }
 
 .section {
@@ -144,7 +133,7 @@ html, textarea {
 }
 
 #title::-webkit-input-placeholder {
-  color: #000;
+  color: #fff;
 }
 
 #title:focus::-webkit-input-placeholder {
@@ -152,6 +141,7 @@ html, textarea {
 }
 
 #title, .moves {
+  color: #fff;
   background: transparent;
   /*border-radius: 12px;*/
   border: 1px solid transparent;
@@ -190,18 +180,12 @@ html, textarea {
 }
 
 #algorithm_shadow span.highlight {
-  background: #F80;
+  background: #fff;
   opacity: 0.3;
   padding: 0.1em 0.2em;
   margin: -0.1em -0.2em;
   border-radius: 8px;
   /*text-shadow: 0px 0px 2px #000;*/
-}
-
-.moves:hover, .moves:focus  {
-  background: rgb(255, 253, 251);
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
 }
 
 #metrics {
@@ -246,6 +230,10 @@ html, textarea {
 input.current_scheme {
   font-size: 1em;
   width: 5em;
+  border: solid 1px #777;
+  padding: 5px;
+  color: #fff;
+  background: #000;
 }
 
 input.current_scheme[readonly] {
@@ -260,19 +248,19 @@ input.current_scheme[readonly] {
   margin: 10px auto;
   max-height: 200px;
   max-width: 75%;
-  background: rgba(255, 127, 0, 0.05);
-  border: 1px solid #F80;
+  /* background: rgba(255, 127, 0, 0.05); */
+  border: 1px solid #fff;
 }
 
 #canvasPNG img:hover {
-  background: rgba(255, 127, 0, 0.1);
+  background: #111;
 }
 
 .sharetext {
   font-size: 1em;
   /*margin: 8px;*/
   padding: 10px 10px;
-  background: rgb(255, 250, 245);
+  background: #000;
   /*border: 1px solid #ddd;*/
   /*border-radius: 5px;*/
   border: none;
@@ -285,10 +273,6 @@ input.current_scheme[readonly] {
 textarea.sharetext {
   height: 2.5em;
   resize: none
-}
-
-.sharetext:hover {
-  background: #fff;
 }
 
 #toast {
