@@ -3,6 +3,10 @@
 	padding: 0;
 }
 
+body {
+	display: flex
+}
+
 html, body {
 	color: #fff;
 	height: 100%;
@@ -33,7 +37,6 @@ html, textarea {
 #info-wrapper {
 	overflow-y: auto;
 	overflow-x: hidden;
-	z-index: -5;
 	background: #000;
 	-webkit-overflow-scrolling: touch;
 }
@@ -92,6 +95,11 @@ html, textarea {
 	width: 8em;
 	white-space: nowrap;
 	margin: 0.2em;
+}
+
+#info .section.buttons {
+	display: flex;
+	flex-wrap: wrap;
 }
 
 #info .section.buttons, #info .section#share, #info .section#embed {
