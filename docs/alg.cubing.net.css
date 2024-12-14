@@ -46,6 +46,7 @@ html, textarea {
 }
 
 @media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
+	body { flex-direction: column; }
 	#display-wrapper, #info-wrapper {width: 100%;}
 	#display-wrapper {height: 50%;}
 	#info-wrapper {height: 50%;}
