@@ -4,7 +4,9 @@
 }
 
 body {
-	display: flex
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 html, body {
@@ -296,31 +298,18 @@ textarea.sharetext {
 }
 
 #toast {
-	display: flex;
-
-	align-items: center;
-	justify-content: center;
-
-	z-index: 1000;
-
-	color: white;
-	background: rgba(0, 0, 0, 0.8);
-
-	width: 50%;
-	height: 5%;
-	min-height: 2em;
-	left: 25%;
 	top: 5%;
-
-	border-radius: 12px;
-
-	text-align: center;
-
-	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	color: #fff;
+	z-index: 1000;
+	padding: 20px 30px;
 	position: absolute;
-	min-height: 4em;
+	max-width: 95%;
+	box-sizing: border-box;
+	background: #000c;
+	box-shadow: 0px 3px 6px #000c;
+	border-radius: 12px;
 }
 
 #toast.error {
-	background: rgba(192, 0, 0, 0.8);
+	background: #c00c;
 }
