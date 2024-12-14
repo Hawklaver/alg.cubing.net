@@ -33,25 +33,28 @@
 	<div id="display-wrapper" data-ng-class="{'fullscreen': view.fullscreen, 'algDelayed': algDelayed || setupDelayed, 'invalid': algStatus == 'invalid' || setupStatus == 'invalid'}">
 		<div id="viewer"></div>
 		<div id="controls">
-			<button class="control" id="cycleView" title="Change View" data-ng-click="nextView()">
+			<a class="control" id="cycleView" title="Change View" data-ng-show="view.id !== 'embed'" data-ng-click="nextView()">
 				<i class="fa fa-cube"></i>
-			</button>
-			<button class="control" id="reset" title="Reset">
+			</a>
+			<a class="control" id="openViewer" title="Open Viewer" data-ng-show="view.id === 'embed'" href="{{editor_url}}" target="_blank">
+				<i class="fa fa-cube"></i>
+			</a>
+			<a class="control" id="reset" title="Reset">
 				<i class="fa fa-fast-backward"></i>
-			</button>
-			<button class="control" id="back" title="Back (1 move)">
+			</a>
+			<a class="control" id="back" title="Back (1 move)">
 				<i class="fa fa-mail-reply"></i>
-			</button>
-			<button class="control" id="play" title="Play">
+			</a>
+			<a class="control" id="play" title="Play">
 				<i class="fa fa-play" data-ng-show="!animating"></i>
 				<i class="fa fa-pause" data-ng-show="animating"></i>
-			</button>
-			<button class="control" id="forward" title="Step forward (1 move)">
+			</a>
+			<a class="control" id="forward" title="Step forward (1 move)">
 				<i class="fa fa-mail-forward"></i>
-			</button>
-			<button class="control" id="skip" title="Skip to End">
+			</a>
+			<a class="control" id="skip" title="Skip to End">
 				<i class="fa fa-fast-forward"></i>
-			</button>
+			</a>
 		</div>
 		<div id="progress">
 			<input id="currentMove" data-ng-model="current_move" type="range" min="0" max="1" step="0.01">

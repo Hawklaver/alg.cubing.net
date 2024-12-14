@@ -220,6 +220,14 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 				extraControls: false,
 				highlightMoveFields: false,
 			},
+			{
+				id: "embed",
+				next: "editor",
+				fullscreen: true,
+				infoPane: false,
+				extraControls: false,
+				highlightMoveFields: false,
+			},
 		]);
 
 		$scope.title_default = "";
@@ -240,9 +248,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		]);
 
 		$scope.nextView = function() {
-			// TODO: Is there a better way to do view cycling?
-			var idx = $scope.view_list.indexOf($scope.view);
-			$scope.view = $scope.view_list[(idx + 1) % $scope.view_list.length];
+			$scope.view = $scope.view_map[$scope.view.next];
 			$scope.updateLocation();
 		};
 
@@ -354,17 +360,13 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			setWithDefault("view", $scope.view.id);
 			setWithDefault("anchor", $scope.anchor.id);
 			setWithDefault("fbclid", null); // Remove Facebook tracking ID
-			// TODO: Update sharing links
-
-			// TODO: Inject playback view into parameters properly.
-			// Right now it's fine because the view paramater is hidden in editor view, which is the only time you see a forum link.
-			$scope.share_url = location.origin + $location.url();
-			if ($location.url().indexOf("?") !== -1) {
-				$scope.share_url += "&view=playback";
-			}
-			var embedUrl = new URL($scope.share_url);
-			embedUrl.searchParams.set("view", "fullscreen");
-			$scope.embed_url = embedUrl.href;
+			// Update sharing links
+			var url = new URL(location.origin + $location.url());
+			$scope.share_url = url.href;
+			url.searchParams.delete("view");
+			$scope.editor_url = url.href;
+			url.searchParams.set("view", "embed");
+			$scope.embed_url = url.href;
 			$scope.embed_text = `<iframe src="${$scope.embed_url}" frameborder="0"></iframe>`;
 			$scope.share_forum_short = '[URL="' + $scope.share_url + '"]' + $scope.alg + "[/URL]";
 			$scope.share_forum_long = forumLinkText($scope.share_url);
