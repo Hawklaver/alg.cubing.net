@@ -714,40 +714,29 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			$scope.algDelayed = event == "delayed";
 		};
 
-		function displayToast(message) {
-			$("#toast").html(message).finish().removeClass("error").fadeIn(100).delay(1000).fadeOut(500);
+		$("#copyEmbed").on("click", function() {
+			copyToClipboard($scope.embed_text);
+		});
+		$("#copyShort").on("click", function() {
+			copyToClipboard($scope.share_forum_short);
+		});
+		$("#copyLong").on("click", function() {
+			copyToClipboard($scope.share_forum_long);
+		});
+		function copyToClipboard(text) {
+			if (navigator.clipboard) {
+				navigator.clipboard.writeText(text).then(() => {
+					displayToast("Link copied to clipboard.");
+				}, () => {
+					displayToast("ERROR: Failed to copy link.", true);
+				});
+			} else {
+				displayToast("ERROR: Failed to copy link.", true);
+			}
 		}
-		function displayErrorToast(message) {
-			$("#toast").html(message).finish().addClass("error").fadeIn(100).delay(2000).fadeOut(2500);
+		function displayToast(message, isError = false) {
+			$("#toast").html(message).finish().toggleClass("error", isError).fadeIn(100).delay(3000).fadeOut(1000);
 		}
-
-		$("#copyEmbed").on("click", function(event) {
-			clipboard.copy({
-				"text/plain": $scope.embed_text,
-			}).then(function() {
-				displayToast("The embed text has been copied to your clipboard.");
-			}, function() {
-				displayErrorToast("ERROR: Could not copy the embed text.<br>(Your browser might not support web clipboard API yet.)");
-			});
-		});
-		$("#copyShort").on("click", function(event) {
-			clipboard.copy({
-				"text/plain": $scope.share_forum_short,
-			}).then(function() {
-				displayToast("The forum link has been copied to your clipboard.");
-			}, function() {
-				displayErrorToast("ERROR: Could not copy the forum link.<br>(Your browser might not support web clipboard API yet.)");
-			});
-		});
-		$("#copyLong").on("click", function(event) {
-			clipboard.copy({
-				"text/plain": $scope.share_forum_long,
-			}).then(function() {
-				displayToast("The forum link has been copied to your clipboard.");
-			}, function() {
-				displayErrorToast("ERROR: Could not copy the forum link.<br>(Your browser might not support web clipboard API yet.)");
-			});
-		});
 
 		// TODO: Use IFs for puzzle/type
 		var demos = {
