@@ -86,7 +86,7 @@ html, textarea {
 	cursor: context-menu;
 }
 
-#info button {
+#info .button {
 	color: #fff;
 	background: #000;
 	border: 1px solid #222;
@@ -95,6 +95,8 @@ html, textarea {
 	width: 8em;
 	white-space: nowrap;
 	margin: 0.2em;
+	text-align: center;
+	box-sizing: border-box;
 }
 
 #info .section.buttons {
@@ -106,16 +108,24 @@ html, textarea {
 	padding: 0;
 }
 
-#info .section.buttons button {
+#info .section.buttons .button {
 	margin: 0;
 }
 
-#info        #tools.section.buttons button {width: 50%;}
-#info     #examples.section.buttons button {width: 16.66666%;}
-#info #info-section.section.buttons button {width: 25%;}
+#info #tools.section.buttons .button {
+	width: 50%;
+}
+#info #examples.section.buttons .button {
+	width: 16.66666%;
+}
+#info #info-section.section.buttons .button {
+	width: 25%;
+	padding: 0px;
+	text-decoration: none;
+}
 
 
-#info select:is(:hover, :focus), #info button:hover {
+#info select:is(:hover, :focus), #info .button:hover {
 	background: #444;
 	cursor: pointer;
 }
