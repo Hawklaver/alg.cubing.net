@@ -47,17 +47,6 @@ html, textarea {
 	font-size: 5vh;
 }
 
-@media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
-	body { flex-direction: column; }
-	#display-wrapper, #info-wrapper {width: 100%;}
-	#display-wrapper {height: 50%;}
-	#info-wrapper {height: 50%;}
-
-	#controls .control {
-		font-size: 3vh;
-	}
-}
-
 /******** Info Pane ********/
 
 #info {
@@ -116,7 +105,7 @@ html, textarea {
 }
 
 #info #tools.section.buttons .button {
-	width: 50%;
+	width: 25%;
 }
 #info #examples.section.buttons .button {
 	width: 16.66666%;
@@ -312,4 +301,22 @@ textarea.sharetext {
 
 #toast.error {
 	background: #c00c;
+}
+
+/******** For Mobile ********/
+
+@media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
+	body {
+		flex-direction: column;
+	}
+	#display-wrapper, #info-wrapper {
+		width: 100%;
+		height: 50%;
+	}
+	#controls .control {
+		font-size: 3vh;
+	}
+	#info #tools.section.buttons .button {
+		width: 50%;
+	}
 }
