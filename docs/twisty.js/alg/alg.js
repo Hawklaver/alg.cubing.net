@@ -475,7 +475,7 @@
         "location": pause.location
       };
     };
-    toMoves.newline = toMoves.pause;
+    toMoves.newline = emptySequence;
     toMoves.comment_short = emptySequence;
     toMoves.comment_long = emptySequence;
     toMoves.timestamp = emptySequence;
