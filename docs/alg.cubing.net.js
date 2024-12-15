@@ -669,6 +669,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		});
 		$scope.$watch("speed", function() {
 			twistyScene.setSpeed($scope.speed);
+			$scope.updateLocation();
 		}); // initialize the watch
 
 		$scope.updateLocation();
@@ -682,7 +683,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		"type",
 		"scheme",
 		"custom_scheme",
-		"title", "speed",
+		"title",
 		"hint_stickers",
 		"hollow",
 		"anchor"
