@@ -206,28 +206,16 @@ html, textarea {
 	position: relative;
 }
 
-.moves.invalid {
-	border-top: 1px solid red;
-	border-bottom: 1px solid red;
-	background: rgba(255, 0, 0, 0.1);
+.moves.invalid:not(:focus) {
+	border-top: 1px solid #f00;
+	border-bottom: 1px solid #f00;
+	background: #f003;
 }
 
-.moves.invalid, .moves.invalid:hover, .moves.invalid:focus {
-	border-top: 1px solid red;
-	border-bottom: 1px solid red;
-	background: rgba(255, 0, 0, 0.1);
-}
-
-.moves.uncanonical {
-	border-top: 1px solid rgba(200, 200, 0, 0.5);
-	border-bottom: 1px solid rgba(200, 200, 0, 0.5);
-	background: rgba(255, 255, 0, 0.1);
-}
-
-.moves.uncanonical, .moves.uncanonical:hover, .moves.uncanonical:focus {
-	border-top: 1px solid rgba(200, 200, 0, 0.5);
-	border-bottom: 1px solid rgba(200, 200, 0, 0.5);
-	background: rgba(255, 255, 0, 0.1);
+.moves.uncanonical:not(:focus) {
+	border-top: 1px solid #ff0;
+	border-bottom: 1px solid #ff0;
+	background: #ff03;
 }
 
 #title:hover, #title:focus, .moves:hover, .moves:focus {
