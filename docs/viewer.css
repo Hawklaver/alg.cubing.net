@@ -23,6 +23,11 @@
 	height: 90%;
 	transition: 0.2s;
 	position: relative;
+	cursor: grab;
+}
+
+#viewer:active {
+	cursor: grabbing;
 }
 
 #controls {

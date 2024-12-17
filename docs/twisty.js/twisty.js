@@ -249,7 +249,6 @@ twisty.scene = function(options) {
   /******** Control: Mouse/Touch Dragging ********/
 
   this.startAllowDragging = function() {
-    $(view.container).css("cursor", "move");
     view.container.addEventListener("mousedown", onStart, false );
     view.container.addEventListener("touchstart", onStart, false );
     if (!isIE) {
