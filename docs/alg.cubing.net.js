@@ -6,7 +6,10 @@ var l;
 var algxApp = angular.module("algxApp", ["algxControllers", "debounce"]);
 
 algxApp.config(["$locationProvider", function($locationProvider) {
-	$locationProvider.html5Mode(true);
+	$locationProvider.html5Mode({
+		enabled: true,
+		requireBase: false,
+	});
 }]);
 
 algxApp.filter("title", function() {
