@@ -247,6 +247,10 @@ input.current_scheme[readonly] {
 	color: #aaa;
 }
 
+label:has(input[type="checkbox"]) {
+	cursor: pointer;
+}
+
 #canvasPNG {
 	text-align: center;
 }
