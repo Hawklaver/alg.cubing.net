@@ -54,7 +54,6 @@ html, textarea {
 }
 
 #info h1 {
-	font-variant: small-caps;
 	width: 100%;
 	text-align: center;
 	padding: 2%;
@@ -64,7 +63,6 @@ html, textarea {
 	font-size: 20px;
 	padding: 5px 10px;
 	background: #222;
-	font-variant: small-caps;
 	border-top: 1px solid #888;
 }
 
@@ -139,7 +137,6 @@ html, textarea {
 	width: 100%;
 	padding: 0 8px;
 	text-overflow: ellipsis;
-	font-variant: small-caps;
 }
 
 #title::-webkit-input-placeholder {
