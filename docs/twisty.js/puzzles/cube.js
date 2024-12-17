@@ -101,7 +101,7 @@ twisty.puzzles.cube = function(twistyScene, twistyParameters) {
   ];
   stageStickers.LL = stageStickers.PLL;
   stageStickers.F2L = [
-    [0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
     [0,0,0,2,2,2,2,2,2],
     [0,0,0,3,3,3,3,3,3],
     [0,0,0,4,4,4,4,4,4],
@@ -109,7 +109,7 @@ twisty.puzzles.cube = function(twistyScene, twistyParameters) {
     [6,6,6,6,6,6,6,6,6]
   ];
   stageStickers.cross = [
-    [0,0,0,0,8,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
     [0,0,0,0,9,0,0,2,0],
     [0,0,0,0,10,0,0,3,0],
     [0,0,0,0,11,0,0,4,0],
