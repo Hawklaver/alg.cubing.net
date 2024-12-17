@@ -344,17 +344,17 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 
 	$scope.updateLocation = function() {
 		$location.replace();
-		setWithDefault("alg", escape_alg($scope.alg));
+		setWithDefault("title", $scope.title);
 		setWithDefault("setup", escape_alg($scope.setup));
+		setWithDefault("alg", escape_alg($scope.alg));
 		setWithDefault("puzzle", $scope.puzzle.id);
+		setWithDefault("stage", $scope.stage.id);
 		setWithDefault("type", $scope.type.id);
 		setWithDefault("scheme", $scope.scheme.id);
 		setWithDefault("custom_scheme", $scope.custom_scheme);
-		setWithDefault("stage", $scope.stage.id);
-		setWithDefault("title", $scope.title);
 		setWithDefault("speed", $scope.speed);
-		setWithDefault("view", $scope.view.id);
 		setWithDefault("anchor", $scope.anchor.id);
+		setWithDefault("view", $scope.view.id);
 		setWithDefault("fbclid", null); // Remove Facebook tracking ID
 		// Update sharing links
 		var url = new URL(location.origin + $location.url());
@@ -672,6 +672,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	};
 
 	[
+		"title",
 		"setup",
 		"alg",
 		"puzzle",
@@ -679,7 +680,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		"type",
 		"scheme",
 		"custom_scheme",
-		"title",
 		"hint_stickers",
 		"hollow",
 		"anchor"
