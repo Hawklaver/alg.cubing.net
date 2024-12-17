@@ -238,7 +238,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	$scope.speed_default = 1;
 	$scope.speed = $scope.speed_default;
 	if ("speed" in search) {
-		$scope.speed = search["speed"];
+		$scope.speed = search["speed"] * 1 || $scope.speed_default;
 	}
 
 	initParameter("anchor", "start", [
