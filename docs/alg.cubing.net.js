@@ -21,12 +21,6 @@ algxApp.filter("title", function() {
 var algxControllers = angular.module("algxControllers", ["monospaced.elastic"]);
 
 algxControllers.controller("algxController", ["$scope", "$location", "debounce", function($scope, $location, debounce) {
-	var touchBrowser = "ontouchstart" in document.documentElement;
-	var fire = true;
-
-	// if (touchBrowser) {
-	// 	$scope.hollow = true;
-	// }
 
 	var search = $location.search();
 
@@ -331,8 +325,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 
 	function setWithDefault(name, value) {
 		var _default = $scope[name + "_default"];
-		// console.log(name);
-		// console.log(_default);
 		$location.search(name, value == _default ? null : value);
 	}
 
@@ -416,8 +408,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	// This currently helps with performance, presumably due to garbage collection.
 	var twistyScene;
 
-	var selectionStart = document.getElementById("algorithm").selectionStart;
-
 	var webgl = (function() {
 		try {
 			var canvas = document.createElement("canvas");
@@ -446,7 +436,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			cubies: !$scope.hollow,
 			stickerBorder: false,
 			doubleSided: !$scope.hint_stickers,
-			// "borderWidth": 1,
 			colors: colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme),
 		});
 
@@ -482,24 +471,9 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			type: type,
 		});
 
-		// Temporary hack to work around highlighting bug.
-		function isNested(alg) {
-			for (var move in alg) {
-				var type = alg[move].type;
-				if (type == "commutator" || type == "conjugate" || type == "group") {
-					return true;
-				}
-			}
-			return false;
-		}
-		var algNested = isNested(algoFull);
-
 		var previousStart = 0;
 		var previousEnd = 0;
 		function highlightCurrentMove(force) {
-			// if (!force && (algNested || touchBrowser || !$scope.animating)) {
-			// 	return;
-			// }
 			// TODO: Make a whole lot more efficient.
 			if (Math.floor(parseFloat($scope.current_move)) > algo.length) {
 				return;
@@ -524,7 +498,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 
 			$("#algorithm_shadow").find("#start").text($scope.alg.slice(0, newStart));
 			$("#algorithm_shadow").find("#middle").text($scope.alg.slice(newStart, newEnd));
-			// $("#algorithm_shadow").find("#end").text($scope.alg.slice(newEnd));
 
 			previousStart = newStart;
 			previousEnd = newEnd;
@@ -541,17 +514,15 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			// Also fixes an iOS Safari reorientation bug.
 			window.scrollTo(0, 0);
 		};
-		var debounceResize = debounce(resizeFunction, 0);
 		$(window).resize(resizeFunction);
 		$scope.$watch("view", resizeFunction);
 
 		$("#moveIndex").val(0); //TODO: Move into twisty.js
 
 		function getCurrentMove() {
-			// console.log(twistyScene.debug.getIndex());
 			var idx = twistyScene.getPosition();
 			var val = parseFloat($scope.current_move);
-			if (idx != val && fire) {
+			if (idx != val) {
 				$scope.$apply("current_move = " + idx);
 				// TODO: Move listener to detect index change.
 				highlightCurrentMove();
@@ -599,42 +570,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 
 		$("#currentMove").attr("max", algo.length);
 
-		/*
-		function followSelection(apply, debKind) {
-			selectionStart = document.getElementById("algorithm").selectionStart;
-			for (var i = 0; i < algo.length; i++) {
-				var move = algo[i];
-				var loc = locationToIndex($scope.alg, move.location.first_line, move.location.first_column);
-				if (loc == selectionStart && loc !== 0) {
-					// Show the beginning of the current move if our cursor is... at the beginning.
-					// TODO: Handle moves like R1000 properly.
-					i += 0.2;
-					break;
-				}
-				if (loc >= selectionStart) {
-					break;
-				}
-			}
-			fire = false;
-			// console.log(apply)
-			// if (apply) {
-			$scope.current_move = i;
-			// $scope.$apply("current_move = " + i);
-			// }
-			twistyScene.setPosition(i);
-			fire = true;
-			highlightCurrentMove();
-			return;
-		}
-		$(document).bind("selectionchange", function(event) {
-			if (!$scope.algDelayed) {
-				followSelection(true);
-			}
-		});
-
-		followSelection(false);
-		*/
-
 		if ($scope.anchor.id === "end") {
 			$scope.current_move = algo.length;
 			twistyScene.setPosition(algo.length);
@@ -643,7 +578,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			twistyScene.setPosition(0);
 		}
 
-		// twistyScene.play.reset();
 		twistyScene.addListener("animating", function(animating) {
 			$scope.$apply("animating = " + animating);
 		});
@@ -659,11 +593,9 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			});
 			var idx = twistyScene.getPosition();
 			var val = parseFloat($scope.current_move);
-			if (fire) {
-				// We need to parse the string.
-				// See https://github.com/angular/angular.js/issues/1189 and linked issue/discussion.
-				twistyScene.setPosition(val);
-			}
+			// We need to parse the string.
+			// See https://github.com/angular/angular.js/issues/1189 and linked issue/discussion.
+			twistyScene.setPosition(val);
 			highlightCurrentMove();
 		});
 		$scope.$watch("speed", function() {
@@ -790,29 +722,11 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	};
 
 	$scope.demo = function(name) {
-		// $scope.reset();
 		var demo = demos[name];
 		for (i in demo) {
 			$scope[i] = demo[i];
 		}
 	};
-
-	// if ("serviceWorker" in navigator) {
-	// 	navigator.serviceWorker.getRegistration().then(function(r) {
-	// 		console.log(r);
-	// 		if (!r) {
-	// 			navigator.serviceWorker.register("./service-worker.js").then(function(registration) {
-	// 				console.log("Registered service worker with scope: ", registration.scope);
-	// 			}, function(err) {
-	// 				console.error(err);
-	// 			});
-	// 		} else {
-	// 			console.log("Service worker already registered.");
-	// 		}
-	// 	}, function(err) {
-	// 		console.error("Could not enable offline support.");
-	// 	});
-	// }
 
 	// For debugging.
 	ss = $scope;
