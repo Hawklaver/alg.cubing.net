@@ -515,7 +515,9 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			window.scrollTo(0, 0);
 		};
 		$(window).resize(resizeFunction);
-		$scope.$watch("view", resizeFunction);
+		// viewの値が変更されてから描画が完了する前に実行されるので、view変更前のサイズがcanvasへ反映されてしまう
+		// $scope.$watch("view", resizeFunction);
+		new ResizeObserver(resizeFunction).observe(twistyScene.debug.view.container);
 
 		$("#moveIndex").val(0); //TODO: Move into twisty.js
 
