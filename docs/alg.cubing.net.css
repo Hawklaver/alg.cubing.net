@@ -239,6 +239,10 @@ label:has(input[type="checkbox"]) {
 	cursor: pointer;
 }
 
+input[type="range"] {
+	vertical-align: middle;
+}
+
 #canvasPNG {
 	text-align: center;
 }

@@ -187,6 +187,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	$scope.setupStatus = "valid";
 	$scope.algStatus = "valid";
 	$scope.hint_stickers = true;
+	$scope.hint_stickers_distance = 1;
 
 	initParameter("view", "editor", [
 		{
@@ -433,6 +434,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			dimension: $scope.puzzle.dimension,
 			stage: $scope.stage.id,
 			hintStickers: $scope.hint_stickers,
+			hintStickersDistance: $scope.hint_stickers_distance,
 			cubies: !$scope.hollow,
 			stickerBorder: false,
 			doubleSided: !$scope.hint_stickers,
@@ -619,6 +621,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		"scheme",
 		"custom_scheme",
 		"hint_stickers",
+		"hint_stickers_distance",
 		"hollow",
 		"anchor"
 	].map(function(prop) {

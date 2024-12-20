@@ -37,6 +37,7 @@ twisty.puzzles.cube = function(twistyScene, twistyParameters) {
     doubleSided: true,
     algUpdateCallback: null,
     hintStickers: false,
+    hintStickersDistance: 1,
     opacity: 1,
     dimension: 3,
     easing: easing.smooth,
@@ -250,7 +251,7 @@ var innerTemplate = new THREE.Mesh(innerGeometry);
 var hintGeometry = innerGeometry.clone();
 var hintTemplate = new THREE.Mesh(hintGeometry);
 hintTemplate.rotateY(Math.PI);
-hintTemplate.translateZ(-3);
+hintTemplate.translateZ(-2.5 * cubeOptions.dimension * cubeOptions.hintStickersDistance);
 
 var cubieTemplate = new THREE.Object3D();
 
@@ -348,7 +349,7 @@ for (var i = 0; i < numSides; i++) {
 
   var actualScale = 2 * cubeOptions.dimension / cubeOptions.scale;
   if (cubeOptions.hintStickers) {
-    actualScale *= 1.2;
+    actualScale *= (cubeOptions.hintStickersDistance + 1);
   }
   function cameraScale() {
     return actualScale;
