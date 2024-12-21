@@ -3,7 +3,7 @@
 var ss;
 var l;
 
-var algxApp = angular.module("algxApp", ["algxControllers", "debounce"]);
+var algxApp = angular.module("algxApp", ["algxControllers", "debounce", "ngWheel"]);
 
 algxApp.config(["$locationProvider", function($locationProvider) {
 	$locationProvider.html5Mode({
@@ -244,6 +244,14 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	$scope.nextView = function() {
 		$scope.view = $scope.view_map[$scope.view.next];
 		$scope.updateLocation();
+	};
+
+	$scope.onwheel = function(e) {
+		e.preventDefault();
+		var { min, max } = e.target;
+		var model = e.target.dataset.ngModel;
+		var value = $scope[model] - e.target.step * Math.sign(e.originalEvent.deltaY);
+		$scope[model] = Math.min(Math.max(min, value), max);
 	};
 
 	$scope.expand = function() {

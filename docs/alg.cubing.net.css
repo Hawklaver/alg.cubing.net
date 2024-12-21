@@ -240,6 +240,7 @@ label:has(input[type="checkbox"]) {
 }
 
 input[type="range"] {
+	cursor: pointer;
 	vertical-align: middle;
 }
 
