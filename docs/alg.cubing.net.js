@@ -579,7 +579,10 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		$("#forward").click(gettingCurrentMove(twistyScene.play.forward));
 		$("#skip").click(gettingCurrentMove(twistyScene.play.skip));
 
-		$("#viewer canvas").dblclick($scope.twisty_init);
+		$("#viewer canvas").dblclick(() => {
+			twistyScene.setCameraPosition(0.5, 3);
+			twistyScene.redraw();
+		});
 
 		$("#currentMove").attr("max", algo.length);
 
