@@ -453,7 +453,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			var algoFull = alg.cube.fromString($scope.alg);
 			$scope.algStatus = "valid";
 			var algoCanonical = alg.cube.toString(algoFull);
-			if (algoCanonical !== $scope.alg) {
+			if (algoCanonical !== $scope.alg.replace(/(?<!^)\s*\/\//g, " //")) {
 				$scope.algStatus = "uncanonical";
 			}
 		} catch (e) {
