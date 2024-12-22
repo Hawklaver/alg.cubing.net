@@ -46,6 +46,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 			0x222222, 0x888888, 0x884400, 0x008800, 0x660000, 0x000088, 0x888800,
 		],
 		stage: "full",
+		stageMap: null,
 		scale: 1,
 	};
 
@@ -191,7 +192,9 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	];
 	var isVoidCube = cubeOptions.stage == "void";
 	var stickers = stageStickers.full;
-	if (cubeOptions.stage in stageStickers) {
+	if (cubeOptions.stage === "custom" && cubeOptions.stageMap) {
+		stickers = cubeOptions.stageMap;
+	} else if (cubeOptions.stage in stageStickers) {
 		stickers = stageStickers[cubeOptions.stage];
 	}
 

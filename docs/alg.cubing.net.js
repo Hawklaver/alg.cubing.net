@@ -91,6 +91,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		{ id: "WV", name: "WV", group: "Variation" },
 		{ id: "ZBLL", name: "ZBLL", group: "Variation" },
 		{ id: "void", name: "Void Cube", group: "Puzzle" },
+		{ id: "custom", name: "Custom", group: "Stage", disabled: true },
 	]);
 
 	initParameter("type", "moves", [
@@ -383,12 +384,12 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	};
 
 	var lightColorMap = {
-		y: 0x888800,
-		w: 0x888888,
-		b: 0x000088,
-		g: 0x008800,
-		o: 0x884400,
-		r: 0x880000,
+		y: 0x444400,
+		w: 0x444444,
+		b: 0x000044,
+		g: 0x004400,
+		o: 0x442200,
+		r: 0x440000,
 		x: 0x111111,
 	};
 
@@ -441,6 +442,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			type: "cube",
 			dimension: $scope.puzzle.dimension,
 			stage: $scope.stage.id,
+			stageMap: $scope.stageMap,
 			hintStickers: $scope.hint_stickers,
 			hintStickersDistance: $scope.hint_stickers_distance,
 			cubies: !$scope.hollow,
@@ -700,6 +702,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			stage: $scope.stage_map["F2L"],
 			type: $scope.type_map["alg"],
 			scheme: $scope.scheme_map["white-face-down"],
+			picture: false,
 			anchor: $scope.anchor_map["start"],
 			imageBaseUrl: "https://cube.rider.biz/visualcube.php?fmt=png&size=64&stage=f2l&bg=t",
 			list: [
@@ -782,6 +785,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			stage: $scope.stage_map["OLL"],
 			type: $scope.type_map["alg"],
 			scheme: $scope.scheme_map["white-face-down"],
+			picture: false,
 			anchor: $scope.anchor_map["start"],
 			imageBaseUrl: "https://cube.rider.biz/visualcube.php?fmt=png&size=64&view=plan&stage=oll&bg=t",
 			list: [
@@ -864,6 +868,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			stage: $scope.stage_map["PLL"],
 			type: $scope.type_map["alg"],
 			scheme: $scope.scheme_map["white-face-down"],
+			picture: false,
 			anchor: $scope.anchor_map["start"],
 			imageBaseUrl: "https://cube.rider.biz/visualcube.php?fmt=png&size=64&view=plan&stage=pll&bg=t&ac=black",
 			list: [
@@ -1026,6 +1031,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			stage: $scope.stage_map["full"],
 			type: $scope.type_map["moves"],
 			scheme: $scope.scheme_map["boy"],
+			picture: false,
 			anchor: $scope.anchor_map["end"],
 			imageBaseUrl: "https://cube.rider.biz/visualcube.php?fmt=png&size=64&bg=t&sch=wrgyob",
 			list: [
@@ -1344,6 +1350,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			puzzle: $scope.puzzle_map["3x3x3"],
 			stage: $scope.stage_map["full"],
 			type: $scope.type_map["moves"],
+			picture: false,
 			anchor: $scope.anchor_map["start"],
 			list: [
 				{
@@ -1393,6 +1400,40 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 							type: $scope.type_map["alg"],
 						},
 						{
+							name: "Rotate 1 Center 180°",
+							title: "Rotate 1 Center 180°",
+							setup: "",
+							alg: "(R U R' U)5",
+							stage: $scope.stage_map["custom"],
+							stageMap: [
+								[8, 8, 8, 8, 1, 8, 8, 8, 8],
+								[9, 9, 9, 9, 9, 9, 9, 9, 9],
+								[10, 10, 10, 10, 10, 10, 10, 10, 10],
+								[11, 11, 11, 11, 11, 11, 11, 11, 11],
+								[12, 12, 12, 12, 12, 12, 12, 12, 12],
+								[13, 13, 13, 13, 13, 13, 13, 13, 13],
+							],
+							type: $scope.type_map["alg"],
+							picture: true,
+						},
+						{
+							name: "Rotate 2 Centers 90°",
+							title: "Rotate 2 Centers 90°",
+							setup: "",
+							alg: "(M' U' M U)5",
+							stage: $scope.stage_map["custom"],
+							stageMap: [
+								[8, 8, 8, 8, 1, 8, 8, 8, 8],
+								[9, 9, 9, 9, 9, 9, 9, 9, 9],
+								[10, 10, 10, 10, 3, 10, 10, 10, 10],
+								[11, 11, 11, 11, 11, 11, 11, 11, 11],
+								[12, 12, 12, 12, 12, 12, 12, 12, 12],
+								[13, 13, 13, 13, 13, 13, 13, 13, 13],
+							],
+							type: $scope.type_map["alg"],
+							picture: true,
+						},
+						{
 							name: "Solve in 126 Moves",
 							title: "Solve in 126 Moves",
 							setup: "",
@@ -1411,7 +1452,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			]
 		},
 	];
-	$scope.examples_keys = ["title", "setup", "alg", "puzzle", "stage", "type", "scheme", "anchor"];
+	$scope.examples_keys = ["title", "setup", "alg", "puzzle", "stage", "stageMap", "type", "scheme", "picture", "anchor"];
 	$scope.examples_map = indexBy($scope.examples, "name");
 	for (var grName in $scope.examples_map) {
 		$scope.examples_map[grName].map = indexBy($scope.examples_map[grName].list, "name");
