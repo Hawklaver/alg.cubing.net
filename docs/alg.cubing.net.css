@@ -87,6 +87,7 @@ html, textarea {
 	margin: 0.2em;
 	text-align: center;
 	box-sizing: border-box;
+	min-width: min-content;
 }
 
 #info .section.buttons {
@@ -119,7 +120,6 @@ html, textarea {
 #info #example-oll .section.buttons .button,
 #info #example-pll .section.buttons .button {
 	width: calc(100% / 7);
-	min-width: min-content;
 }
 #info #example-pattern .section.buttons .button {
 	width: calc(100% / 4);
@@ -288,6 +288,23 @@ label:has(input[type="checkbox"]) {
 	cursor: pointer;
 }
 
+input[type="checkbox"].toggle-button,
+input[type="checkbox"].toggle-button:checked ~ .fa-caret-up,
+input[type="checkbox"].toggle-button:not(:checked) ~ .fa-caret-down {
+	display: none;
+}
+h2:has(input[type="checkbox"].toggle-button) + * {
+	height: auto;
+	height: calc-size(auto, size);
+	overflow: hidden;
+	transition: all 300ms;
+}
+h2:has(input[type="checkbox"].toggle-button:checked) + * {
+	height: 0px !important;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
 input[type="range"] {
 	cursor: pointer;
 	vertical-align: middle;
@@ -365,7 +382,8 @@ textarea.sharetext {
 	#controls .control {
 		font-size: 3vh;
 	}
-	#info #tools.section.buttons .button {
+	#info #tools.section.buttons .button,
+	#info #info-section.section.buttons .button {
 		width: 50%;
 	}
 	#info .puzzles.section.buttons button,

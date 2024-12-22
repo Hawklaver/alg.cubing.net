@@ -68,12 +68,26 @@
 				<textarea id="title" data-msd-elastic data-ng-trim="false" data-ng-model="title" placeholder="alg.cubing.net [forked]"></textarea>
 			</h1>
 			<div data-ng-show="!(view.id == 'playback' && setup == '')">
-				<h2 data-ng-bind="type.setup">Setup</h2>
-				<textarea id="setup" class="moves" data-ng-model="setup" data-ng-trim="false" data-ng-class="[setupStatus]" data-ng-class="{'invalid': !setupValid, 'hoverHighlight': view.highlightMoveFields}" data-msd-elastic placeholder="[Click here to add {{type.setup_moves}}.]" data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
+				<h2>
+					<label>
+						<input type="checkbox" class="toggle-button">
+						<i class="fa fa-caret-up"></i>
+						<i class="fa fa-caret-down"></i>
+						<span data-ng-bind="type.setup">Setup</span>
+					</label>
+				</h2>
+				<div>
+					<textarea id="setup" class="moves" data-ng-model="setup" data-ng-trim="false" data-ng-class="[setupStatus]" data-ng-class="{'invalid': !setupValid, 'hoverHighlight': view.highlightMoveFields}" data-msd-elastic placeholder="[Click here to add {{type.setup_moves}}.]" data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
+				</div>
 			</div>
 			<div>
 				<h2>
-					<span data-ng-bind="type.alg">Algorithm</span>
+					<label>
+						<input type="checkbox" class="toggle-button">
+						<i class="fa fa-caret-up"></i>
+						<i class="fa fa-caret-down"></i>
+						<span data-ng-bind="type.alg">Algorithm</span>
+					</label>
 					<span title="h = obtm, q = obqtm, s = btm, e = etm" id="metrics">
 						(<span data-ng-bind="obtm">0</span>h,
 						<span data-ng-bind="obqtm">0</span>q,
@@ -87,25 +101,41 @@
 				</div>
 			</div>
 			<div data-ng-show="view.extraControls">
-				<h2>Examples</h2>
-				<div class="section buttons" id="example-groups">
-					<button class="button" data-ng-repeat="group in examples" data-ng-click="showExamples(group);" data-ng-class="{ selected: selected_example_group === '{{group.name}}' }">{{group.name}}</button>
-				</div>
-				<div class="section buttons puzzles hidden" data-ng-class="{ hidden: group.list.length === 1 || selected_example_group !== '{{group.name}}' }" data-ng-repeat="group in examples">
-					<button class="button" data-ng-class="{ selected: selected_example_group === '{{group.name}}' && selected_example_puzzle === '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list" data-ng-click="showExamples(group, puzzle);">
-						<span>{{puzzle.name}}</span>
-						<img data-ng-src="{{createExampleImage(group, puzzle)}}">
-					</button>
-				</div>
-				<div id="example-{{group.name.toLowerCase()}}" data-ng-repeat="group in examples">
-					<div class="section buttons examples hidden" data-ng-class="{ hidden: selected_example_group !== '{{group.name}}' || selected_example_puzzle !== '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list">
-						<button class="button" data-ng-repeat="example in puzzle.list" data-ng-click="showExamples(group, puzzle, example);">
-							<span>{{example.name}}</span>
-							<img data-ng-src="{{createExampleImage(group, puzzle, example)}}">
+				<h2>
+					<label>
+						<input type="checkbox" class="toggle-button">
+						<i class="fa fa-caret-up"></i>
+						<i class="fa fa-caret-down"></i>
+						<span>Examples</span>
+					</label>
+				</h2>
+				<div>
+					<div class="section buttons" id="example-groups">
+						<button class="button" data-ng-repeat="group in examples" data-ng-click="showExamples(group);" data-ng-class="{ selected: selected_example_group === '{{group.name}}' }">{{group.name}}</button>
+					</div>
+					<div class="section buttons puzzles hidden" data-ng-class="{ hidden: group.list.length === 1 || selected_example_group !== '{{group.name}}' }" data-ng-repeat="group in examples">
+						<button class="button" data-ng-class="{ selected: selected_example_group === '{{group.name}}' && selected_example_puzzle === '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list" data-ng-click="showExamples(group, puzzle);">
+							<span>{{puzzle.name}}</span>
+							<img data-ng-src="{{createExampleImage(group, puzzle)}}">
 						</button>
 					</div>
+					<div id="example-{{group.name.toLowerCase()}}" data-ng-repeat="group in examples">
+						<div class="section buttons examples hidden" data-ng-class="{ hidden: selected_example_group !== '{{group.name}}' || selected_example_puzzle !== '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list">
+							<button class="button" data-ng-repeat="example in puzzle.list" data-ng-click="showExamples(group, puzzle, example);">
+								<span>{{example.name}}</span>
+								<img data-ng-src="{{createExampleImage(group, puzzle, example)}}">
+							</button>
+						</div>
+					</div>
 				</div>
-				<h2>Settings</h2>
+				<h2>
+					<label>
+						<input type="checkbox" class="toggle-button">
+						<i class="fa fa-caret-up"></i>
+						<i class="fa fa-caret-down"></i>
+						<span>Settings</span>
+					</label>
+				</h2>
 				<div class="section">
 					<select data-ng-model="puzzle" data-ng-options="p.name group by p.group for p in puzzle_list"></select>
 					<select data-ng-model="stage" data-ng-options="s.name group by s.group disable when s.disabled for s in stage_list" data-ng-disabled="puzzle.name != '3x3x3'"></select>
@@ -117,7 +147,14 @@
 					<input class="current_scheme" type="text" data-ng-show="!scheme.custom" data-ng-readonly="true" data-ng-value="scheme.scheme"/>
 				</div>
 				<div>
-					<h2>Playback Options</h2>
+					<h2>
+						<label>
+							<input type="checkbox" class="toggle-button">
+							<i class="fa fa-caret-up"></i>
+							<i class="fa fa-caret-down"></i>
+							<span>Playback Optionss</span>
+						</label>
+					</h2>
 					<div class="section">
 						<div>
 							<span>Speed:</span>
@@ -137,37 +174,56 @@
 					</div>
 				</div>
 				<div>
-					<h2>Tools</h2>
-					<div class="section buttons" id="tools">
-						<button class="button" data-ng-click="expand();">Expand</button>
-						<button class="button" data-ng-click="simplify();">Simplify</button>
-						<button class="button" data-ng-click="clear();"><i class="fa fa-square-o"></i> Clear</button>
-						<button class="button" data-ng-click="reset();"><i class="fa fa-power-off"></i> Reset</button>
-						<button class="button" data-ng-click="mirrorAcrossM();" title="Mirror across M"><i class="fa fa-arrows-h"></i> Mirror (M)</button>
-						<button class="button" data-ng-click="mirrorAcrossS();" title="Mirror across S"><i class="fa fa-expand"></i> Mirror (S)</button>
-						<button class="button" data-ng-click="invert();"><i class="fa fa-backward"></i> Invert</button>
-						<button class="button" data-ng-click="removeComments();">Remove Comments</button>
-						<button class="button" data-ng-click="image();"><i class="fa fa-image"></i> Image</button>
+					<h2>
+						<label>
+							<input type="checkbox" class="toggle-button">
+							<i class="fa fa-caret-up"></i>
+							<i class="fa fa-caret-down"></i>
+							<span>Tools</span>
+						</label>
+					</h2>
+					<div>
+						<div class="section buttons" id="tools">
+							<button class="button" data-ng-click="expand();">Expand</button>
+							<button class="button" data-ng-click="simplify();">Simplify</button>
+							<button class="button" data-ng-click="clear();"><i class="fa fa-square-o"></i> Clear</button>
+							<button class="button" data-ng-click="reset();"><i class="fa fa-power-off"></i> Reset</button>
+							<button class="button" data-ng-click="mirrorAcrossM();" title="Mirror across M"><i class="fa fa-arrows-h"></i> Mirror (M)</button>
+							<button class="button" data-ng-click="mirrorAcrossS();" title="Mirror across S"><i class="fa fa-expand"></i> Mirror (S)</button>
+							<button class="button" data-ng-click="invert();"><i class="fa fa-backward"></i> Invert</button>
+							<button class="button" data-ng-click="removeComments();">Remove Comments</button>
+							<button class="button" data-ng-click="image();"><i class="fa fa-image"></i> Image</button>
+						</div>
+						<div id="canvasPNG"></div>
 					</div>
-					<div id="canvasPNG"></div>
 				</div>
 				<h2>
-					<span>Embed</span>
-					<button id="copyEmbed" class="button clipboard" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
-						<i class="fa fa-clipboard"></i>
-					</button>
+					<label>
+						<input type="checkbox" class="toggle-button">
+						<i class="fa fa-caret-up"></i>
+						<i class="fa fa-caret-down"></i>
+						<span>Embed</span>
+						<button id="copyEmbed" class="button clipboard" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
+							<i class="fa fa-clipboard"></i>
+						</button>
+					</label>
 				</h2>
 				<div class="section" id="embed">
 					<textarea class="sharetext" data-ng-model="embed_text" data-msd-elastic></textarea>
 				</div>
 				<h2>
-					<span>Forum Link</span>
-					<button id="copyShort" class="button clipboard" data-ng-show="! type.reconstruction" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
-						<i class="fa fa-clipboard"></i>
-					</button>
-					<button id="copyLong" class="button clipboard" data-ng-show="type.reconstruction" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
-						<i class="fa fa-clipboard"></i>
-					</button>
+					<label>
+						<input type="checkbox" class="toggle-button">
+						<i class="fa fa-caret-up"></i>
+						<i class="fa fa-caret-down"></i>
+						<span>Forum Link</span>
+						<button id="copyShort" class="button clipboard" data-ng-show="! type.reconstruction" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
+							<i class="fa fa-clipboard"></i>
+						</button>
+						<button id="copyLong" class="button clipboard" data-ng-show="type.reconstruction" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
+							<i class="fa fa-clipboard"></i>
+						</button>
+					</label>
 				</h2>
 				<div class="section" id="share">
 					<div data-ng-show="! type.reconstruction">
@@ -177,7 +233,14 @@
 						<textarea class="sharetext" readonly="readonly" onclick="this.focus(); this.select();" data-ng-bind="share_forum_long">[Long forum link will appear here.]</textarea>
 					</div>
 				</div>
-				<h2>Info</h2>
+				<h2>
+					<label>
+						<input type="checkbox" class="toggle-button">
+						<i class="fa fa-caret-up"></i>
+						<i class="fa fa-caret-down"></i>
+						<span>Info</span>
+					</label>
+				</h2>
 				<div class="section buttons" id="info-section">
 					<a class="button" href="https://github.com/Hawklaver/alg.cubing.net" target="_blank"><i class="fa fa-github"></i> GitHub</a>
 					<a class="button" href="https://alg.cubing.net/" target="_blank">alg.cubing.net</a>
