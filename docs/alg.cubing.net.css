@@ -82,7 +82,6 @@ html, textarea {
 	border: 1px solid #222;
 	font-size: 1em;
 	padding: 0.4em 0.6em;
-	width: 8em;
 	white-space: nowrap;
 	margin: 0.2em;
 	text-align: center;
@@ -105,17 +104,57 @@ html, textarea {
 #info #tools.section.buttons .button {
 	width: 25%;
 }
-#info #examples.section.buttons .button {
-	width: 16.66666%;
+
+#info #example-groups.section.buttons .button {
+	flex: 1;
 }
+#info #example-f2l .section.buttons .button,
+#info #example-oll .section.buttons .button,
+#info #example-pll .section.buttons .button {
+	width: calc(100% / 7);
+	min-width: min-content;
+}
+#info #example-pattern .section.buttons .button {
+	width: calc(100% / 4);
+}
+#info #example-pattern .section.buttons .button span {
+	max-width: calc(100% - 64px);
+	text-align: left;
+	white-space: normal;
+}
+#info .puzzles.section.buttons {
+	display: flex;
+	justify-content: space-between;
+}
+#info .puzzles.section.buttons button {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+}
+#info .puzzles.section.buttons,
+#info .examples.section.buttons {
+	height: auto;
+	height: calc-size(auto, size);
+	overflow: hidden;
+	transition: all 300ms;
+}
+#info .examples.section.buttons .button {
+	display: flex;
+	justify-content: space-between;
+}
+#info .puzzles.section.buttons.hidden,
+#info .examples.section.buttons.hidden {
+	height: 0px;
+}
+
 #info #info-section.section.buttons .button {
 	width: 25%;
 	padding: 0px;
 	text-decoration: none;
 }
 
-
-#info select:is(:hover, :focus), #info .button:hover {
+#info select:is(:hover, :focus), #info .button:is(.selected, :hover) {
 	background: #444;
 	cursor: pointer;
 }

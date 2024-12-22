@@ -87,13 +87,22 @@
 			</div>
 			<div data-ng-show="view.extraControls">
 				<h2>Examples</h2>
-				<div class="section buttons" id="examples">
-					<button class="button" href="" data-ng-click="demo('yusheng-3.47');">WR</button>
-					<button class="button" href="" data-ng-click="demo('T-Perm');">T</button>
-					<button class="button" href="" data-ng-click="demo('Sune');">Sune</button>
-					<button class="button" href="" data-ng-click="demo('notation');">Notation</button>
-					<button class="button" onclick="location.href = 'https://www.speedsolving.com/wiki/index.php/OLL'">OLLs</button>
-					<button class="button" onclick="location.href = 'http://www.speedsolving.com/wiki/index.php/PLL'">PLLs</button>
+				<div class="section buttons" id="example-groups">
+					<button class="button" data-ng-repeat="group in examples" data-ng-click="showExamples(group);" data-ng-class="{ selected: selected_example_group === '{{group.name}}' }">{{group.name}}</button>
+				</div>
+				<div class="section buttons puzzles hidden" data-ng-class="{ hidden: group.list.length === 1 || selected_example_group !== '{{group.name}}' }" data-ng-repeat="group in examples">
+					<button class="button" data-ng-class="{ selected: selected_example_group === '{{group.name}}' && selected_example_puzzle === '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list" data-ng-click="showExamples(group, puzzle);">
+						<span>{{puzzle.name}}</span>
+						<img data-ng-src="{{createExampleImage(group, puzzle)}}">
+					</button>
+				</div>
+				<div id="example-{{group.name.toLowerCase()}}" data-ng-repeat="group in examples">
+					<div class="section buttons examples hidden" data-ng-class="{ hidden: selected_example_group !== '{{group.name}}' || selected_example_puzzle !== '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list">
+						<button class="button" data-ng-repeat="example in puzzle.list" data-ng-click="showExamples(group, puzzle, example);">
+							<span>{{example.name}}</span>
+							<img data-ng-src="{{createExampleImage(group, puzzle, example)}}">
+						</button>
+					</div>
 				</div>
 				<h2>Settings</h2>
 				<div class="section">
