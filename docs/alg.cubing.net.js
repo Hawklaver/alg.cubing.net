@@ -663,6 +663,10 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		$scope.algDelayed = event == "delayed";
 	};
 
+	$("#algorithm").on("input", function() {
+		$("#algorithm_shadow .highlight").hide();
+	});
+
 	$("#copyEmbed").on("click", function() {
 		copyToClipboard($scope.embed_text);
 	});
