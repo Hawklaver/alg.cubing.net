@@ -453,6 +453,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		});
 
 		try {
+			$scope.alg = $scope.alg.replaceAll("’", "'");
 			var algoFull = alg.cube.fromString($scope.alg);
 			$scope.algStatus = "valid";
 			var algoCanonical = alg.cube.toString(algoFull);
@@ -464,6 +465,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		}
 
 		try {
+			$scope.setup = $scope.setup.replaceAll("’", "'");
 			var init = alg.cube.fromString($scope.setup);
 			$scope.setupStatus = "valid";
 			var setupCanonical = alg.cube.toString(init);
