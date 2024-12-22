@@ -444,6 +444,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			hintStickers: $scope.hint_stickers,
 			hintStickersDistance: $scope.hint_stickers_distance,
 			cubies: !$scope.hollow,
+			picture: $scope.picture,
 			stickerBorder: false,
 			doubleSided: !$scope.hint_stickers,
 			colors: colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme),
@@ -634,6 +635,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		"hint_stickers",
 		"hint_stickers_distance",
 		"hollow",
+		"picture",
 		"anchor"
 	].map(function(prop) {
 		$scope.$watch(prop, $scope.twisty_init);

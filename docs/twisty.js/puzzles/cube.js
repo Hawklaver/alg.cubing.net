@@ -31,6 +31,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		stickerBorder: true,
 		borderWidth: 8,
 		cubies: false,
+		picture: false,
 		stickerWidth: 1.7,
 		doubleSided: true,
 		algUpdateCallback: null,
@@ -58,12 +59,29 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	// Cube Constants
 	var numSides = 6;
 
+	// Create Picture Texture
+	if (!twisty.puzzles.pictureMap) {
+		var size = 256;
+		var ctx = document.createElement("canvas").getContext("2d");
+		ctx.canvas.width = size;
+		ctx.canvas.height = size;
+		ctx.fillStyle = "#fff";
+		ctx.fillRect(0, 0, size, size);
+		ctx.font = `bold ${size}px sans-serif`;
+		ctx.textAlign = "center";
+		ctx.textBaseline = "middle";
+		ctx.fillStyle = "#000";
+		ctx.fillText("A", size / 2, size / 2);
+		twisty.puzzles.pictureMap = new THREE.TextureLoader().load(ctx.canvas.toDataURL());
+	}
+	var map = cubeOptions.picture ? twisty.puzzles.pictureMap : null;
+
 	// Cube Materials
 	var materials = { singleSided: [], doubleSided: [] };
 	for (var i = 0; i < cubeOptions.colors.length; i++) {
 		for (var j = 0; j < 2; j++) {
 			var side = ["singleSided", "doubleSided"][j];
-			var material = new THREE.MeshBasicMaterial({ color: cubeOptions.colors[i], overdraw: 0.5 });
+			var material = new THREE.MeshBasicMaterial({ color: cubeOptions.colors[i], overdraw: 0.5, map });
 			if (side === "doubleSided") {
 				material.side = THREE.DoubleSide;
 			}
