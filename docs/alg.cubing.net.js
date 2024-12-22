@@ -667,6 +667,14 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		$scope.algDelayed = event == "delayed";
 	};
 
+	$("#info-wrapper").on("scroll", function(e) {
+		if ($("#info h1").outerHeight() < $(e.target).scrollTop()) {
+			$("#display-wrapper h2").fadeIn();
+		} else {
+			$("#display-wrapper h2").fadeOut();
+		}
+	});
+
 	$("#algorithm").on("input", function() {
 		$("#algorithm_shadow .highlight").hide();
 	});

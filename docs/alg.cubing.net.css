@@ -57,6 +57,7 @@ html, textarea {
 	width: 100%;
 	text-align: center;
 	padding: 2%;
+	box-sizing: border-box;
 }
 
 #info h2 {
@@ -99,6 +100,12 @@ html, textarea {
 
 #info .section.buttons .button {
 	margin: 0;
+}
+
+#info > div:has(#algorithm_wrapper) {
+	top: 0px;
+	z-index: 1;
+	position: sticky;
 }
 
 #info #tools.section.buttons .button {
@@ -210,6 +217,9 @@ html, textarea {
 
 #algorithm_wrapper {
 	position: relative;
+	background: #000;
+	margin-bottom: -1px;
+	border-bottom: 1px solid #888;
 }
 
 #algorithm_shadow {
@@ -343,9 +353,14 @@ textarea.sharetext {
 	body {
 		flex-direction: column;
 	}
+	#display-wrapper {
+		height: 40%;
+	}
+	#info-wrapper {
+		height: 60%;
+	}
 	#display-wrapper, #info-wrapper {
 		width: 100%;
-		height: 50%;
 	}
 	#controls .control {
 		font-size: 3vh;

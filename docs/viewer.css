@@ -17,6 +17,15 @@
 
 /******** Display Pane ********/
 
+#display-wrapper h2 {
+	width: 100%;
+	z-index: 1;
+	position: absolute;
+	text-align: center;
+	background: #0008;
+	display: none;
+}
+
 #viewer {
 	display: block;
 	width: 100%;
