@@ -1464,6 +1464,10 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		var url = new URL(group.imageBaseUrl);
 		if (puzzle) {
 			url.searchParams.set("pzl", puzzle.name.split("x")[0]);
+			if (!example) {
+				url.searchParams.set("sch", "ndlndl");
+				url.searchParams.set("cc", "w");
+			}
 		}
 		if (example) {
 			if (example.imageUrl) {
