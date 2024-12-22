@@ -794,7 +794,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 					list: [
 						{
 							name: "6",
-							title: "OLL-7 (Fat Anti Sune)",
+							title: "OLL-6 (Fat Anti Sune)",
 							setup: "",
 							alg: "Rw U2 R' U' R U' Rw'",
 						},
