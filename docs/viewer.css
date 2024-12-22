@@ -30,10 +30,6 @@
 	cursor: grabbing;
 }
 
-#controls {
-	height: 20%;
-}
-
 .algDelayed {
 	opacity: 0.4;
 }
@@ -55,17 +51,12 @@
 }
 
 #controls {
-	display: flex;
 	width: 100%;
-	/*height: 20%;*/
+	height: 10%;
+	display: flex;
 	transition: 0.2s;
 	/*background: rgba(127, 127, 127, 0.2);*/
 	/*background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.2) 20%);*/
-}
-
-#controls {
-	width: 100%;
-	/*position: absolute; bottom: 0; left: 0; */
 }
 
 #currentMove:hover {
@@ -171,7 +162,6 @@
 
 #controls .control {
 	flex: 1;
-	height: 50%;
 	border: none;
 	display: flex;
 	align-items: center;

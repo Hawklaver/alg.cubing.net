@@ -336,6 +336,7 @@ textarea.sharetext {
 	background: #c00c;
 }
 
+
 /******** For Mobile ********/
 
 @media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
@@ -352,4 +353,23 @@ textarea.sharetext {
 	#info #tools.section.buttons .button {
 		width: 50%;
 	}
+	#info .puzzles.section.buttons button,
+	#info .examples.section.buttons .button {
+		align-items: center;
+		flex-direction: column-reverse;
+		justify-content: flex-end;
+	}
+	#info #example-pattern .section.buttons .button span {
+		max-width: none;
+		text-align: center;
+	}
+	#info #example-f2l .section.buttons .button,
+	#info #example-oll .section.buttons .button,
+	#info #example-pll .section.buttons .button {
+		width: calc(100% / 4);
+	}
+	#info #example-pattern .section.buttons .button {
+		width: calc(100% / 3);
+	}
+
 }
