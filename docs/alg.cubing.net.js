@@ -1464,7 +1464,8 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			pzl = puzzle.name.split("x")[0];
 			url.searchParams.set("pzl", pzl);
 			if (!example) {
-				url.searchParams.set("sch", "ndlndl");
+				url.searchParams.set("view", "plan");
+				url.searchParams.set("sch", "nttttt");
 				url.searchParams.set("cc", "w");
 			}
 		}
