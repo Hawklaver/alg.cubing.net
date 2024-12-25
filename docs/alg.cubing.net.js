@@ -141,6 +141,11 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		},
 	]);
 
+	initParameter("anchor", "start", [
+		{ id: "start", name: "anchored at start" },
+		{ id: "end", name: "anchored at end" },
+	]);
+
 	// TODO: BOY/Japanese translations.
 	initParameter("scheme", "boy", [
 		{
@@ -236,11 +241,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 	if ("speed" in search) {
 		$scope.speed = search["speed"] * 1 || $scope.speed_default;
 	}
-
-	initParameter("anchor", "start", [
-		{ id: "start", name: "anchored at start" },
-		{ id: "end", name: "anchored at end" },
-	]);
 
 	$scope.nextView = function() {
 		$scope.view = $scope.view_map[$scope.view.next];
@@ -355,10 +355,10 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		setWithDefault("puzzle", $scope.puzzle.id);
 		setWithDefault("stage", $scope.stage.id);
 		setWithDefault("type", $scope.type.id);
+		setWithDefault("anchor", $scope.anchor.id);
 		setWithDefault("scheme", $scope.scheme.id);
 		setWithDefault("custom_scheme", $scope.custom_scheme);
 		setWithDefault("speed", $scope.speed);
-		setWithDefault("anchor", $scope.anchor.id);
 		setWithDefault("view", $scope.view.id);
 		setWithDefault("fbclid", null); // Remove Facebook tracking ID
 		// Update sharing links
@@ -634,13 +634,13 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		"puzzle",
 		"stage",
 		"type",
+		"anchor",
 		"scheme",
 		"custom_scheme",
 		"hint_stickers",
 		"hint_stickers_distance",
 		"hollow",
 		"picture",
-		"anchor"
 	].map(function(prop) {
 		$scope.$watch(prop, $scope.twisty_init);
 	});
@@ -1449,7 +1449,7 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 			]
 		},
 	];
-	$scope.examples_keys = ["title", "setup", "alg", "puzzle", "stage", "stageMap", "type", "scheme", "picture", "anchor"];
+	$scope.examples_keys = ["title", "setup", "alg", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
 	$scope.examples_map = indexBy($scope.examples, "name");
 	for (var grName in $scope.examples_map) {
 		$scope.examples_map[grName].map = indexBy($scope.examples_map[grName].list, "name");
