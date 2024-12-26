@@ -98,46 +98,22 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		{
 			id: "moves",
 			name: "Moves",
-			group: "Start from Setup",
 			setup: "Setup",
 			alg: "Moves",
 			type: "generator",
 			setup_moves: "setup moves",
 			alg_moves: "moves",
-			reconstruction: false,
-		},
-		{
-			id: "reconstruction",
-			name: "Reconstruction",
-			group: "Start from Setup",
-			setup: "Scramble",
-			alg: "Solve",
-			type: "generator",
-			setup_moves: "scramble moves",
-			alg_moves: "reconstruction moves",
-			reconstruction: true,
+			inverse: "alg",
 		},
 		{
 			id: "alg",
 			name: "Algorithm",
-			group: "End Solved / End with Setup",
 			setup: "Setup",
 			alg: "Algorithm",
 			type: "solve",
 			setup_moves: "setup moves for end position",
 			alg_moves: "algorithm moves",
-			reconstruction: false,
-		},
-		{
-			id: "reconstruction-end-with-setup",
-			name: "Reconstruction (no scramble)",
-			group: "End Solved / End with Setup",
-			setup: "Setup",
-			alg: "Solve",
-			type: "solve",
-			setup_moves: "setup moves for end position",
-			alg_moves: "reconstruction moves",
-			reconstruction: true,
+			inverse: "moves",
 		},
 	]);
 
@@ -264,19 +240,13 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		$scope.addHistoryCheckpoint = true;
 	};
 
-	var inverseTypeMap = {
-		moves: "alg",
-		reconstruction: "reconstruction-end-with-setup",
-		alg: "moves",
-		"reconstruction-end-with-setup": "reconstruction",
-	};
 	$scope.invert = function() {
 		// The setup stays the same. It's like magic!
 		$scope.alg = alg.cube.invert($scope.alg);
 		var currentPosition = twistyScene.getPosition();
 		var maxPosition = twistyScene.getMaxPosition();
 		$scope.current_move = maxPosition - currentPosition;
-		$scope.type = $scope.type_map[inverseTypeMap[$scope.type.id]];
+		$scope.type = $scope.type_map[$scope.type.inverse];
 		$scope.addHistoryCheckpoint = true;
 	};
 
@@ -338,15 +308,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		$location.search(name, value == _default ? null : value);
 	}
 
-	function forumLinkText(url) {
-		var algWithCommentsGreyed = ($scope.alg + "\n").replace(/(\/\/.*)[\n\r]/g, '[COLOR="gray"]$1[/COLOR]\n').replace(/(\/\*[^(\*\/)]*\*\/)/g, '[COLOR="gray"]$1[/COLOR]');
-		var text = algWithCommentsGreyed + '\n[COLOR="gray"]// View at [URL="' + url + '"]alg.cubing.net[/URL][/COLOR]';
-		if ($scope.setup !== "") {
-			text = '[COLOR="gray"]/* Scramble */[/COLOR]\n' + $scope.setup + '\n\n [COLOR="gray"]/* Solve */[/COLOR]\n' + text;
-		}
-		return text.trim(); // The trim is redundant for angular.js, but let's keep it just in case.
-	}
-
 	$scope.updateLocation = function() {
 		$location.replace();
 		setWithDefault("title", $scope.title);
@@ -369,8 +330,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		url.searchParams.set("view", "embed");
 		$scope.embed_url = url.href;
 		$scope.embed_text = `<iframe src="${$scope.embed_url}" frameborder="0"></iframe>`;
-		$scope.share_forum_short = '[URL="' + $scope.share_url + '"]' + $scope.alg + "[/URL]";
-		$scope.share_forum_long = forumLinkText($scope.share_url);
 	};
 
 	var colorMap = {
@@ -683,12 +642,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 
 	$("#copyEmbed").on("click", function() {
 		copyToClipboard($scope.embed_text);
-	});
-	$("#copyShort").on("click", function() {
-		copyToClipboard($scope.share_forum_short);
-	});
-	$("#copyLong").on("click", function() {
-		copyToClipboard($scope.share_forum_long);
 	});
 	function copyToClipboard(text) {
 		if (navigator.clipboard) {

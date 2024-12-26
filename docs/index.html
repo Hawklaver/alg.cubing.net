@@ -146,7 +146,7 @@
 					<div>
 						<select data-ng-model="puzzle" data-ng-options="p.name group by p.group for p in puzzle_list"></select>
 						<select data-ng-model="stage" data-ng-options="s.name group by s.group disable when s.disabled for s in stage_list" data-ng-disabled="puzzle.name != '3x3x3'"></select>
-						<select data-ng-model="type" data-ng-options="a.name group by a.group for a in type_list"></select>
+						<select data-ng-model="type" data-ng-options="a.name for a in type_list"></select>
 						<select data-ng-model="anchor" data-ng-options="a.name for a in anchor_list"></select>
 					</div>
 					<div>
@@ -203,28 +203,6 @@
 				</h2>
 				<div class="section" id="embed">
 					<textarea class="sharetext" data-ng-model="embed_text" data-msd-elastic></textarea>
-				</div>
-				<h2>
-					<label>
-						<input type="checkbox" class="toggle-button">
-						<i class="fa fa-caret-up"></i>
-						<i class="fa fa-caret-down"></i>
-						<span>Forum Link</span>
-						<button id="copyShort" class="button clipboard" data-ng-show="! type.reconstruction" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
-							<i class="fa fa-clipboard"></i>
-						</button>
-						<button id="copyLong" class="button clipboard" data-ng-show="type.reconstruction" style="margin: 0; padding: 2px 6px; width: 2em; font-size: 0.75em">
-							<i class="fa fa-clipboard"></i>
-						</button>
-					</label>
-				</h2>
-				<div class="section" id="share">
-					<div data-ng-show="! type.reconstruction">
-						<input type="text" class="sharetext" readonly="readonly" data-ng-model="share_forum_short" onclick="this.focus(); this.select();" value="[Short forum link will appear here.]"/>
-					</div>
-					<div data-ng-show="type.reconstruction">
-						<textarea class="sharetext" readonly="readonly" onclick="this.focus(); this.select();" data-ng-bind="share_forum_long">[Long forum link will appear here.]</textarea>
-					</div>
 				</div>
 				<h2>
 					<label>
