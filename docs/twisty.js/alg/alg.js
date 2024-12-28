@@ -587,6 +587,17 @@
       }
     };
 
+    var mirrorE = {
+      fixed: ["y", "E", "e"],
+      sliceMap: {
+        "U": "D", "Uw": "Dw", "u": "d",                     "y": "y",
+        "F": "F", "Fw": "Fw", "f": "f", "S": "S", "s": "s", "z": "z",
+        "R": "R", "Rw": "Rw", "r": "r",                     "x": "x",
+        "B": "B", "Bw": "Bw", "b": "b",
+		"L": "L", "Lw": "Lw", "l": "l", "M": "M", "m": "m",
+        "D": "U", "Dw": "Uw", "d": "u", "E": "E"
+      }
+    };
 
     var mirrorS = {
       fixed: ["z", "S", "s"],
@@ -608,8 +619,20 @@
 
     mirrorAcrossM.move = function(move) {
       var mirroredMove = cloneMove(move);
-      if (mirrorM.fixed.indexOf(mirroredMove.base) === -1) {
+      if (!mirrorM.fixed.includes(mirroredMove.base)) {
         mirroredMove.base = mirrorM.sliceMap[mirroredMove.base];
+        mirroredMove.amount = -mirroredMove.amount;
+      }
+      return mirroredMove;
+    }
+
+
+    var mirrorAcrossE = makeAlgTraversal();
+
+    mirrorAcrossE.move = function(move) {
+      var mirroredMove = cloneMove(move);
+      if (!mirrorE.fixed.includes(mirroredMove.base)) {
+        mirroredMove.base = mirrorE.sliceMap[mirroredMove.base];
         mirroredMove.amount = -mirroredMove.amount;
       }
       return mirroredMove;
@@ -620,7 +643,7 @@
 
     mirrorAcrossS.move = function(move) {
       var mirroredMove = cloneMove(move);
-      if (mirrorS.fixed.indexOf(mirroredMove.base) === -1) {
+      if (!mirrorS.fixed.includes(mirroredMove.base)) {
         mirroredMove.base = mirrorS.sliceMap[mirroredMove.base];
         mirroredMove.amount = -mirroredMove.amount;
       }
@@ -830,6 +853,7 @@
       makeAlgTraversal: makeAlgTraversal,
       invert: invert,
       mirrorAcrossM: mirrorAcrossM,
+      mirrorAcrossE: mirrorAcrossE,
       mirrorAcrossS: mirrorAcrossS,
       canonicalizeMove: canonicalizeMove,
       removeComments: removeComments,
