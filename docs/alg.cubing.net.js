@@ -20,7 +20,7 @@ algxApp.filter("title", function() {
 
 var algxControllers = angular.module("algxControllers", ["monospaced.elastic"]);
 
-algxControllers.controller("algxController", ["$scope", "$location", "debounce", function($scope, $location, debounce) {
+algxControllers.controller("algxController", ["$scope", "$sce", "$location", "debounce", function($scope, $sce, $location, debounce) {
 
 	var search = $location.search();
 
@@ -329,18 +329,44 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		setWithDefault("view", $scope.view.id);
 		setWithDefault("fbclid", null); // Remove Facebook tracking ID
 		// Update sharing links
-		var url = new URL(location.origin + $location.url());
-		$scope.share_url = url.href;
+		$scope.share_url = $location.absUrl();
+		var url = new URL($scope.share_url);
+		url.searchParams.delete("view");
+		$scope.editor_url = url.href;
 		var tweetUrl = new URL("https://twitter.com/intent/tweet");
 		tweetUrl.searchParams.set("text", document.title);
 		tweetUrl.searchParams.set("url", $scope.share_url);
 		$scope.share_twitter_url = tweetUrl.href;
-		url.searchParams.delete("view");
-		$scope.editor_url = url.href;
 		url.searchParams.set("view", "embed");
 		$scope.embed_url = url.href;
 		$scope.embed_text = `<iframe src="${$scope.embed_url}" frameborder="0"></iframe>`;
+		showEmbedDebounce();
 	};
+
+	$scope.toggleEmbed = function() {
+		$("#embed").toggleClass("hidden");
+		$scope.showEmbed();
+	};
+	$scope.showEmbed = function() {
+		if (!$("#embed").is(".hidden")) {
+			$scope.embed_html = $sce.trustAsHtml($scope.embed_text);
+		}
+	};
+	var showEmbedDebounce = debounce($scope.showEmbed, 1000);
+	$("#copyEmbed").on("click", function() {
+		copyToClipboard($scope.embed_text);
+	});
+	function copyToClipboard(text) {
+		if (navigator.clipboard) {
+			navigator.clipboard.writeText(text).then(() => {
+				displayToast("Link copied to clipboard.");
+			}, () => {
+				displayToast("ERROR: Failed to copy link.", true);
+			});
+		} else {
+			displayToast("ERROR: Failed to copy link.", true);
+		}
+	}
 
 	var colorMap = {
 		y: 0xffff00,
@@ -650,20 +676,6 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		$("#algorithm_shadow .highlight").hide();
 	});
 
-	$("#copyEmbed").on("click", function() {
-		copyToClipboard($scope.embed_text);
-	});
-	function copyToClipboard(text) {
-		if (navigator.clipboard) {
-			navigator.clipboard.writeText(text).then(() => {
-				displayToast("Link copied to clipboard.");
-			}, () => {
-				displayToast("ERROR: Failed to copy link.", true);
-			});
-		} else {
-			displayToast("ERROR: Failed to copy link.", true);
-		}
-	}
 	function displayToast(message, isError = false) {
 		$("#toast").html(message).finish().toggleClass("error", isError).fadeIn(100).delay(3000).fadeOut(1000);
 	}

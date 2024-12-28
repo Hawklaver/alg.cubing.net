@@ -95,7 +95,7 @@ html, textarea {
 	flex-wrap: wrap;
 }
 
-#info .section.buttons, #info .section#share, #info .section#embed {
+#info .section.buttons, #info #share.section {
 	padding: 0;
 }
 
@@ -140,7 +140,8 @@ html, textarea {
 	justify-content: space-evenly;
 }
 #info .puzzles.section.buttons,
-#info .examples.section.buttons {
+#info .examples.section.buttons,
+#info #embed {
 	height: auto;
 	height: calc-size(auto, size);
 	overflow: hidden;
@@ -151,8 +152,11 @@ html, textarea {
 	justify-content: space-between;
 }
 #info .puzzles.section.buttons.hidden,
-#info .examples.section.buttons.hidden {
+#info .examples.section.buttons.hidden,
+#info #embed.hidden {
 	height: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 
 #info #share.section.buttons .button,
@@ -160,6 +164,16 @@ html, textarea {
 	width: 25%;
 	padding: 0px;
 	text-decoration: none;
+}
+
+#info #embed {
+	display: flex;
+}
+#info iframe {
+	margin-right: 10px;
+}
+#info #embed #copyEmbed {
+	font-size: 0.75em;
 }
 
 #info select:is(:hover, :focus), #info .button:is(.selected, :hover) {
@@ -268,7 +282,7 @@ html, textarea {
 	background: #ff03;
 }
 
-#title:hover, #title:focus, .moves:hover, .moves:focus {
+#title, .moves, #embed textarea {
 	outline: none;
 }
 
@@ -327,21 +341,14 @@ input[type="range"] {
 	background: #111;
 }
 
-.sharetext {
-	font-size: 1em;
-	/*margin: 8px;*/
-	padding: 10px 10px;
-	background: #000;
-	/*border: 1px solid #ddd;*/
-	/*border-radius: 5px;*/
-	border: none;
-	text-overflow: ellipsis;
-	vertical-align: middle;
+#embed textarea {
 	width: 100%;
 	color: #666;
-}
-
-textarea.sharetext {
+	border: none;
+	font-size: 1em;
+	background: #000;
+	word-break: break-all;
+	padding-bottom: 10px;
 	resize: vertical;
 	min-height: min-content;
 	field-sizing: content;
@@ -406,5 +413,7 @@ textarea.sharetext {
 	#info #example-pattern .section.buttons .button {
 		width: calc(100% / 3);
 	}
-
+	#info #embed {
+		flex-direction: column-reverse;
+	}
 }
