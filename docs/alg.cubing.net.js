@@ -331,6 +331,10 @@ algxControllers.controller("algxController", ["$scope", "$location", "debounce",
 		// Update sharing links
 		var url = new URL(location.origin + $location.url());
 		$scope.share_url = url.href;
+		var tweetUrl = new URL("https://twitter.com/intent/tweet");
+		tweetUrl.searchParams.set("text", document.title);
+		tweetUrl.searchParams.set("url", $scope.share_url);
+		$scope.share_twitter_url = tweetUrl.href;
 		url.searchParams.delete("view");
 		$scope.editor_url = url.href;
 		url.searchParams.set("view", "embed");

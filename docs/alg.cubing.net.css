@@ -155,6 +155,7 @@ html, textarea {
 	height: 0px;
 }
 
+#info #share.section.buttons .button,
 #info #info-section.section.buttons .button {
 	width: 25%;
 	padding: 0px;
@@ -383,6 +384,7 @@ textarea.sharetext {
 		font-size: 3vh;
 	}
 	#info #tools.section.buttons .button,
+	#info #share.section.buttons .button,
 	#info #info-section.section.buttons .button {
 		width: 50%;
 	}
