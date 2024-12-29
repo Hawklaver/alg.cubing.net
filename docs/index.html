@@ -128,8 +128,8 @@
 					<div id="example-{{group.name.toLowerCase()}}" data-ng-repeat="group in examples">
 						<div class="section buttons examples hidden" data-ng-class="{ hidden: selected_example_group !== '{{group.name}}' || selected_example_puzzle !== '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list">
 							<button class="button" data-ng-repeat="example in puzzle.list" data-ng-click="showExamples(group, puzzle, example);">
-								<span>{{example.name}}</span>
 								<img data-ng-src="{{createExampleImage(group, puzzle, example)}}">
+								<span>{{example.name}}</span>
 							</button>
 						</div>
 					</div>
