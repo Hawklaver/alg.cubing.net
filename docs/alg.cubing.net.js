@@ -46,6 +46,10 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			$scope[param] = param_defaults[param];
 		}
 		$scope.speed = $scope.speed_default;
+		$scope.hint_stickers = $scope.hint_stickers_default;
+		$scope.hint_stickers_distance = $scope.hint_stickers_distance_default;
+		$scope.hollow = $scope.hollow_default;
+		$scope.picture = $scope.picture_default;
 		$scope.clear();
 	};
 
@@ -163,13 +167,10 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.custom_scheme = search["custom_scheme"].slice(0, 6);
 	}
 
-	$scope.speed = 1;
 	$scope.current_move = "0";
 
 	$scope.setupStatus = "valid";
 	$scope.algStatus = "valid";
-	$scope.hint_stickers = true;
-	$scope.hint_stickers_distance = 1;
 
 	initParameter("view", "editor", [
 		{
@@ -216,6 +217,48 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.speed = $scope.speed_default;
 	if ("speed" in search) {
 		$scope.speed = search["speed"] * 1 || $scope.speed_default;
+	}
+
+	$scope.hint_stickers_default = true;
+	$scope.hint_stickers = $scope.hint_stickers_default;
+	if ("hint_stickers" in search) {
+		$scope.hint_stickers = toBoolean(search["hint_stickers"]);
+	}
+
+	$scope.hint_stickers_distance_default = 1;
+	$scope.hint_stickers_distance = $scope.hint_stickers_distance_default;
+	if ("hint_stickers_distance" in search) {
+		$scope.hint_stickers_distance = search["hint_stickers_distance"] * 1 || $scope.hint_stickers_distance_default;
+	}
+
+	$scope.hollow_default = false;
+	$scope.hollow = $scope.hollow_default;
+	if ("hollow" in search) {
+		$scope.hollow = toBoolean(search["hollow"]);
+	}
+
+	$scope.picture_default = false;
+	$scope.picture = $scope.picture_default;
+	if ("picture" in search) {
+		$scope.picture = toBoolean(search["picture"]);
+	}
+
+	function toBoolean(value) {
+		if (typeof value === "boolean") {
+			return value;
+		}
+		switch (String(value).toLowerCase()) {
+			case "1":
+			case "on":
+			case "true":
+				return true;
+			case "0":
+			case "off":
+			case "false":
+				return false;
+			default:
+				return false;
+		}
 	}
 
 	$scope.nextView = function() {
@@ -326,6 +369,10 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		setWithDefault("scheme", $scope.scheme.id);
 		setWithDefault("custom_scheme", $scope.custom_scheme);
 		setWithDefault("speed", $scope.speed);
+		setWithDefault("hint_stickers", $scope.hint_stickers);
+		setWithDefault("hint_stickers_distance", $scope.hint_stickers_distance);
+		setWithDefault("hollow", $scope.hollow);
+		setWithDefault("picture", $scope.picture);
 		setWithDefault("view", $scope.view.id);
 		setWithDefault("fbclid", null); // Remove Facebook tracking ID
 		// Update sharing links
@@ -338,6 +385,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		tweetUrl.searchParams.set("url", $scope.share_url);
 		$scope.share_twitter_url = tweetUrl.href;
 		url.searchParams.set("view", "embed");
+		url.search = url.search.replace(/=(?=&|$)/g, "");
 		$scope.embed_url = url.href;
 		$scope.embed_text = `<iframe src="${$scope.embed_url}" frameborder="0"></iframe>`;
 		showEmbedDebounce();
