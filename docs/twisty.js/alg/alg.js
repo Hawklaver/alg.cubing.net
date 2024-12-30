@@ -323,23 +323,22 @@
 		simplify.sequence = function (sequence) {
 			var algOut = [];
 			for (var i = 0; i < sequence.length; i++) {
-				var move = sequence[i];
+				var move = cloneMove(sequence[i]);
 				if (move.type !== "move") {
 					algOut.push(simplify[move.type](move));
-				} else if (algOut.length > 0 && algOut[algOut.length - 1].type == "move" && sameBlock(algOut[algOut.length - 1], move)) {
-					var amount = algOut[algOut.length - 1].amount + move.amount;
-					// Mod to [-2, -1, 0, 1, 2]
-					// x | 0 truncates x towards 0.
-					amount = amount - 4 * round(amount / 4);
-					if (amount == 0) {
-						algOut.pop();
-					} else {
-						algOut[algOut.length - 1].amount = amount;
-					}
-				} else {
-					algOut.push(cloneMove(move));
+					continue;
 				}
-				//console.log(JSON.stringify(algOut));
+				if (algOut.length > 0 && algOut[algOut.length - 1].type == "move" && sameBlock(algOut[algOut.length - 1], move)) {
+					move.amount += algOut[algOut.length - 1].amount;
+					algOut.pop();
+				}
+				// Mod to [-1, 0, 1, 2]
+				// x | 0 truncates x towards 0.
+				move.amount = move.amount % 4 + 4;
+				move.amount = move.amount - 4 * round(move.amount / 4);
+				if (move.amount !== 0) {
+					algOut.push(move);
+				}
 			}
 			return algOut;
 		};
