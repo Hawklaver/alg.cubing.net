@@ -561,7 +561,10 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			previousEnd = newEnd;
 		}
 
-		twistyScene.setCameraPosition(0.5, 3);
+		function initCameraPosition() {
+			twistyScene.setCameraPosition(0.65, 3);
+		}
+		initCameraPosition();
 
 		var resizeFunction = function() {
 			$("#algorithm_shadow").width($("#algorithm").width());
@@ -628,7 +631,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$("#skip").click(gettingCurrentMove(twistyScene.play.skip));
 
 		$("#viewer canvas").dblclick(() => {
-			twistyScene.setCameraPosition(0.5, 3);
+			initCameraPosition();
 			twistyScene.redraw();
 		});
 
