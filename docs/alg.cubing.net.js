@@ -311,6 +311,33 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.addHistoryCheckpoint = true;
 	};
 
+	$scope.rotate = function(axis) {
+		if ($scope.alg.trim()) {
+			$scope.alg = alg.cube.rotate($scope.alg, axis);
+			var matcher = new RegExp(`^\\s*${axis}(\\d*)('?)\\s*`, "g");
+			if (matcher.test($scope.alg)) {
+				$scope.alg = $scope.alg.replace(matcher, function(match, p1, p2) {
+					var amount = ((((p1 || 1) * (p2 ? -1 : 1) + 1) % 4) + 4) % 4;
+					switch (amount) {
+						case 0:
+							return "";
+						case 1:
+							return axis + " ";
+						case 2:
+							return axis + "2 ";
+						case 3:
+							return axis + "' ";
+						default:
+							return "";
+					}
+				});
+			} else {
+				$scope.alg = axis + " " + $scope.alg;
+			}
+			$scope.addHistoryCheckpoint = true;
+		}
+	};
+
 	$scope.removeComments = function() {
 		$scope.setup = alg.cube.removeComments($scope.setup);
 		$scope.alg = alg.cube.removeComments($scope.alg);

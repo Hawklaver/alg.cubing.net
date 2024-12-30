@@ -520,6 +520,45 @@
 			}
 		};
 
+		var rotateMap = {
+			x: {
+				"U": "B", "Uw": "Bw", "u": "b",
+				"F": "U", "Fw": "Uw", "f": "u",
+				"R": "R", "Rw": "Rw", "r": "r",
+				"B": "D", "Bw": "Dw", "b": "d",
+				"L": "L", "Lw": "Lw", "l": "l",
+				"D": "F", "Dw": "Fw", "d": "f",
+				"M": "M", "m": "m",
+				"E": "S", "e": "s",
+				"S": "E'", "s": "e'",
+				"x": "x", "y": "z'", "z": "y",
+			},
+			y: {
+				"U": "U", "Uw": "Uw", "u": "u",
+				"F": "L", "Fw": "Lw", "f": "l",
+				"R": "F", "Rw": "Fw", "r": "f",
+				"B": "R", "Bw": "Rw", "b": "r",
+				"L": "B", "Lw": "Bw", "l": "b",
+				"D": "D", "Dw": "Dw", "d": "d",
+				"M": "S'", "m": "s'",
+				"E": "E", "e": "e",
+				"S": "M", "s": "m",
+				"x": "z", "y": "y", "z": "x'",
+			},
+			z: {
+				"U": "R", "Uw": "Rw", "u": "r",
+				"F": "F", "Fw": "Fw", "f": "f",
+				"R": "D", "Rw": "Dw", "r": "d",
+				"B": "B", "Bw": "Bw", "b": "b",
+				"L": "U", "Lw": "Uw", "l": "u",
+				"D": "L", "Dw": "Lw", "d": "l",
+				"M": "E'", "m": "e'",
+				"E": "M", "e": "m",
+				"S": "S'", "s": "s",
+				"x": "y'", "y": "x", "z": "z",
+			},
+		};
+
 		/****************************************************************/
 
 		var mirrorAcrossM = makeAlgTraversal();
@@ -553,6 +592,17 @@
 				mirroredMove.amount = -mirroredMove.amount;
 			}
 			return mirroredMove;
+		};
+
+		var rotate = makeAlgTraversal();
+		rotate.move = function(move, axis) {
+			var rotatedMove = cloneMove(move);
+			rotatedMove.base = rotateMap[axis][rotatedMove.base];
+			if (rotatedMove.base.includes("'")) {
+				rotatedMove.base = rotatedMove.base.replace("'", "");
+				rotatedMove.amount = -rotatedMove.amount;
+			}
+			return rotatedMove;
 		};
 
 		/************************************************************************************************/
@@ -739,6 +789,7 @@
 			mirrorAcrossM,
 			mirrorAcrossE,
 			mirrorAcrossS,
+			rotate,
 			canonicalizeMove,
 			removeComments,
 			toMoves,
