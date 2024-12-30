@@ -273,6 +273,28 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		var value = $scope[model] - e.target.step * Math.sign(e.originalEvent.deltaY);
 		$scope[model] = Math.min(Math.max(min, value), max);
 	};
+	$scope.changeSpeed = e => {
+		e.preventDefault();
+		var slider = document.querySelector("#speed input");
+		var { min, max } = slider;
+		var value = $scope.speed - slider.step * Math.sign(e.originalEvent.deltaY);
+		$scope.speed = Math.min(Math.max(min, value), max);
+		$("#speed input").show();
+	};
+	$scope.toggleSpeedSlider = e => {
+		if (!e.target.matches("input")) {
+			$("#speed input").toggle();
+		}
+	};
+	$scope.initSpeedSlider = e => {
+		$scope.speed = $scope.speed_default;
+		$("#speed input").hide();
+	};
+	$(document).on("mousedown touchstart", e => {
+		if (!e.target.closest("#speed")) {
+			$("#speed input").hide();
+		}
+	});
 
 	$scope.expand = function() {
 		$scope.alg = alg.cube.expand($scope.alg);

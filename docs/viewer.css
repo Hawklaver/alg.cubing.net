@@ -64,6 +64,7 @@
 	height: 10%;
 	display: flex;
 	transition: 0.2s;
+	user-select: none;
 	/*background: rgba(127, 127, 127, 0.2);*/
 	/*background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.2) 20%);*/
 }
@@ -189,4 +190,29 @@
 	color: #000;
 	max-height: 100%;
 	max-width: 100%;
+}
+
+#speed span {
+	color: #000;
+	position: absolute;
+	font-size: 1em;
+	font-weight: bold;
+}
+#speed input[type="range"] {
+	bottom: calc(10% + 10px);
+	width: calc(90vh - 30px);
+	max-width: 50vh;
+	position: absolute;
+	transform: translateX(50%) rotate(-90deg);
+	transform-origin: left;
+	display: none;
+}
+
+
+/******** For Mobile ********/
+
+@media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
+	#speed input[type="range"] {
+		width: calc(90vh * 0.4 - 50px);
+	}
 }
