@@ -199,6 +199,7 @@
 	font-weight: bold;
 }
 #speed input[type="range"] {
+	z-index: 1;
 	bottom: calc(10% + 10px);
 	width: calc(90vh - 30px);
 	max-width: 50vh;
@@ -211,8 +212,11 @@
 
 /******** For Mobile ********/
 
-@media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
+@media (max-width: 640px), (orientation: portrait) {
+	#display-wrapper h2 {
+		font-size: 18px;
+	}
 	#speed input[type="range"] {
-		width: calc(90vh * 0.4 - 50px);
+		width: calc((50vh - 104px) * 0.7);
 	}
 }

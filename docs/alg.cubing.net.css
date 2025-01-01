@@ -85,9 +85,9 @@ html, textarea {
 	font-size: 1em;
 	padding: 0.4em 0.6em;
 	margin: 0.2em;
+	overflow: hidden;
 	text-align: center;
 	box-sizing: border-box;
-	min-width: min-content;
 }
 
 #info .section.buttons {
@@ -378,22 +378,7 @@ input[type="range"] {
 
 /******** For Mobile ********/
 
-@media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
-	body {
-		flex-direction: column;
-	}
-	#display-wrapper {
-		height: calc(50% - 92px);
-	}
-	#info-wrapper {
-		height: calc(50% + 92px);
-	}
-	#display-wrapper, #info-wrapper {
-		width: 100%;
-	}
-	#controls .control {
-		font-size: 3vh;
-	}
+@media (max-width: 1080px) {
 	#info #tools.section.buttons .button,
 	#info #share.section.buttons .button,
 	#info #info-section.section.buttons .button {
@@ -412,5 +397,22 @@ input[type="range"] {
 	}
 	#info #embed {
 		flex-direction: column-reverse;
+	}
+}
+
+@media (max-width: 640px), (orientation: portrait) {
+	body {
+		flex-direction: column;
+	}
+	#display-wrapper {
+		width: 100%;
+		height: calc(50% - 92px);
+	}
+	#info-wrapper {
+		width: 100%;
+		height: calc(50% + 92px);
+	}
+	#controls .control {
+		font-size: 3vh;
 	}
 }
