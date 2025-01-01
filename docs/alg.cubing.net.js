@@ -772,8 +772,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 	});
 
-	$("#algorithm").on("input", function() {
+	$("#algorithm").on("input", () => {
 		$("#algorithm_shadow .highlight").hide();
+	}).on("scroll", e => {
+		var scrollTop = $(e.target).scrollTop();
+		$("#algorithm_shadow").css("margin-top", -scrollTop);
 	});
 
 	function displayToast(message, isError = false) {

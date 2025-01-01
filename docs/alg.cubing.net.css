@@ -221,9 +221,17 @@ html, textarea {
 	padding: 0.8em 1em;
 	font-family: "Ubuntu", Verdana, Helvetica, Tahoma, sans-serif;
 }
+@supports (field-sizing: content) {
+	.moves {
+		height: fit-content;
+		field-sizing: content;
+	}
+}
 
 #algorithm {
-	z-index: 100;
+	resize: vertical !important;
+	overflow-y: auto !important;
+	max-height: calc(50% - 34px);
 }
 
 #algorithm_wrapper {
@@ -375,10 +383,10 @@ input[type="range"] {
 		flex-direction: column;
 	}
 	#display-wrapper {
-		height: 40%;
+		height: calc(50% - 92px);
 	}
 	#info-wrapper {
-		height: 60%;
+		height: calc(50% + 92px);
 	}
 	#display-wrapper, #info-wrapper {
 		width: 100%;

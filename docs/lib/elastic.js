@@ -68,7 +68,7 @@ angular.module('monospaced.elastic', [])
             minHeightValue = parseInt(taStyle.getPropertyValue('min-height'), 10),
             heightValue = parseInt(taStyle.getPropertyValue('height'), 10),
             minHeight = Math.max(minHeightValue, heightValue) - boxOuter.height,
-            maxHeight = parseInt(taStyle.getPropertyValue('max-height'), 10),
+            maxHeight = taStyle.getPropertyValue('max-height').replace('px', '') * 1,
             mirrored,
             active,
             copyStyle = ['font-family',
@@ -79,7 +79,12 @@ angular.module('monospaced.elastic', [])
                          'line-height',
                          'text-transform',
                          'word-spacing',
-                         'text-indent'];
+                         'text-indent'],
+            fieldSizing = taStyle.getPropertyValue('field-sizing');
+
+        if (fieldSizing === "content") {
+          return;
+        }
 
         // exit if elastic already applied (or is the mirror element)
         if ($ta.data('elastic')) {
