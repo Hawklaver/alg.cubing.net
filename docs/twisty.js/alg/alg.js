@@ -51,6 +51,15 @@
 		".": ".",
 	};
 
+	var combinationMap = {
+		"U": "D",
+		"F": "B",
+		"R": "L",
+		"B": "F",
+		"L": "R",
+		"D": "U",
+	};
+
 	function canonicalizeMove(orig, dimension) {
 		var move = {};
 		move.amount = orig.amount;
@@ -93,6 +102,7 @@
 			comment_short: { repeatable: false },
 			comment_long: { repeatable: false },
 			timestamp: { repeatable: false },
+			combination: { repeatable: false },
 		};
 
 		/************************************************************************************************/
@@ -144,7 +154,9 @@
 				var afterNewline = alg[i].type === "newline";
 				var beforeNewline = i + 1 in alg && alg[i + 1].type === "newline";
 				var betweenPauses = i + 1 in alg && alg[i].type === "pause" && alg[i + 1].type === "pause";
-				if (!lastMove && !afterNewline && !beforeNewline && !betweenPauses) {
+				var beforeCombination = type === "move" && alg[i+1] && alg[i+1].type === "combination";
+				var afterCombination = type === "combination" && alg[i+1] && alg[i+1].type === "move";
+				if (!lastMove && !afterNewline && !beforeNewline && !betweenPauses && !afterCombination && !beforeCombination) {
 					moveStrings.push(" ");
 				}
 			}
@@ -202,6 +214,10 @@
 
 		toString.newline = function (newline) {
 			return "\n";
+		};
+
+		toString.combination = function (combination) {
+			return "+";
 		};
 
 		/************************************************************************************************/
@@ -280,6 +296,7 @@
 			fn.comment_short = id;
 			fn.comment_long = id;
 			fn.timestamp = id;
+			fn.combination = id;
 			// Make the defaults available to overrides.
 			// TODO: Use prototypes?
 			for (i in fn) {
@@ -381,6 +398,28 @@
 		/****************************************************************/
 
 		var toMoves = makeAlgTraversal();
+		toMoves.sequence = function (algIn, data) {
+			var moves = [];
+			for (var i = 0; i < algIn.length; i++) {
+				if (algIn[i].type === "combination") {
+					var moveA = algIn[i-1];
+					var moveB = algIn[i+1];
+					if (isValidCombination(moveA, moveB)) {
+						var combination = this[moveB.type](moveB, data);
+						moves[moves.length-1].combination = combination;
+						moves[moves.length-1].location.last_line = combination.location.last_line;
+						moves[moves.length-1].location.last_column = combination.location.last_column;
+						combination.combination = moves[moves.length-1];
+						i++;
+					} else {
+						throw new Error("Impossible Move Combination");
+					}
+				} else {
+					moves = moves.concat(this[algIn[i].type](algIn[i], data));
+				}
+			}
+			return moves;
+		};
 		toMoves.commutator = expand.commutator;
 		toMoves.conjugate = expand.conjugate;
 		toMoves.group = expand.group;
@@ -400,6 +439,12 @@
 		toMoves.comment_short = emptySequence;
 		toMoves.comment_long = emptySequence;
 		toMoves.timestamp = emptySequence;
+
+		/************************************************************************************************/
+
+		function isValidCombination(moveA, moveB) {
+			return moveA && moveB && moveA.type === "move" && moveB.type === "move" && !moveA.combination && !moveB.combination && moveA.base === combinationMap[moveB.base];
+		}
 
 		/************************************************************************************************/
 
@@ -434,6 +479,10 @@
 			var invertedMove = cloneMove(move);
 			if (move.base !== ".") {
 				invertedMove.amount = -invertedMove.amount;
+				if (invertedMove.combination) {
+					invertedMove.combination = cloneMove(invertedMove.combination);
+					invertedMove.combination.amount = -invertedMove.combination.amount;
+				}
 			}
 			return invertedMove;
 		};
@@ -707,6 +756,7 @@
 		countMoves.comment_short = zero;
 		countMoves.comment_long = zero;
 		countMoves.timestamp = zero;
+		countMoves.combination = zero;
 
 		let toCubingJSAlg = makeAlgTraversal();
 		toCubingJSAlg.sequence = function (algIn, data) {

@@ -329,32 +329,35 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	var animateMoveCallback = function (twisty, currentMove, moveProgress) {
 		// Easing
 		moveProgress = twisty.options.easing(moveProgress);
-		var canonical = alg.cube.canonicalizeMove(currentMove, twisty.options.dimension);
-		if (canonical.base == ".") {
-			return; // Pause
-		}
-		var rott = new THREE.Matrix4();
-		lastMoveProgress = moveProgress;
-		rott.makeRotationAxis(sidesRotAxis[canonical.base], (moveProgress * canonical.amount * Math.PI) / 2);
-		var state = twisty.cubePieces;
-		for (var faceIndex = 0; faceIndex < state.length; faceIndex++) {
-			var faceStickers = state[faceIndex];
-			for (var stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
-				// TODO - sticker isn't really a good name for this --jfly
-				var sticker = state[faceIndex][stickerIndex];
-				// Support negative layer indices (e.g. for rotations)
-				// TODO: Bug 20110906, if negative index ends up the same as start index, the animation is iffy.
-				var layerStart = canonical.startLayer;
-				var layerEnd = canonical.endLayer;
-				if (layerEnd < 0) {
-					layerEnd = twisty.options.dimension + 1 + layerEnd;
-				}
-				var layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
-				if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && layer > twisty.options.dimension - 2 * layerEnd - 0.5) {
-					var roty = rott.clone();
-					roty.multiply(sticker[0]);
-					sticker[1].matrix.copy(sticker[0]);
-					sticker[1].applyMatrix(rott);
+		var moves = currentMove.combination ? [currentMove, currentMove.combination] : [currentMove];
+		for (var move of moves) {
+			var canonical = alg.cube.canonicalizeMove(move, twisty.options.dimension);
+			if (canonical.base == ".") {
+				return; // Pause
+			}
+			var rott = new THREE.Matrix4();
+			lastMoveProgress = moveProgress;
+			rott.makeRotationAxis(sidesRotAxis[canonical.base], (moveProgress * canonical.amount * Math.PI) / 2);
+			var state = twisty.cubePieces;
+			for (var faceIndex = 0; faceIndex < state.length; faceIndex++) {
+				var faceStickers = state[faceIndex];
+				for (var stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
+					// TODO - sticker isn't really a good name for this --jfly
+					var sticker = state[faceIndex][stickerIndex];
+					// Support negative layer indices (e.g. for rotations)
+					// TODO: Bug 20110906, if negative index ends up the same as start index, the animation is iffy.
+					var layerStart = canonical.startLayer;
+					var layerEnd = canonical.endLayer;
+					if (layerEnd < 0) {
+						layerEnd = twisty.options.dimension + 1 + layerEnd;
+					}
+					var layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
+					if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && layer > twisty.options.dimension - 2 * layerEnd - 0.5) {
+						var roty = rott.clone();
+						roty.multiply(sticker[0]);
+						sticker[1].matrix.copy(sticker[0]);
+						sticker[1].applyMatrix(rott);
+					}
 				}
 			}
 		}
@@ -378,35 +381,38 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	var cumulativeAlgorithm = [];
 
 	var advanceMoveCallback = function (twisty, currentMove) {
-		var canonical = alg.cube.canonicalizeMove(currentMove, twisty.options.dimension);
-		if (canonical.base === ".") {
-			return; // Pause
-		}
-		var rott = matrix4Power(sidesRot[canonical.base], canonical.amount);
-		var state = twisty.cubePieces;
-		for (var faceIndex = 0; faceIndex < state.length; faceIndex++) {
-			var faceStickers = state[faceIndex];
-			for (var stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
-				// TODO - sticker isn't really a good name for this --jfly
-				var sticker = state[faceIndex][stickerIndex];
-				var layerStart = canonical.startLayer;
-				var layerEnd = canonical.endLayer;
-				if (layerEnd < 0) {
-					layerEnd = twisty.options.dimension + 1 + layerEnd;
-				}
-				var layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
-				if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && layer > twisty.options.dimension - 2 * layerEnd - 0.5) {
-					var roty = rott.clone();
-					roty.multiply(sticker[0]);
-					sticker[1].matrix.identity();
-					sticker[1].applyMatrix(roty);
-					sticker[0].copy(roty);
+		var moves = currentMove.combination ? [currentMove, currentMove.combination] : [currentMove];
+		for (var move of moves) {
+			var canonical = alg.cube.canonicalizeMove(move, twisty.options.dimension);
+			if (canonical.base === ".") {
+				return; // Pause
+			}
+			var rott = matrix4Power(sidesRot[canonical.base], canonical.amount);
+			var state = twisty.cubePieces;
+			for (var faceIndex = 0; faceIndex < state.length; faceIndex++) {
+				var faceStickers = state[faceIndex];
+				for (var stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
+					// TODO - sticker isn't really a good name for this --jfly
+					var sticker = state[faceIndex][stickerIndex];
+					var layerStart = canonical.startLayer;
+					var layerEnd = canonical.endLayer;
+					if (layerEnd < 0) {
+						layerEnd = twisty.options.dimension + 1 + layerEnd;
+					}
+					var layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
+					if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && layer > twisty.options.dimension - 2 * layerEnd - 0.5) {
+						var roty = rott.clone();
+						roty.multiply(sticker[0]);
+						sticker[1].matrix.identity();
+						sticker[1].applyMatrix(roty);
+						sticker[0].copy(roty);
+					}
 				}
 			}
-		}
-		cumulativeAlgorithm.push(canonical);
-		if (twisty.options.algUpdateCallback) {
-			twisty.options.algUpdateCallback(cumulativeAlgorithm);
+			cumulativeAlgorithm.push(canonical);
+			if (twisty.options.algUpdateCallback) {
+				twisty.options.algUpdateCallback(cumulativeAlgorithm);
+			}
 		}
 	};
 

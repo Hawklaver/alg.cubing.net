@@ -45,10 +45,12 @@
 
 #display-wrapper.invalid {
 	transition: 0.2s;
+	background: #f004;
+	cursor: not-allowed;
 }
 
-#display-wrapper.invalid {
-	background: rgba(255, 0, 0, 0.3);
+#display-wrapper.invalid * {
+	pointer-events: none;
 }
 
 #display-wrapper.invalid #viewer {
@@ -113,7 +115,7 @@
 	transition: 0.2s;
 }
 
-#display-wrapper:hover #progress {
+#display-wrapper:not(.invalid):hover #progress {
 	height: 12px;
 }
 
@@ -157,7 +159,7 @@
 	height: 20px;
 }
 
-#display-wrapper:hover #currentMove::-webkit-slider-thumb {
+#display-wrapper:not(.invalid):hover #currentMove::-webkit-slider-thumb {
 	width: 16px !important;
 	height: 16px !important;
 }

@@ -423,7 +423,12 @@ twisty.scene = function(options) {
       var prevTime = model.time;
       var prevPosition = model.position;
 
-      var speedCoef = 1 / (0.5 * (Math.abs(model.moveList[Math.floor(model.position)].amount) + 1));
+      var currentMove = model.moveList[Math.floor(model.position)];
+      var amount = Math.abs(currentMove.amount);
+      if (currentMove.combination) {
+        amount = Math.max(amount, Math.abs(currentMove.combination.amount));
+      }
+      var speedCoef = 1 / (0.5 * (amount + 1));
 
       model.time = Date.now();
       model.position = prevPosition + (model.time - prevTime) * control.speed * speedCoef * 1.5 / 1000;
@@ -442,7 +447,6 @@ twisty.scene = function(options) {
         }
       }
       else {
-        var currentMove = model.moveList[Math.floor(model.position)];
         model.twisty["animateMoveCallback"](model.twisty, currentMove, model.position % 1);
       }
     }

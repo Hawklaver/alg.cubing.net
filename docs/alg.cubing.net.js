@@ -380,7 +380,6 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 		var escaped = alg;
 		escaped = escaped.replace(/_/g, "&#95;").replace(/ /g, "_");
-		escaped = escaped.replace(/\+/g, "&#2b;");
 		escaped = escaped.replace(/-/g, "&#45;").replace(/'/g, "-");
 		return escaped;
 	}
@@ -391,7 +390,6 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 		var unescaped = alg;
 		unescaped = unescaped.replace(/-(?!\d)/g, "'").replace(/&#45;/g, "-");
-		unescaped = unescaped.replace(/\+/g, " ").replace(/&#2b;/g, "+"); // Recognize + as space. Many URL encodings will do this.
 		unescaped = unescaped.replace(/_/g, " ").replace(/&#95;/g, "_");
 		return unescaped;
 	}
@@ -568,10 +566,19 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			$scope.setupStatus = "invalid";
 		}
 
-		var type = $scope.type.type;
+		var algo;
+		try {
+			init = alg.cube.toMoves(init);
+			algo = alg.cube.toMoves(algoFull);
+		} catch (e) {
+			$scope.algStatus = "invalid";
+		}
 
-		init = alg.cube.toMoves(init);
-		var algo = alg.cube.toMoves(algoFull);
+		if ($scope.algStatus === "invalid") {
+			return;
+		}
+
+		var type = $scope.type.type;
 
 		twistyScene.setupAnimation(algo, {
 			init: init,
@@ -995,28 +1002,28 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 							name: "Ga",
 							title: "Ga-Perm",
 							setup: "",
-							alg: "R2 U R' U R' U' R U' R2 U' D R' U R D'",
+							alg: "R2 U R' U R' U' R U' R2 U'+D R' U R D'",
 							arw: "U0U2-s8,U2U6-s8,U6U0-s8,U3U5-s8,U5U1-s6,U1U3-s6",
 						},
 						{
 							name: "Gb",
 							title: "Gb-Perm",
 							setup: "",
-							alg: "R' U' R U D' R2 U R' U R U' R U' R2' D",
+							alg: "R' U' R U+D' R2 U R' U R U' R U' R2' D",
 							arw: "U0U6-s8,U6U8-s8,U8U0-s8,U1U7-s8,U7U3-s6,U3U1-s6",
 						},
 						{
 							name: "Gc",
 							title: "Gc-Perm",
 							setup: "",
-							alg: "R2' U' R U' R U R' U R2 U D' R U' R' D",
+							alg: "R2' U' R U' R U R' U R2 U+D' R U' R' D",
 							arw: "U0U6-s8,U6U8-s8,U8U0-s8,U3U5-s8,U5U7-s6,U7U3-s6",
 						},
 						{
 							name: "Gd",
 							title: "Gd-Perm",
 							setup: "",
-							alg: "R U R' U' D R2 U' R U' R' U R' U R2 D'",
+							alg: "R U R' U'+D R2 U' R U' R' U R' U R2 D'",
 							arw: "U6U0-s8,U0U2-s8,U2U6-s8,U7U1-s8,U1U3-s6,U3U7-s6",
 						},
 						{
@@ -1563,7 +1570,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		if (!pzl || pzl <= 3) {
 			return alg;
 		}
-		alg = alg.replace(/\/\/.*$/gm, "");
+		alg = alg.replace(/\/\/.*$/gm, "").replace(/[\s\+]+/g, " ");
 		alg = alg.replace(/([mes])(\d+)?(')?/g, function(match, p1, p2, p3) {
 			var base = p1;
 			var amount = p2 || "";
