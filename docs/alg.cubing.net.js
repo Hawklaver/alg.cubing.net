@@ -1379,20 +1379,19 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 							name: "Checkerboard",
 							title: "Checkerboard",
 							setup: "",
-		//					alg: "2L2 2R2 2U2 2D2 2F2 2B2",
-							alg: "m2 M2 e2 E2 s2 S2",
+							alg: "(M2 E2 S2) (M2 E2 S2)w",
 						},
 						{
 							name: "Dot in a Dot",
 							title: "Dot in a Dot",
 							setup: "",
-							alg: "[E, S] [e, s]",
+							alg: "[E, S] [E, S]w",
 						},
 						{
 							name: "6 X",
 							title: "6 X",
 							setup: "",
-							alg: "(((M2' 2U2)2 z)2 x y)3 m2 s2 e2",
+							alg: "(((M2' 2U2)2 z)2 x y)3 Mw2 Sw2 Ew2",
 						},
 						{
 							name: "Smiley Face",
@@ -1416,7 +1415,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 							name: "Exchanged Rings",
 							title: "Exchanged Rings",
 							setup: "",
-							alg: "B' U' B' L' D B U D2 B U L D' L' U' L2 D\nb' u' b' l' d b u d2 b u l d' l' u' l2 d",
+							alg: "(B' U' B' L' D B U D2 B U L D' L' U' L2 D)\n(B' U' B' L' D B U D2 B U L D' L' U' L2 D)w",
 						},
 						{
 							name: "Superflip",
@@ -1562,10 +1561,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			}
 		}
 		if (example) {
+			var expand = alg.cube.expand;
 			if (group.type.id === "moves") {
-				url.searchParams.set("alg", alg.cube.expand(formatAlgForVisualCube(`${example.setup} ${example.alg}`, pzl)));
+				url.searchParams.set("alg", expand(formatAlgForVisualCube(expand(`${example.setup} ${example.alg}`), pzl)));
 			} else if (group.type.id === "alg") {
-				url.searchParams.set("case", alg.cube.expand(formatAlgForVisualCube(`${example.setup} ${example.alg}`, pzl)));
+				url.searchParams.set("case", expand(formatAlgForVisualCube(expand(`${example.setup} ${example.alg}`), pzl)));
 			}
 			if (example.arw) {
 				url.searchParams.set("arw", example.arw);
@@ -1578,19 +1578,22 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			return alg;
 		}
 		alg = alg.replace(/\/\/.*$/gm, "").replace(/[\s\+]+/g, " ");
-		alg = alg.replace(/([mes])(\d+)?(')?/g, function(match, p1, p2, p3) {
+		alg = alg.replace(/([mes]|[MES]w)(\d+)?(')?/g, function(match, p1, p2, p3) {
 			var base = p1;
 			var amount = p2 || "";
 			var prime = p3 || "";
 			var moves = "";
 			switch (base) {
 				case "m":
+				case "Mw":
 					moves = "x' R L'";
 					break;
 				case "e":
+				case "Ew":
 					moves = "y' U D'";
 					break;
 				case "s":
+				case "Sw":
 					moves = "z F' B";
 					break;
 				default:

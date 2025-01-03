@@ -130,6 +130,9 @@
 			var amountDir = repeated.amount > 0 ? 1 : -1; // Mutable
 			var suffix = "";
 			// Suffix Logic
+			if (repeated.wide) {
+				suffix += "w";
+			}
 			if (amount > 1) {
 				suffix += "" + amount;
 			}
@@ -271,6 +274,7 @@
 					A: fn(commutator.A, data),
 					B: fn(commutator.B, data),
 					amount: commutator.amount,
+					wide: commutator.wide,
 				};
 			};
 			fn.conjugate = function (conjugate, data) {
@@ -279,6 +283,7 @@
 					A: fn(conjugate.A, data),
 					B: fn(conjugate.B, data),
 					amount: conjugate.amount,
+					wide: conjugate.wide,
 				};
 			};
 			fn.group = function (group, data) {
@@ -286,6 +291,7 @@
 					type: "group",
 					A: fn(group.A, data),
 					amount: group.amount,
+					wide: group.wide,
 				};
 			};
 			var id = function (x) {
@@ -364,12 +370,21 @@
 
 		function repeatMoves(movesIn, accordingTo) {
 			var movesOnce = movesIn;
+			var movesOut = [];
+			if (accordingTo.wide) {
+				for (var move of movesOnce) {
+					if (patterns.single.test(move.base) || patterns.singleSlice.test(move.base)) {
+						move.base += "w";;
+					}
+					movesOut.push(move);
+				}
+				return movesOut;
+			}
 			var amount = Math.abs(accordingTo.amount);
 			var amountDir = accordingTo.amount > 0 ? 1 : -1; // Mutable
 			if (amountDir == -1) {
 				movesOnce = invert(movesOnce);
 			}
-			var movesOut = [];
 			for (var i = 0; i < amount; i++) {
 				movesOut = movesOut.concat(movesOnce);
 			}
@@ -493,6 +508,7 @@
 				A: commutator.B,
 				B: commutator.A,
 				amount: commutator.amount,
+				wide: commutator.wide,
 			};
 		};
 
@@ -502,6 +518,7 @@
 				A: conjugate.A,
 				B: invert(conjugate.B),
 				amount: conjugate.amount,
+				wide: conjugate.wide,
 			};
 		};
 
@@ -510,6 +527,7 @@
 				type: "group",
 				A: invert(group.A),
 				amount: group.amount,
+				wide: group.wide,
 			};
 		};
 
