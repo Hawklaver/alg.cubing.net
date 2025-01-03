@@ -521,11 +521,18 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.twisty_init = function() {
 		$("#viewer").empty();
 
-		twistyScene = new twisty.scene({
-			allowDragging: true,
-			renderer: Renderer,
-			cachedRenderer: true,
-		});
+		try {
+			twistyScene = new twisty.scene({
+				allowDragging: true,
+				renderer: Renderer,
+				cachedRenderer: true,
+			});
+		} catch (e) {
+			$("#play").off("click").on("click", () => {
+				displayToast("If nothing is displayed on the canvas, try restarting your browser.", true);
+			}).trigger("click");
+			return;
+		}
 		$("#viewer").append($(twistyScene.getDomElement()));
 
 		twistyScene.initializePuzzle({
