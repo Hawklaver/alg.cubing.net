@@ -550,123 +550,97 @@
 
 		/************************************************************************************************/
 
-		var mirrorM = {
-			fixed: ["x", "M", "m"],
-			sliceMap: {
-				"U": "U", "Uw": "Uw", "u": "u",
-				"F": "F", "Fw": "Fw", "f": "f",
-				"R": "L", "Rw": "Lw", "r": "l",
-				"B": "B", "Bw": "Bw", "b": "b",
-				"L": "R", "Lw": "Rw", "l": "r",
-				"D": "D", "Dw": "Dw", "d": "d",
-				"M": "M", "Mw": "Mw", "m": "m",
-				"E": "E", "Ew": "Ew", "e": "e",
-				"S": "S", "Sw": "Sw", "s": "s",
-				"x": "x", "y": "y", "z": "z",
-			}
-		};
-
-		var mirrorE = {
-			fixed: ["y", "E", "e"],
-			sliceMap: {
-				"U": "D", "Uw": "Dw", "u": "d",
-				"F": "F", "Fw": "Fw", "f": "f",
-				"R": "R", "Rw": "Rw", "r": "r",
-				"B": "B", "Bw": "Bw", "b": "b",
-				"L": "L", "Lw": "Lw", "l": "l",
-				"D": "U", "Dw": "Uw", "d": "u",
-				"M": "M", "Mw": "Mw", "m": "m",
-				"E": "E", "Ew": "Ew", "e": "e",
-				"S": "S", "Sw": "Sw", "s": "s",
-				"x": "x", "y": "y", "z": "z",
-			}
-		};
-
-		var mirrorS = {
-			fixed: ["z", "S", "s"],
-			sliceMap: {
-				"U": "U", "Uw": "Uw", "u": "u",
-				"F": "B", "Fw": "Bw", "f": "b",
-				"R": "R", "Rw": "Rw", "r": "r",
-				"B": "F", "Bw": "Fw", "b": "f",
-				"L": "L", "Lw": "Lw", "l": "l",
-				"D": "D", "Dw": "Dw", "d": "d",
-				"M": "M", "Mw": "Mw", "m": "m",
-				"E": "E", "Ew": "Ew", "e": "e",
-				"S": "S", "Sw": "Sw", "s": "s",
-				"x": "x", "y": "y", "z": "z",
-			}
+		var mirrorMap = {
+			M: {
+				fixed: ["x", "M", "Mw", "m"],
+				map: {
+					U: "U", Uw: "Uw", u: "u",
+					F: "F", Fw: "Fw", f: "f",
+					R: "L", Rw: "Lw", r: "l",
+					B: "B", Bw: "Bw", b: "b",
+					L: "R", Lw: "Rw", l: "r",
+					D: "D", Dw: "Dw", d: "d",
+					E: "E", Ew: "Ew", e: "e",
+					S: "S", Sw: "Sw", s: "s",
+					y: "y", z: "z",
+				}
+			},
+			E: {
+				fixed: ["y", "E", "Ew", "e"],
+				map: {
+					U: "D", Uw: "Dw", u: "d",
+					F: "F", Fw: "Fw", f: "f",
+					R: "R", Rw: "Rw", r: "r",
+					B: "B", Bw: "Bw", b: "b",
+					L: "L", Lw: "Lw", l: "l",
+					D: "U", Dw: "Uw", d: "u",
+					M: "M", Mw: "Mw", m: "m",
+					S: "S", Sw: "Sw", s: "s",
+					x: "x", z: "z",
+				}
+			},
+			S: {
+				fixed: ["z", "S", "Sw", "s"],
+				map: {
+					U: "U", Uw: "Uw", u: "u",
+					F: "B", Fw: "Bw", f: "b",
+					R: "R", Rw: "Rw", r: "r",
+					B: "F", Bw: "Fw", b: "f",
+					L: "L", Lw: "Lw", l: "l",
+					D: "D", Dw: "Dw", d: "d",
+					M: "M", Mw: "Mw", m: "m",
+					E: "E", Ew: "Ew", e: "e",
+					x: "x", y: "y",
+				}
+			},
 		};
 
 		var rotateMap = {
 			x: {
-				"U": "B", "Uw": "Bw", "u": "b",
-				"F": "U", "Fw": "Uw", "f": "u",
-				"R": "R", "Rw": "Rw", "r": "r",
-				"B": "D", "Bw": "Dw", "b": "d",
-				"L": "L", "Lw": "Lw", "l": "l",
-				"D": "F", "Dw": "Fw", "d": "f",
-				"M": "M", "Mw": "Mw", "m": "m",
-				"E": "S", "Ew": "Sw", "e": "s",
-				"S": "E'", "Sw": "Ew'", "s": "e'",
-				"x": "x", "y": "z'", "z": "y",
+				U: "B", Uw: "Bw", u: "b",
+				F: "U", Fw: "Uw", f: "u",
+				R: "R", Rw: "Rw", r: "r",
+				B: "D", Bw: "Dw", b: "d",
+				L: "L", Lw: "Lw", l: "l",
+				D: "F", Dw: "Fw", d: "f",
+				M: "M", Mw: "Mw", m: "m",
+				E: "S", Ew: "Sw", e: "s",
+				S: "E'", Sw: "Ew'", s: "e'",
+				x: "x", y: "z'", z: "y",
 			},
 			y: {
-				"U": "U", "Uw": "Uw", "u": "u",
-				"F": "L", "Fw": "Lw", "f": "l",
-				"R": "F", "Rw": "Fw", "r": "f",
-				"B": "R", "Bw": "Rw", "b": "r",
-				"L": "B", "Lw": "Bw", "l": "b",
-				"D": "D", "Dw": "Dw", "d": "d",
-				"M": "S'", "Mw": "Sw'", "m": "s'",
-				"E": "E", "Ew": "Ew", "e": "e",
-				"S": "M", "Sw": "Mw", "s": "m",
-				"x": "z", "y": "y", "z": "x'",
+				U: "U", Uw: "Uw", u: "u",
+				F: "L", Fw: "Lw", f: "l",
+				R: "F", Rw: "Fw", r: "f",
+				B: "R", Bw: "Rw", b: "r",
+				L: "B", Lw: "Bw", l: "b",
+				D: "D", Dw: "Dw", d: "d",
+				M: "S'", Mw: "Sw'", m: "s'",
+				E: "E", Ew: "Ew", e: "e",
+				S: "M", Sw: "Mw", s: "m",
+				x: "z", y: "y", z: "x'",
 			},
 			z: {
-				"U": "R", "Uw": "Rw", "u": "r",
-				"F": "F", "Fw": "Fw", "f": "f",
-				"R": "D", "Rw": "Dw", "r": "d",
-				"B": "B", "Bw": "Bw", "b": "b",
-				"L": "U", "Lw": "Uw", "l": "u",
-				"D": "L", "Dw": "Lw", "d": "l",
-				"M": "E'", "Mw": "Ew'", "m": "e'",
-				"E": "M", "Ew": "Mw", "e": "m",
-				"S": "S'", "Sw": "Sw'", "s": "s",
-				"x": "y'", "y": "x", "z": "z",
+				U: "R", Uw: "Rw", u: "r",
+				F: "F", Fw: "Fw", f: "f",
+				R: "D", Rw: "Dw", r: "d",
+				B: "B", Bw: "Bw", b: "b",
+				L: "U", Lw: "Uw", l: "u",
+				D: "L", Dw: "Lw", d: "l",
+				M: "E'", Mw: "Ew'", m: "e'",
+				E: "M", Ew: "Mw", e: "m",
+				S: "S'", Sw: "Sw'", s: "s",
+				x: "y'", y: "x", z: "z",
 			},
 		};
 
 		/****************************************************************/
 
-		var mirrorAcrossM = makeAlgTraversal();
-
-		mirrorAcrossM.move = function (move) {
+		var mirror = makeAlgTraversal();
+		mirror.move = function(move, axis) {
 			var mirroredMove = cloneMove(move);
-			if (!mirrorM.fixed.includes(mirroredMove.base)) {
-				mirroredMove.base = mirrorM.sliceMap[mirroredMove.base];
-				mirroredMove.amount = -mirroredMove.amount;
-			}
-			return mirroredMove;
-		};
-
-		var mirrorAcrossE = makeAlgTraversal();
-
-		mirrorAcrossE.move = function (move) {
-			var mirroredMove = cloneMove(move);
-			if (!mirrorE.fixed.includes(mirroredMove.base)) {
-				mirroredMove.base = mirrorE.sliceMap[mirroredMove.base];
-				mirroredMove.amount = -mirroredMove.amount;
-			}
-			return mirroredMove;
-		};
-
-		var mirrorAcrossS = makeAlgTraversal();
-
-		mirrorAcrossS.move = function (move) {
-			var mirroredMove = cloneMove(move);
-			if (!mirrorS.fixed.includes(mirroredMove.base)) {
-				mirroredMove.base = mirrorS.sliceMap[mirroredMove.base];
+			if (!mirrorMap[axis].fixed.includes(mirroredMove.base)) {
+				mirroredMove.base = mirrorMap[axis].map[mirroredMove.base];
 				mirroredMove.amount = -mirroredMove.amount;
 			}
 			return mirroredMove;
@@ -865,9 +839,7 @@
 			cloneMove,
 			makeAlgTraversal,
 			invert,
-			mirrorAcrossM,
-			mirrorAcrossE,
-			mirrorAcrossS,
+			mirror,
 			rotate,
 			canonicalizeMove,
 			removeComments,

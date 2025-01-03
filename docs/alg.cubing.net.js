@@ -315,21 +315,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.addHistoryCheckpoint = true;
 	};
 
-	$scope.mirrorAcrossM = function() {
-		$scope.setup = alg.cube.mirrorAcrossM($scope.setup);
-		$scope.alg = alg.cube.mirrorAcrossM($scope.alg);
-		$scope.addHistoryCheckpoint = true;
-	};
-
-	$scope.mirrorAcrossE = function() {
-		$scope.setup = alg.cube.mirrorAcrossE($scope.setup);
-		$scope.alg = alg.cube.mirrorAcrossE($scope.alg);
-		$scope.addHistoryCheckpoint = true;
-	};
-
-	$scope.mirrorAcrossS = function() {
-		$scope.setup = alg.cube.mirrorAcrossS($scope.setup);
-		$scope.alg = alg.cube.mirrorAcrossS($scope.alg);
+	$scope.mirror = function(axis) {
+		$scope.setup = alg.cube.mirror($scope.setup, axis);
+		$scope.alg = alg.cube.mirror($scope.alg, axis);
 		$scope.addHistoryCheckpoint = true;
 	};
 
