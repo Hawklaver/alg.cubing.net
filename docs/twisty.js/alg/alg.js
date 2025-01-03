@@ -13,9 +13,9 @@
 	var debug = false;
 	var patterns = {
 		single: /^[UFRBLD]$/,
-		wide: /^([ufrbld])|([UFRBLD]w)$/,
+		wide: /^([ufrbld]|[UFRBLD]w)$/,
 		singleSlice: /^[MES]$/,
-		wideSlice: /^[mes]$/,
+		wideSlice: /^([mes]|[MES]w)$/,
 		rotation: /^[xyz]$/,
 		pause: /^\.$/,
 	};
@@ -44,9 +44,9 @@
 		"B": "B", "Bw": "B", "b": "B",
 		"L": "L", "Lw": "L", "l": "L",
 		"D": "D", "Dw": "D", "d": "D",
-		"M": "L", "m": "L",
-		"E": "D", "e": "D",
-		"S": "F", "s": "F",
+		"M": "L", "Mw": "L", "m": "L",
+		"E": "D", "Ew": "D", "e": "D",
+		"S": "F", "Sw": "F", "s": "F",
 		"x": "R", "y": "U", "z": "F",
 		".": ".",
 	};
@@ -535,36 +535,48 @@
 		var mirrorM = {
 			fixed: ["x", "M", "m"],
 			sliceMap: {
-				"U": "U", "Uw": "Uw", "u": "u",                     "y": "y",
-				"F": "F", "Fw": "Fw", "f": "f", "S": "S", "s": "s", "z": "z",
-				"R": "L", "Rw": "Lw", "r": "l",                     "x": "x",
+				"U": "U", "Uw": "Uw", "u": "u",
+				"F": "F", "Fw": "Fw", "f": "f",
+				"R": "L", "Rw": "Lw", "r": "l",
 				"B": "B", "Bw": "Bw", "b": "b",
-				"L": "R", "Lw": "Rw", "l": "r", "M": "M",
-				"D": "D", "Dw": "Dw", "d": "d", "E": "E", "e": "e"
+				"L": "R", "Lw": "Rw", "l": "r",
+				"D": "D", "Dw": "Dw", "d": "d",
+				"M": "M", "Mw": "Mw", "m": "m",
+				"E": "E", "Ew": "Ew", "e": "e",
+				"S": "S", "Sw": "Sw", "s": "s",
+				"x": "x", "y": "y", "z": "z",
 			}
 		};
 
 		var mirrorE = {
 			fixed: ["y", "E", "e"],
 			sliceMap: {
-				"U": "D", "Uw": "Dw", "u": "d",                     "y": "y",
-				"F": "F", "Fw": "Fw", "f": "f", "S": "S", "s": "s", "z": "z",
-				"R": "R", "Rw": "Rw", "r": "r",                     "x": "x",
+				"U": "D", "Uw": "Dw", "u": "d",
+				"F": "F", "Fw": "Fw", "f": "f",
+				"R": "R", "Rw": "Rw", "r": "r",
 				"B": "B", "Bw": "Bw", "b": "b",
-				"L": "L", "Lw": "Lw", "l": "l", "M": "M", "m": "m",
-				"D": "U", "Dw": "Uw", "d": "u", "E": "E"
+				"L": "L", "Lw": "Lw", "l": "l",
+				"D": "U", "Dw": "Uw", "d": "u",
+				"M": "M", "Mw": "Mw", "m": "m",
+				"E": "E", "Ew": "Ew", "e": "e",
+				"S": "S", "Sw": "Sw", "s": "s",
+				"x": "x", "y": "y", "z": "z",
 			}
 		};
 
 		var mirrorS = {
 			fixed: ["z", "S", "s"],
 			sliceMap: {
-				"U": "U", "Uw": "Uw", "u": "u",                     "y": "y",
-				"F": "B", "Fw": "Bw", "f": "b", "S": "S",           "z": "z",
-				"R": "R", "Rw": "Rw", "r": "r",                     "x": "x",
+				"U": "U", "Uw": "Uw", "u": "u",
+				"F": "B", "Fw": "Bw", "f": "b",
+				"R": "R", "Rw": "Rw", "r": "r",
 				"B": "F", "Bw": "Fw", "b": "f",
-				"L": "L", "Lw": "Lw", "l": "l", "M": "M", "m": "m",
-				"D": "D", "Dw": "Dw", "d": "d", "E": "E", "e": "e"
+				"L": "L", "Lw": "Lw", "l": "l",
+				"D": "D", "Dw": "Dw", "d": "d",
+				"M": "M", "Mw": "Mw", "m": "m",
+				"E": "E", "Ew": "Ew", "e": "e",
+				"S": "S", "Sw": "Sw", "s": "s",
+				"x": "x", "y": "y", "z": "z",
 			}
 		};
 
@@ -576,9 +588,9 @@
 				"B": "D", "Bw": "Dw", "b": "d",
 				"L": "L", "Lw": "Lw", "l": "l",
 				"D": "F", "Dw": "Fw", "d": "f",
-				"M": "M", "m": "m",
-				"E": "S", "e": "s",
-				"S": "E'", "s": "e'",
+				"M": "M", "Mw": "Mw", "m": "m",
+				"E": "S", "Ew": "Sw", "e": "s",
+				"S": "E'", "Sw": "Ew'", "s": "e'",
 				"x": "x", "y": "z'", "z": "y",
 			},
 			y: {
@@ -588,9 +600,9 @@
 				"B": "R", "Bw": "Rw", "b": "r",
 				"L": "B", "Lw": "Bw", "l": "b",
 				"D": "D", "Dw": "Dw", "d": "d",
-				"M": "S'", "m": "s'",
-				"E": "E", "e": "e",
-				"S": "M", "s": "m",
+				"M": "S'", "Mw": "Sw'", "m": "s'",
+				"E": "E", "Ew": "Ew", "e": "e",
+				"S": "M", "Sw": "Mw", "s": "m",
 				"x": "z", "y": "y", "z": "x'",
 			},
 			z: {
@@ -600,9 +612,9 @@
 				"B": "B", "Bw": "Bw", "b": "b",
 				"L": "U", "Lw": "Uw", "l": "u",
 				"D": "L", "Dw": "Lw", "d": "l",
-				"M": "E'", "m": "e'",
-				"E": "M", "e": "m",
-				"S": "S'", "s": "s",
+				"M": "E'", "Mw": "Ew'", "m": "e'",
+				"E": "M", "Ew": "Mw", "e": "m",
+				"S": "S'", "Sw": "Sw'", "s": "s",
 				"x": "y'", "y": "x", "z": "z",
 			},
 		};
