@@ -537,39 +537,35 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			colors: colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme),
 		});
 
-		try {
-			$scope.alg = $scope.alg.replaceAll("’", "'");
-			var algoFull = alg.cube.fromString($scope.alg);
-			$scope.algStatus = "valid";
-			var algoCanonical = alg.cube.toString(algoFull);
-			if (algoCanonical !== $scope.alg.replace(/(?<!^)\s*\/\//g, " //")) {
-				$scope.algStatus = "uncanonical";
-			}
-		} catch (e) {
-			$scope.algStatus = "invalid";
-		}
+		var init, algo;
 
 		try {
-			$scope.setup = $scope.setup.replaceAll("’", "'");
-			var init = alg.cube.fromString($scope.setup);
 			$scope.setupStatus = "valid";
+			$scope.setup = $scope.setup.replaceAll("’", "'");
+			init = alg.cube.fromString($scope.setup);
 			var setupCanonical = alg.cube.toString(init);
 			if (setupCanonical !== $scope.setup) {
 				$scope.setupStatus = "uncanonical";
 			}
+			init = alg.cube.toMoves(init);
 		} catch (e) {
 			$scope.setupStatus = "invalid";
 		}
 
-		var algo;
 		try {
-			init = alg.cube.toMoves(init);
+			$scope.algStatus = "valid";
+			$scope.alg = $scope.alg.replaceAll("’", "'");
+			var algoFull = alg.cube.fromString($scope.alg);
+			var algoCanonical = alg.cube.toString(algoFull);
+			if (algoCanonical !== $scope.alg.replace(/(?<!^)\s*\/\//g, " //")) {
+				$scope.algStatus = "uncanonical";
+			}
 			algo = alg.cube.toMoves(algoFull);
 		} catch (e) {
 			$scope.algStatus = "invalid";
 		}
 
-		if ($scope.algStatus === "invalid") {
+		if ($scope.setupStatus === "invalid" || $scope.algStatus === "invalid") {
 			return;
 		}
 
