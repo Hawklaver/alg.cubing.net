@@ -591,6 +591,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			$scope.current_move = 0;
 			twistyScene.setPosition(0);
 		}
+		highlightCurrentMove(true);
 
 		new ResizeObserver(resizeFunction).observe(twistyScene.debug.view.container);
 
@@ -626,7 +627,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 	var prevStart = 0;
 	var prevEnd = 0;
-	function highlightCurrentMove() {
+	function highlightCurrentMove(force) {
 		// TODO: Make a whole lot more efficient.
 		var algo = alg.cube.toMoves(alg.cube.fromString($scope.alg));
 		if (algo.length < Math.floor(parseFloat($scope.current_move))) {
@@ -638,17 +639,18 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 		var current_move = algo[idx];
 		if (!current_move) {
-			$("#algorithm_shadow").find("#middle").hide();
+			$("#algorithm_shadow #middle").hide();
 			return;
 		}
-		$("#algorithm_shadow").find("#middle").show();
+		$("#algorithm_shadow #middle").show();
 		var newStart = locationToIndex($scope.alg, current_move.location.first_line, current_move.location.first_column);
 		var newEnd = locationToIndex($scope.alg, current_move.location.last_line, current_move.location.last_column);
-		if (newStart === prevStart && newEnd === prevEnd) {
+		if (!force && newStart === prevStart && newEnd === prevEnd) {
 			return;
 		}
-		$("#algorithm_shadow").find("#start").text($scope.alg.slice(0, newStart));
-		$("#algorithm_shadow").find("#middle").text($scope.alg.slice(newStart, newEnd));
+		$("#algorithm_shadow #start").text($scope.alg.slice(0, newStart));
+		$("#algorithm_shadow #middle").text($scope.alg.slice(newStart, newEnd));
+		$("#algorithm_shadow #end").text($scope.alg.slice(newEnd));
 		prevStart = newStart;
 		prevEnd = newEnd;
 	}
