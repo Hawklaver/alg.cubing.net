@@ -484,7 +484,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	}
 
 	function locationToIndex(text, line, column) {
-		var lines = $scope.alg.split("\n");
+		var lines = text.split("\n");
 		var index = 0;
 		for (var i = 0; i < line - 1; i++) {
 			index += lines[i].length + 1;
@@ -507,7 +507,6 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	var Renderer = webgl ? THREE.WebGLRenderer : THREE.CanvasRenderer;
 
 	$scope.twisty_init = function() {
-		$("#viewer").empty();
 
 		try {
 			twistyScene = new twisty.scene({
@@ -516,12 +515,13 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 				cachedRenderer: true,
 			});
 		} catch (e) {
-			$("#play").off("click").on("click", () => {
+			($scope.play = () => {
 				displayToast("If nothing is displayed on the canvas, try restarting your browser.", true);
-			}).trigger("click");
+			})();
 			return;
 		}
-		$("#viewer").append($(twistyScene.getDomElement()));
+
+		$("#viewer").empty().append(twistyScene.getDomElement());
 
 		twistyScene.initializePuzzle({
 			type: "cube",
@@ -576,113 +576,13 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			type: type,
 		});
 
-		var previousStart = 0;
-		var previousEnd = 0;
-		function highlightCurrentMove(force) {
-			// TODO: Make a whole lot more efficient.
-			if (Math.floor(parseFloat($scope.current_move)) > algo.length) {
-				return;
-			}
-			var idx = Math.ceil(parseFloat($scope.current_move)) - 1;
-			if (idx == -1) {
-				idx = 0;
-			}
-			var current_move = algo[idx];
-			if (typeof current_move === "undefined") {
-				$("#algorithm_shadow").find("#middle").hide();
-				return;
-			}
-			$("#algorithm_shadow").find("#middle").show();
-
-			var newStart = locationToIndex($scope.alg, current_move.location.first_line, current_move.location.first_column);
-			var newEnd = locationToIndex($scope.alg, current_move.location.last_line, current_move.location.last_column);
-
-			if (newStart == previousStart && newEnd == previousEnd) {
-				return;
-			}
-
-			$("#algorithm_shadow").find("#start").text($scope.alg.slice(0, newStart));
-			$("#algorithm_shadow").find("#middle").text($scope.alg.slice(newStart, newEnd));
-
-			previousStart = newStart;
-			previousEnd = newEnd;
-		}
-
-		function initCameraPosition() {
-			twistyScene.setCameraPosition(0.65, 3);
-		}
-		initCameraPosition();
-
-		var resizeFunction = function() {
-			$("#algorithm_shadow").width($("#algorithm").width());
-			twistyScene.resize();
-			// Force redraw. iOS Safari until iOS 7 has a bug where vh units are not recalculated.
-			// Hiding and then showing immediately was the first thing I tried that forces a recalculation.
-			$("#controls").find("button").hide().show();
-			// Also fixes an iOS Safari reorientation bug.
-			window.scrollTo(0, 0);
-		};
-		new ResizeObserver(resizeFunction).observe(twistyScene.debug.view.container);
-		// ↓ResizeObserverで検知できるので要らない
-		// $(window).resize(resizeFunction);
-		// ↓viewの値が変更されてから描画が完了する前に実行されるので、view変更前のサイズがcanvasへ反映されてしまう
-		// $scope.$watch("view", resizeFunction);
-
-		$("#moveIndex").val(0); //TODO: Move into twisty.js
-
-		function getCurrentMove() {
-			var idx = twistyScene.getPosition();
-			var val = parseFloat($scope.current_move);
-			if (idx != val) {
-				$scope.$apply("current_move = " + idx);
-				// TODO: Move listener to detect index change.
-				highlightCurrentMove();
-			}
-		}
-
-		function gettingCurrentMove(f) {
-			return function() {
-				f();
-				getCurrentMove();
-			};
-		}
-
-		// TODO: With a single twistyScene this own't be necessary
-		$("#reset").unbind("click");
-		$("#back").unbind("click");
-		$("#play").unbind("click");
-		$("#pause").unbind("click");
-		$("#forward").unbind("click");
-		$("#skip").unbind("click");
-		$("#viewer canvas").unbind("dblclick");
-		$(document).unbind("selectionchange");
-
-		var start = gettingCurrentMove(twistyScene.play.start);
-		var reset = gettingCurrentMove(twistyScene.play.reset);
-
-		$("#reset").click(reset);
-		$("#back").click(gettingCurrentMove(twistyScene.play.back));
-		$("#play").click(function() {
-			if ($scope.animating) {
-				twistyScene.play.pause();
-			} else {
-				var algEnded = parseFloat($scope.current_move) === algo.length;
-				if (algEnded) {
-					$(document.getElementById("viewer").children[0].children[0]).fadeOut(100, reset).fadeIn(400, start);
-				} else {
-					start();
-				}
-			}
-		});
-		$("#forward").click(gettingCurrentMove(twistyScene.play.forward));
-		$("#skip").click(gettingCurrentMove(twistyScene.play.skip));
-
-		$("#viewer canvas").dblclick(() => {
-			initCameraPosition();
-			twistyScene.redraw();
+		twistyScene.addListener("animating", function(animating) {
+			$scope.$evalAsync(() => {
+				$scope.animating = animating;
+			});
 		});
 
-		$("#currentMove").attr("max", algo.length);
+		twistyScene.addListener("position", getCurrentMove);
 
 		if ($scope.anchor.id === "end") {
 			$scope.current_move = algo.length;
@@ -692,36 +592,100 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			twistyScene.setPosition(0);
 		}
 
-		twistyScene.addListener("animating", function(animating) {
-			$scope.$apply("animating = " + animating);
+		new ResizeObserver(resizeFunction).observe(twistyScene.debug.view.container);
+
+		$("#currentMove").attr("max", algo.length);
+
+		var play = gettingCurrentMove(twistyScene.player.play);
+		$scope.init = gettingCurrentMove(twistyScene.player.init);
+		$scope.play = () => {
+			if ($scope.animating) {
+				twistyScene.player.pause();
+			} else {
+				var algEnded = parseFloat($scope.current_move) === algo.length;
+				if (algEnded) {
+					$("#viewer canvas").fadeOut(100, $scope.init).fadeIn(400, play);
+				} else {
+					play();
+				}
+			}
+		};
+		$scope.prev = gettingCurrentMove(twistyScene.player.prev);
+		$scope.next = gettingCurrentMove(twistyScene.player.next);
+		$scope.skip = gettingCurrentMove(twistyScene.player.skip);
+
+		$("#viewer canvas").off("dblclick").dblclick(() => {
+			initCameraPosition();
+			twistyScene.redraw();
 		});
-		twistyScene.addListener("position", getCurrentMove);
-		$scope.$watch("current_move", function() {
-			$("#currentMove").css({
-				background:
-					"linear-gradient(to right, #cc181e 0%, #cc181e " +
-					($scope.current_move / $("#currentMove").attr("max")) * 100 +
-					"%, #000 " +
-					($scope.current_move / $("#currentMove").attr("max")) * 100 +
-					"%, #000 100%)",
-			});
-			var idx = twistyScene.getPosition();
-			var val = parseFloat($scope.current_move);
-			// We need to parse the string.
-			// See https://github.com/angular/angular.js/issues/1189 and linked issue/discussion.
-			twistyScene.setPosition(val);
-			highlightCurrentMove();
-		});
-		$scope.$watch("speed", function() {
-			twistyScene.setSpeed($scope.speed);
-			$scope.updateLocation();
-		}); // initialize the watch
+
+		initCameraPosition();
 
 		$scope.updateLocation();
 	};
 
+	var prevStart = 0;
+	var prevEnd = 0;
+	function highlightCurrentMove() {
+		// TODO: Make a whole lot more efficient.
+		var algo = alg.cube.toMoves(alg.cube.fromString($scope.alg));
+		if (algo.length < Math.floor(parseFloat($scope.current_move))) {
+			return;
+		}
+		var idx = Math.ceil(parseFloat($scope.current_move)) - 1;
+		if (idx === -1) {
+			idx = 0;
+		}
+		var current_move = algo[idx];
+		if (!current_move) {
+			$("#algorithm_shadow").find("#middle").hide();
+			return;
+		}
+		$("#algorithm_shadow").find("#middle").show();
+		var newStart = locationToIndex($scope.alg, current_move.location.first_line, current_move.location.first_column);
+		var newEnd = locationToIndex($scope.alg, current_move.location.last_line, current_move.location.last_column);
+		if (newStart === prevStart && newEnd === prevEnd) {
+			return;
+		}
+		$("#algorithm_shadow").find("#start").text($scope.alg.slice(0, newStart));
+		$("#algorithm_shadow").find("#middle").text($scope.alg.slice(newStart, newEnd));
+		prevStart = newStart;
+		prevEnd = newEnd;
+	}
+
+	function getCurrentMove() {
+		var idx = twistyScene.getPosition();
+		var val = parseFloat($scope.current_move);
+		if (idx !== val) {
+			$scope.$evalAsync(() => {
+				$scope.current_move = idx;
+			});
+			highlightCurrentMove();
+		}
+	}
+
+	function gettingCurrentMove(f) {
+		return function() {
+			f();
+			getCurrentMove();
+		};
+	}
+
+	function initCameraPosition() {
+		twistyScene.setCameraPosition(0.65, 3);
+	}
+
+	function resizeFunction() {
+		$("#algorithm_shadow").width($("#algorithm").width());
+		twistyScene.resize();
+		// Force redraw. iOS Safari until iOS 7 has a bug where vh units are not recalculated.
+		// Hiding and then showing immediately was the first thing I tried that forces a recalculation.
+		$("#controls").find("button").hide().show();
+		// Also fixes an iOS Safari reorientation bug.
+		window.scrollTo(0, 0);
+	}
+
 	[
-		"title",
 		"setup",
 		"alg",
 		"puzzle",
@@ -738,29 +702,33 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.$watch(prop, $scope.twisty_init);
 	});
 
-	var metrics = ["obtm", "btm", "obqtm", "etm"];
+	$scope.$watch("title", $scope.updateLocation);
 
-	function updateMetrics() {
+	$scope.$watch("speed", function() {
+		twistyScene.setSpeed($scope.speed);
+		$scope.updateLocation();
+	});
+
+	$scope.$watch("current_move", function() {
+		var percentage = $scope.current_move / $("#currentMove").attr("max") * 100;
+		$("#currentMove").css("background", `linear-gradient(to right, #cc181e 0%, #cc181e ${percentage}%, #000 ${percentage}%, #000 100%)`);
+		var val = parseFloat($scope.current_move);
+		// We need to parse the string.
+		// See https://github.com/angular/angular.js/issues/1189 and linked issue/discussion.
+		twistyScene.setPosition(val);
+		highlightCurrentMove();
+	});
+
+	$scope.$watch("alg", () => {
 		var algo = alg.cube.fromString($scope.alg);
-		for (var i in metrics) {
-			var metric = metrics[i];
+		var metrics = ["obtm", "btm", "obqtm", "etm"];
+		for (var metric of metrics) {
 			$scope[metric] = alg.cube.countMoves(algo, {
 				metric: metric,
 				dimension: $scope.puzzle.dimension,
 			});
 		}
-	}
-	$scope.$watch("alg", updateMetrics);
-
-	$scope.setupDelayed = false;
-	$scope.setupDebounce = function(event) {
-		$scope.setupDelayed = event == "delayed";
-	};
-
-	$scope.algDelayed = false;
-	$scope.algDebounce = function(event) {
-		$scope.algDelayed = event == "delayed";
-	};
+	});
 
 	$("#info-wrapper").on("scroll", function(e) {
 		if ($("#info h1").outerHeight() < $(e.target).scrollTop()) {

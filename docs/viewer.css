@@ -39,10 +39,6 @@
 	cursor: grabbing;
 }
 
-.algDelayed {
-	opacity: 0.4;
-}
-
 #display-wrapper.invalid {
 	transition: 0.2s;
 	background: #f004;

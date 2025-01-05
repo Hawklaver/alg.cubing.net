@@ -37,30 +37,30 @@
 </head>
 <body ng-cloak>
 	<div id="toast" style="display:none;">Message.</div>
-	<div id="display-wrapper" data-ng-class="{'fullscreen': view.fullscreen, 'algDelayed': algDelayed || setupDelayed, 'invalid': algStatus == 'invalid' || setupStatus == 'invalid'}">
+	<div id="display-wrapper" data-ng-class="{'fullscreen': view.fullscreen, 'invalid': algStatus == 'invalid' || setupStatus == 'invalid'}">
 		<h2 data-ng-bind="title"></h2>
 		<div id="viewer"></div>
 		<div id="controls">
-			<a class="control" id="cycleView" title="Change View" data-ng-show="view.id !== 'embed'" data-ng-click="nextView()">
+			<a class="control" title="Change View" data-ng-show="view.id !== 'embed'" data-ng-click="nextView()">
 				<i class="fa fa-cube"></i>
 			</a>
-			<a class="control" id="openViewer" title="Open Viewer" data-ng-show="view.id === 'embed'" href="{{editor_url}}" target="_blank">
+			<a class="control" title="Open Viewer" data-ng-show="view.id === 'embed'" href="{{editor_url}}" target="_blank">
 				<i class="fa fa-cube"></i>
 			</a>
-			<a class="control" id="reset" title="Reset">
+			<a class="control" title="Skip to Start" data-ng-click="init();">
 				<i class="fa fa-fast-backward"></i>
 			</a>
-			<a class="control" id="back" title="Back (1 move)">
+			<a class="control" title="Step backward (1 move)" data-ng-click="prev();">
 				<i class="fa fa-mail-reply"></i>
 			</a>
-			<a class="control" id="play" title="Play">
+			<a class="control" title="Play" data-ng-click="play();">
 				<i class="fa fa-play" data-ng-show="!animating"></i>
 				<i class="fa fa-pause" data-ng-show="animating"></i>
 			</a>
-			<a class="control" id="forward" title="Step forward (1 move)">
+			<a class="control" title="Step forward (1 move)" data-ng-click="next();">
 				<i class="fa fa-mail-forward"></i>
 			</a>
-			<a class="control" id="skip" title="Skip to End">
+			<a class="control" title="Skip to End" data-ng-click="skip();">
 				<i class="fa fa-fast-forward"></i>
 			</a>
 			<a class="control" id="speed" title="Speed" data-ng-click="toggleSpeedSlider($event);" data-ng-dblclick="initSpeedSlider($event);" data-ng-wheel="changeSpeed($event);">
@@ -126,13 +126,13 @@
 					<div class="section buttons puzzles hidden" data-ng-class="{ hidden: group.list.length === 1 || selected_example_group !== '{{group.name}}' }" data-ng-repeat="group in examples">
 						<button class="button" data-ng-class="{ selected: selected_example_group === '{{group.name}}' && selected_example_puzzle === '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list" data-ng-click="showExamples(group, puzzle);">
 							<span>{{puzzle.name}}</span>
-							<img data-ng-src="{{createExampleImage(group, puzzle)}}">
+							<img data-ng-src="{{::createExampleImage(group, puzzle)}}">
 						</button>
 					</div>
 					<div id="example-{{group.name.toLowerCase()}}" data-ng-repeat="group in examples">
 						<div class="section buttons examples hidden" data-ng-class="{ hidden: selected_example_group !== '{{group.name}}' || selected_example_puzzle !== '{{puzzle.name}}' }" data-ng-repeat="puzzle in group.list">
 							<button class="button" data-ng-repeat="example in puzzle.list" data-ng-click="showExamples(group, puzzle, example);">
-								<img data-ng-src="{{createExampleImage(group, puzzle, example)}}">
+								<img data-ng-src="{{::createExampleImage(group, puzzle, example)}}">
 								<span>{{example.name}}</span>
 							</button>
 						</div>

@@ -502,37 +502,33 @@ twisty.scene = function(options) {
     model.moveList = model.moveList.concat(moves);
   };
 
-  this.play = {}
-
-  this.play.reset = function() {
-    setAnimating(false);
-    that.setIndex(0);
-  }
-
-  this.play.start = function() {
-    triggerAnimation();
-  }
-
-  this.play.pause = function() {
-    setAnimating(false);
-  }
-
-  this.play.skip = function() {
-    setAnimating(false);
-    that.setIndex(model.moveList.length);
-  }
-
-  this.play.forward = function() {
-    triggerAnimation();
-    control.stopAfterNextMove = true;
-  }
-
-  this.play.back = function() {
-    var index = Math.ceil(that.getPosition());
-    if (index > 0) {
-      that.setIndex(index - 1);
-    }
-  }
+  this.player = {
+    play() {
+      triggerAnimation();
+    },
+    pause() {
+      setAnimating(false);
+    },
+    prev() {
+      var index = Math.ceil(that.getPosition());
+      if (0 < index) {
+        setAnimating(false);
+        that.setIndex(index - 1);
+      }
+    },
+    next() {
+      triggerAnimation();
+      control.stopAfterNextMove = true;
+    },
+    init() {
+      setAnimating(false);
+      that.setIndex(0);
+    },
+    skip() {
+      setAnimating(false);
+      that.setIndex(model.moveList.length);
+    },
+  };
 
   this.setPosition = function(position) {
 
