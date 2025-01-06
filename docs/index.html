@@ -69,6 +69,7 @@
 			</a>
 		</div>
 		<div id="progress">
+			<div id="counter" data-ng-show="algo.length">{{current_move | ceil}} / {{algo.length}}</div>
 			<input id="currentMove" data-ng-model="current_move" type="range" min="0" max="1" step="any">
 		</div>
 	</div>

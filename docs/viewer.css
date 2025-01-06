@@ -115,6 +115,15 @@
 	height: 12px;
 }
 
+#counter {
+	right: 10px;
+	bottom: 20px;
+	padding: 10px;
+	position: absolute;
+	background: #000c;
+	border-radius: 10px;
+}
+
 #currentMove {
 	background: #000;
 	width: 100%;

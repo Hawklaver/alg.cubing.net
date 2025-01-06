@@ -18,6 +18,8 @@ algxApp.filter("title", function() {
 	};
 });
 
+algxApp.filter("ceil", () => (input => Math.ceil(input)));
+
 var algxControllers = angular.module("algxControllers", ["monospaced.elastic"]);
 
 algxControllers.controller("algxController", ["$scope", "$sce", "$location", "debounce", function($scope, $sce, $location, debounce) {
@@ -537,7 +539,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			colors: colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme),
 		});
 
-		var init, algo;
+		var init;
 
 		try {
 			$scope.setupStatus = "valid";
@@ -560,7 +562,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			if (algoCanonical !== $scope.alg.replace(/(?<!^)\s*\/\//g, " //")) {
 				$scope.algStatus = "uncanonical";
 			}
-			algo = alg.cube.toMoves(algoFull);
+			$scope.algo = alg.cube.toMoves(algoFull);
 		} catch (e) {
 			$scope.algStatus = "invalid";
 		}
@@ -571,7 +573,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 		var type = $scope.type.type;
 
-		twistyScene.setupAnimation(algo, {
+		twistyScene.setupAnimation($scope.algo, {
 			init: init,
 			type: type,
 		});
@@ -585,8 +587,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		twistyScene.addListener("position", getCurrentMove);
 
 		if ($scope.anchor.id === "end") {
-			$scope.current_move = algo.length;
-			twistyScene.setPosition(algo.length);
+			$scope.current_move = $scope.algo.length;
+			twistyScene.setPosition($scope.algo.length);
 		} else {
 			$scope.current_move = 0;
 			twistyScene.setPosition(0);
@@ -595,7 +597,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 		new ResizeObserver(resizeFunction).observe(twistyScene.debug.view.container);
 
-		$("#currentMove").attr("max", algo.length);
+		$("#currentMove").attr("max", $scope.algo.length);
 
 		var play = gettingCurrentMove(twistyScene.player.play);
 		$scope.init = gettingCurrentMove(twistyScene.player.init);
@@ -603,7 +605,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			if ($scope.animating) {
 				twistyScene.player.pause();
 			} else {
-				var algEnded = parseFloat($scope.current_move) === algo.length;
+				var algEnded = parseFloat($scope.current_move) === $scope.algo.length;
 				if (algEnded) {
 					$("#viewer canvas").fadeOut(100, $scope.init).fadeIn(400, play);
 				} else {
@@ -629,15 +631,14 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	var prevEnd = 0;
 	function highlightCurrentMove(force) {
 		// TODO: Make a whole lot more efficient.
-		var algo = alg.cube.toMoves(alg.cube.fromString($scope.alg));
-		if (algo.length < Math.floor(parseFloat($scope.current_move))) {
+		if ($scope.algo.length < Math.floor(parseFloat($scope.current_move))) {
 			return;
 		}
 		var idx = Math.ceil(parseFloat($scope.current_move)) - 1;
 		if (idx === -1) {
 			idx = 0;
 		}
-		var current_move = algo[idx];
+		var current_move = $scope.algo[idx];
 		if (!current_move) {
 			$("#algorithm_shadow #middle").hide();
 			return;
