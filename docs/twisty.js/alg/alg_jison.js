@@ -104,7 +104,7 @@ case 17:this.$ = {type: "move", base: $$[$0], layer: $$[$0-1]};
 break;
 case 18:this.$ = {type: "move", base: $$[$0], endLayer: $$[$0-1]};
 break;
-case 19:this.$ = {type: "move", base: $$[$0], startLayer: $$[$0-3], endLayer: $$[$0-1]};
+case 19:if ($$[$0-1] < $$[$0-3]) { [$$[$0-3], $$[$0-1]] = [$$[$0-1], $$[$0-3]]; } this.$ = {type: "move", base: $$[$0], startLayer: $$[$0-3], endLayer: $$[$0-1]};
 break;
 case 20:this.$ = {type: "timestamp", time: parseFloat($$[$0-1])};
 break;

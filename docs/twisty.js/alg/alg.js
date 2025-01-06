@@ -167,19 +167,16 @@
 		}
 
 		toString.move = function (move) {
-			var tL = move.layer;
-			var sL = move.startLayer;
-			var oL = move.endLayer;
 			var prefix = "";
 			// Prefix logic
 			if (patterns.single.test(move.base)) {
-				if (move.layer) {
+				if (1 < move.layer) {
 					prefix = move.layer.toString();
 				}
 			} else if (patterns.wide.test(move.base)) {
 				if (move.endLayer) {
 					prefix = move.endLayer.toString();
-					if (move.startLayer) {
+					if (1 < move.startLayer) {
 						prefix = move.startLayer.toString() + "-" + prefix;
 					}
 				}
