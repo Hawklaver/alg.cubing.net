@@ -196,10 +196,6 @@ html, textarea {
 	text-overflow: ellipsis;
 }
 
-#title::-webkit-input-placeholder {
-	color: #fff;
-}
-
 #title:focus::-webkit-input-placeholder {
 	color: transparent;
 }
