@@ -265,7 +265,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 	$scope.nextView = function() {
 		$scope.view = $scope.view_map[$scope.view.next];
-		$scope.updateLocation();
+		updateLocation();
 	};
 
 	$scope.onwheel = function(e) {
@@ -394,7 +394,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$location.search(name, value == _default ? null : value);
 	}
 
-	$scope.updateLocation = function() {
+	function updateLocation() {
 		$location.replace();
 		setWithDefault("title", $scope.title);
 		setWithDefault("setup", escape_alg($scope.setup));
@@ -426,7 +426,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.embed_url = url.href;
 		$scope.embed_text = `<iframe src="${$scope.embed_url}" frameborder="0"></iframe>`;
 		showEmbedDebounce();
-	};
+	}
 
 	$scope.toggleEmbed = function() {
 		$("#embed").toggleClass("hidden");
@@ -508,7 +508,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	})();
 	var Renderer = webgl ? THREE.WebGLRenderer : THREE.CanvasRenderer;
 
-	$scope.twisty_init = function() {
+	function initTwisty() {
+
+		if ($scope.animating) {
+			twistyScene.player.pause();
+		}
 
 		try {
 			twistyScene = new twisty.scene({
@@ -595,7 +599,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 		highlightCurrentMove(true);
 
-		new ResizeObserver(resizeFunction).observe(twistyScene.debug.view.container);
+		new ResizeObserver(resizeFunction).observe(twistyScene.getDomElement());
 
 		$("#currentMove").attr("max", $scope.algo.length);
 
@@ -624,8 +628,19 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 		initCameraPosition();
 
-		$scope.updateLocation();
-	};
+		updateLocation();
+	}
+
+	function updateTwisty() {
+		twistyScene.setOption("stage", $scope.stage.id);
+		twistyScene.setOption("colors", colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme));
+		twistyScene.setOption("hintStickers", $scope.hint_stickers);
+		twistyScene.setOption("hintStickersDistance", $scope.hint_stickers_distance);
+		twistyScene.setOption("cubies", !$scope.hollow);
+		twistyScene.setOption("picture", $scope.picture);
+		twistyScene.setPosition(twistyScene.getPosition(), true);
+		updateLocation();
+	}
 
 	var prevStart = 0;
 	var prevEnd = 0;
@@ -688,28 +703,21 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		window.scrollTo(0, 0);
 	}
 
-	[
-		"setup",
-		"alg",
-		"puzzle",
-		"stage",
-		"type",
-		"anchor",
-		"scheme",
-		"custom_scheme",
-		"hint_stickers",
-		"hint_stickers_distance",
-		"hollow",
-		"picture",
-	].map(function(prop) {
-		$scope.$watch(prop, $scope.twisty_init);
+	["setup", "alg", "puzzle", "type"].map(function(prop) {
+		$scope.$watch(prop, initTwisty);
 	});
 
-	$scope.$watch("title", $scope.updateLocation);
+	["stage", "scheme", "custom_scheme", "hint_stickers", "hint_stickers_distance", "hollow", "picture"].map(function(prop) {
+		$scope.$watch(prop, updateTwisty);
+	});
+
+	["title", "anchor"].map(function(prop) {
+		$scope.$watch(prop, updateLocation);
+	});
 
 	$scope.$watch("speed", function() {
 		twistyScene.setSpeed($scope.speed);
-		$scope.updateLocation();
+		updateLocation();
 	});
 
 	$scope.$watch("current_move", function() {

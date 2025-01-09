@@ -530,11 +530,11 @@ twisty.scene = function(options) {
     },
   };
 
-  this.setPosition = function(position) {
+  this.setPosition = function(position, force) {
 
     // If we're somewhere on the same move, don't recalculate position.
     // Else, recalculate from the beginning, since we don't have something clever yet.
-    if (Math.floor(position) !== that.getIndex()) {
+    if (Math.floor(position) !== that.getIndex() || force) {
       var preMoveListSaved = model.preMoveList;
       var moveListSaved = model.moveList;
 
@@ -630,6 +630,9 @@ twisty.scene = function(options) {
     return output;
   }
 
+  this.setOption = function(key, val) {
+    model.twisty.type[key] = val;
+  };
 
   /******** Go! ********/
 
