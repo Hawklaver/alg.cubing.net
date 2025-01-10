@@ -827,6 +827,75 @@
 
 		/************************************************************************************************/
 
+		var toVisualCubeAlg = makeAlgTraversal();
+
+		toVisualCubeAlg.sequence = function(sequence) {
+			var algOut = [];
+			sequence = expand(removeComments(sequence));
+			for (var i = 0; i < sequence.length; i++) {
+				var move = cloneMove(sequence[i]);
+				if (move.type === "pause" || move.type === "newline" || move.type === "combination") {
+					continue;
+				}
+				if (move.type === "move") {
+					if (patterns.wideSlice.test(move.base)) {
+						var move1 = cloneMove(move);
+						var move2 = cloneMove(move);
+						var move3 = cloneMove(move);
+						switch (move.base) {
+							case "m":
+							case "Mw":
+								// x' R L'
+								move1.base = "x"; move1.amount *= -1;
+								move2.base = "R";
+								move3.base = "L"; move3.amount *= -1;
+								break;
+							case "e":
+							case "Ew":
+								// y' U D'
+								move1.base = "y"; move1.amount *= -1;
+								move2.base = "U";
+								move3.base = "D"; move3.amount *= -1;
+								break;
+							case "s":
+							case "Sw":
+								// z F' B
+								move1.base = "z";
+								move2.base = "F"; move2.amount *= -1;
+								move3.base = "B";
+								break;
+							default:
+								break;
+						}
+						algOut.push(move1, move2, move3);
+					} else if (patterns.single.test(move.base) && move.layer) {
+						algOut.push(cloneMove(move));
+						move.layer -= 1;
+						move.amount *= -1;
+						algOut.push(move);
+					} else if (patterns.wide.test(move.base) && move.startLayer && move.endLayer) {
+						var move1 = cloneMove(move);
+						var move2 = cloneMove(move);
+						delete move1.startLayer;
+						delete move2.startLayer;
+						move1.endLayer = move.endLayer;
+						move2.endLayer = move.startLayer - 1;
+						if (move2.endLayer === 1) {
+							delete move2.endLayer;
+							move2.base = move2.base.replace("w", "").toUpperCase();
+						}
+						move2.amount *= -1;
+						algOut.push(move1, move2);
+					} else {
+						algOut.push(move);
+					}
+				}
+			}
+			return algOut;
+		};
+
+		/************************************************************************************************/
+
 		// Exports
 
 		return {
@@ -844,6 +913,7 @@
 			expand,
 			countMoves,
 			toCubingJSAlg,
+			toVisualCubeAlg,
 		};
 	})();
 

@@ -1503,20 +1503,13 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			]
 		},
 	];
-	$scope.examples_keys = ["title", "setup", "alg", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
-	$scope.examples_map = indexBy($scope.examples, "name");
-	for (var grName in $scope.examples_map) {
-		$scope.examples_map[grName].map = indexBy($scope.examples_map[grName].list, "name");
-	}
 	$scope.createExampleImage = function(group, puzzle, example) {
 		if (!group.imageBaseUrl) {
 			return "";
 		}
 		var url = new URL(group.imageBaseUrl);
-		var pzl = "";
 		if (puzzle) {
-			pzl = puzzle.name.split("x")[0];
-			url.searchParams.set("pzl", pzl);
+			url.searchParams.set("pzl", puzzle.name.split("x")[0]);
 			if (!example) {
 				url.searchParams.set("view", "plan");
 				url.searchParams.set("sch", "nttttt");
@@ -1524,62 +1517,16 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			}
 		}
 		if (example) {
-			var expand = alg.cube.expand;
 			if (group.type.id === "moves") {
-				url.searchParams.set("alg", expand(formatAlgForVisualCube(expand(`${example.setup} ${example.alg}`), pzl)));
+				url.searchParams.set("alg", alg.cube.toVisualCubeAlg(`${example.setup} ${example.alg}`));
 			} else if (group.type.id === "alg") {
-				url.searchParams.set("case", expand(formatAlgForVisualCube(expand(`${example.setup} ${example.alg}`), pzl)));
+				url.searchParams.set("case", alg.cube.toVisualCubeAlg(`${example.alg} ${alg.cube.invert(example.setup)}`));
 			}
 			if (example.arw) {
 				url.searchParams.set("arw", example.arw);
 			}
 		}
 		return url.href;
-	};
-	function formatAlgForVisualCube(alg, pzl) {
-		if (!pzl || pzl <= 3) {
-			return alg;
-		}
-		alg = alg.replace(/\/\/.*$/gm, "").replace(/[\s\+]+/g, " ");
-		alg = alg.replace(/([mes]|[MES]w)(\d+)?(')?/g, function(match, p1, p2, p3) {
-			var base = p1;
-			var amount = p2 || "";
-			var prime = p3 || "";
-			var moves = "";
-			switch (base) {
-				case "m":
-				case "Mw":
-					moves = "x' R L'";
-					break;
-				case "e":
-				case "Ew":
-					moves = "y' U D'";
-					break;
-				case "s":
-				case "Sw":
-					moves = "z F' B";
-					break;
-				default:
-					break;
-			}
-			return `((${moves})${amount})${prime}`;
-		});
-		alg = alg.replace(/(?<!\d\-)(\d+)([UFRBLD])(?!w)(\d+)?(')?/g, function(match, p1, p2, p3, p4) {
-			var layer = p1;
-			var base = p2;
-			var amount = p3 || "";
-			var prime = p4 || "";
-			return `${match} (${layer-1}${base}${amount}${prime})'`;
-		});
-		alg = alg.replace(/(\d+)\-(\d+)([UFRBLD])w(\d+)?(')?/g, function(match, p1, p2, p3, p4, p5) {
-			var layerFrom = p1 * 1;
-			var layerTo = p2 * 1;
-			var base = p3;
-			var amount = p4 || "";
-			var prime = p5 || "";
-			return `${layerTo}${base}${amount}${prime} (${layerFrom-1}${base}${amount}${prime})'`;
-		});
-		return alg.trim();
 	};
 	$scope.showExamples = function(group, puzzle, example) {
 		if (!puzzle && !example) {
@@ -1592,7 +1539,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			$scope.selected_example_puzzle = $scope.selected_example_puzzle === puzzle.name && !example ? "" : puzzle.name;
 		}
 		if (example) {
-			for (var key of $scope.examples_keys) {
+			var keys = ["title", "setup", "alg", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
+			for (var key of keys) {
 				$scope[key] = key in example ? example[key] : key in puzzle ? puzzle[key] : key in group ? group[key] : $scope[key];
 			}
 		}
