@@ -555,6 +555,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			}
 			init = alg.cube.toMoves(init);
 		} catch (e) {
+			console.error(e);
 			$scope.setupStatus = "invalid";
 		}
 
@@ -568,6 +569,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			}
 			$scope.algo = alg.cube.toMoves(algoFull);
 		} catch (e) {
+			console.error(e);
 			$scope.algStatus = "invalid";
 		}
 

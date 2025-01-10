@@ -175,7 +175,12 @@
 				}
 			} else if (patterns.wide.test(move.base)) {
 				if (move.endLayer) {
-					prefix = move.endLayer.toString();
+					if (move.endLayer === 1) {
+						throw new Error(`The notation includes a contradiction:\n${move.endLayer}${move.base}\n^`);
+					}
+					if (2 < move.endLayer) {
+						prefix = move.endLayer.toString();
+					}
 					if (1 < move.startLayer) {
 						prefix = move.startLayer.toString() + "-" + prefix;
 					}
