@@ -15,6 +15,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
 	<link href="alg.cubing.net.css" rel="stylesheet" type="text/css" />
 	<link href="viewer.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
 	<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 	<!-- twisty.js libraries and code -->
 	<script src="twisty.js/lib/jquery-1.11.0.min.js"></script>
@@ -41,11 +42,11 @@
 		<h2 data-ng-bind="title"></h2>
 		<div id="viewer"></div>
 		<div id="controls">
-			<a class="control" title="Change View" data-ng-show="view.id !== 'embed'" data-ng-click="nextView()">
-				<i class="fa fa-cube"></i>
+			<a class="control" title="{{view.fullscreen ? 'Exit ' : ''}}Full Screen" data-ng-show="!view.embed" data-ng-click="toggleFullScreen();">
+				<i class="fa-solid fa-{{view.fullscreen ? 'compress' : 'expand'}}"></i>
 			</a>
-			<a class="control" title="Open Viewer" data-ng-show="view.id === 'embed'" href="{{editor_url}}" target="_blank">
-				<i class="fa fa-cube"></i>
+			<a class="control" title="Open Viewer" data-ng-show="view.embed" href="{{editor_url}}" target="_blank">
+				<i class="fa fa-up-right-from-square"></i>
 			</a>
 			<a class="control" title="Skip to Start" data-ng-click="init();">
 				<i class="fa fa-fast-backward"></i>
@@ -78,7 +79,7 @@
 			<h1>
 				<textarea id="title" data-msd-elastic data-ng-trim="false" data-ng-model="title" placeholder="alg.cubing.net [forked]"></textarea>
 			</h1>
-			<div data-ng-show="!(view.id == 'playback' && setup == '')">
+			<div>
 				<h2>
 					<label>
 						<input type="checkbox" class="toggle-button">
@@ -88,7 +89,7 @@
 					</label>
 				</h2>
 				<div>
-					<textarea id="setup" class="moves" data-ng-model="setup" data-ng-trim="false" data-ng-class="[setupStatus]" data-ng-class="{'invalid': !setupValid, 'hoverHighlight': view.highlightMoveFields}" data-msd-elastic placeholder="Enter {{type.setup_moves}}." data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
+					<textarea id="setup" class="moves" data-ng-model="setup" data-ng-trim="false" data-ng-class="[setupStatus]" data-msd-elastic placeholder="Enter {{type.setup_moves}}." data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
 				</div>
 			</div>
 			<div>
@@ -108,10 +109,10 @@
 				</h2>
 				<div id="algorithm_wrapper">
 					<div id="algorithm_shadow" class="moves"><span id="start"></span><span id="middle" class="highlight" style="display: none;"></span><span id="end"></span></div>
-					<textarea id="algorithm" class="moves" data-ng-model="alg" data-ng-trim="false" data-ng-class="[algStatus]" data-ng-class="{'hoverHighlight': view.highlightMoveFields}" data-msd-elastic placeholder="Enter {{type.alg_moves}}." data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
+					<textarea id="algorithm" class="moves" data-ng-model="alg" data-ng-trim="false" data-ng-class="[algStatus]" data-msd-elastic placeholder="Enter {{type.alg_moves}}." data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
 				</div>
 			</div>
-			<div data-ng-show="view.extraControls">
+			<div>
 				<h2>
 					<label>
 						<input type="checkbox" class="toggle-button">
@@ -189,7 +190,7 @@
 							<button class="button" data-ng-click="rotate('x');"><i class="fa fa-rotate-right"></i> Rotate(x)</button>
 							<button class="button" data-ng-click="rotate('y');"><i class="fa fa-rotate-right"></i> Rotate(y)</button>
 							<button class="button" data-ng-click="rotate('z');"><i class="fa fa-rotate-right"></i> Rotate(z)</button>
-							<button class="button" data-ng-click="removeComments();">Remove Comments</button>
+							<button class="button" data-ng-click="removeComments();"><i class="fa fa-comment-slash"></i> Remove Comments</button>
 							<button class="button" data-ng-click="image();"><i class="fa fa-image"></i> Image</button>
 						</div>
 						<div id="canvasPNG"></div>

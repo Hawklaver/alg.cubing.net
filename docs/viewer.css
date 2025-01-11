@@ -25,6 +25,9 @@
 	background: #0008;
 	display: none;
 }
+#display-wrapper.fullscreen h2 {
+	display: block !important;
+}
 
 #viewer {
 	display: block;
@@ -186,17 +189,25 @@
 	background-color: #cccc;
 	text-decoration: none;
 }
-
-#controls .control:hover {
-	background: #ddd;
-	cursor: pointer;
+@media (hover: hover) {
+	#controls .control:hover {
+		cursor: pointer;
+		background: #ddd;
+	}
+}
+@media (hover: none) {
+	#controls .control:active {
+		background: #ddd;
+	}
 }
 
 #controls .control .fa,
-#controls .control .fa::before {
+#controls .control .fa-solid,
+#controls .control .fa::before,
+#controls .control .fa-solid::before {
 	color: #000;
-	max-height: 100%;
 	max-width: 100%;
+	max-height: 100%;
 }
 
 #speed span {

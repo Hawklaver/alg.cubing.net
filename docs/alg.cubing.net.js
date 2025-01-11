@@ -177,35 +177,24 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	initParameter("view", "editor", [
 		{
 			id: "editor",
-			next: "playback",
-			fullscreen: false,
-			infoPane: true,
-			extraControls: true,
-			highlightMoveFields: true,
-		},
-		{
-			id: "playback",
 			next: "fullscreen",
 			fullscreen: false,
 			infoPane: true,
-			extraControls: false,
-			highlightMoveFields: false,
+			embed: false,
 		},
 		{
 			id: "fullscreen",
 			next: "editor",
 			fullscreen: true,
 			infoPane: false,
-			extraControls: false,
-			highlightMoveFields: false,
+			embed: false,
 		},
 		{
 			id: "embed",
 			next: "editor",
 			fullscreen: true,
 			infoPane: false,
-			extraControls: false,
-			highlightMoveFields: false,
+			embed: true,
 		},
 	]);
 
@@ -263,8 +252,13 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 	}
 
-	$scope.nextView = function() {
+	$scope.toggleFullScreen = function() {
 		$scope.view = $scope.view_map[$scope.view.next];
+		if ($scope.view.fullscreen) {
+			document.getElementById("display-wrapper").requestFullscreen();
+		} else if (document.fullscreenElement) {
+			document.exitFullscreen();
+		}
 		updateLocation();
 	};
 
