@@ -316,12 +316,11 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		return m.elements[12] * v.x + m.elements[13] * v.y + m.elements[14] * v.z;
 	}
 
-	var actualScale = 2 * cubeOptions.dimension / cubeOptions.scale;
-	if (cubeOptions.hintStickers) {
-		actualScale *= (cubeOptions.hintStickersDistance + 1);
-	}
-
 	function cameraScale() {
+		var actualScale = 2.2 * cubeOptions.dimension / cubeOptions.scale;
+		if (cubeOptions.hintStickers) {
+			actualScale *= (cubeOptions.hintStickersDistance + 0.9);
+		}
 		return actualScale;
 	}
 
