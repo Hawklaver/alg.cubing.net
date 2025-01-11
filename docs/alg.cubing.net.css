@@ -217,12 +217,6 @@ html, textarea {
 	padding: 0.8em 1em;
 	font-family: "Ubuntu", Verdana, Helvetica, Tahoma, sans-serif;
 }
-@supports (field-sizing: content) {
-	.moves {
-		height: fit-content;
-		field-sizing: content;
-	}
-}
 
 #algorithm {
 	resize: vertical !important;
@@ -350,8 +344,6 @@ input[type="range"] {
 	word-break: break-all;
 	padding-bottom: 10px;
 	resize: vertical;
-	min-height: min-content;
-	field-sizing: content;
 }
 
 #toast {
@@ -371,6 +363,12 @@ input[type="range"] {
 	background: #c00c;
 }
 
+@supports (field-sizing: content) {
+	[data-msd-elastic] {
+		min-height: min-content;
+		field-sizing: content;
+	}
+}
 
 /******** For Mobile ********/
 

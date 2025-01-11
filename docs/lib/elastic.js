@@ -41,7 +41,6 @@ angular.module('monospaced.elastic', [])
 
         var appendText = attrs.msdElastic || config.append,
             append = appendText === '\\n' ? '\n' : appendText,
-            $win = angular.element($window),
             mirrorStyle = 'position: absolute; top: -999px; right: auto; bottom: auto; left: 0 ;' +
                           'overflow: hidden; -webkit-box-sizing: content-box;' +
                           '-moz-box-sizing: content-box; box-sizing: content-box;' +
@@ -183,7 +182,8 @@ angular.module('monospaced.elastic', [])
           ta['oninput'] = adjust;
         }
 
-        $win.bind('resize', forceAdjust);
+        var resizeObserver = new ResizeObserver(forceAdjust);
+        resizeObserver.observe(ta);
 
         scope.$watch(function(){
           return ngModel.$modelValue;
@@ -199,7 +199,7 @@ angular.module('monospaced.elastic', [])
 
         scope.$on('$destroy', function(){
           $mirror.remove();
-          $win.unbind('resize', forceAdjust);
+          resizeObserver.disconnect();
         });
       }
     };
