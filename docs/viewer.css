@@ -201,13 +201,12 @@
 	}
 }
 
-#controls .control .fa,
-#controls .control .fa-solid,
-#controls .control .fa::before,
-#controls .control .fa-solid::before {
+#controls .control {
 	color: #000;
-	max-width: 100%;
-	max-height: 100%;
+}
+#controls .control.disabled {
+	color: #888;
+	pointer-events: none;
 }
 
 #speed span {

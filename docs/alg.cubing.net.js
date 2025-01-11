@@ -169,7 +169,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.custom_scheme = search["custom_scheme"].slice(0, 6);
 	}
 
-	$scope.current_move = "0";
+	$scope.current_move = 0;
 
 	$scope.setupStatus = "valid";
 	$scope.algStatus = "valid";
