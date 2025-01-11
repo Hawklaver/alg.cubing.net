@@ -533,7 +533,6 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			cubies: !$scope.hollow,
 			picture: $scope.picture,
 			stickerBorder: false,
-			doubleSided: !$scope.hint_stickers,
 			colors: colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme),
 		});
 

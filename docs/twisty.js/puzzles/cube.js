@@ -33,7 +33,6 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		cubies: false,
 		picture: false,
 		stickerWidth: 1.7,
-		doubleSided: true,
 		algUpdateCallback: null,
 		hintStickers: false,
 		hintStickersDistance: 1,
@@ -266,7 +265,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	var cubieTemplate1 = new THREE.Mesh(cubieGeometry, cubieMaterial);
 	cubieTemplate1.translateZ(-1);
 	cubieTemplate.add(cubieTemplate1);
-	var side = cubeOptions.doubleSided ? "doubleSided" : "singleSided";
+	var side = cubeOptions.hintStickers ? "singleSided" : "doubleSided";
 
 	// Cube Object Generation
 	for (var i = 0; i < numSides; i++) {
