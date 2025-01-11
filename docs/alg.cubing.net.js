@@ -36,23 +36,14 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 	var param_defaults = [];
 
-	$scope.clear = function() {
-		$scope.alg = "";
-		$scope.setup = "";
-		$scope.current_move = 0;
-		$scope.title = "";
-	};
-
 	$scope.reset = function() {
-		for (var param in param_defaults) {
-			$scope[param] = param_defaults[param];
+		for (var key in $scope) {
+			if (param_defaults[key]) {
+				$scope[key] = param_defaults[key];
+			} else if (key + "_default" in $scope) {
+				$scope[key] = $scope[key + "_default"];
+			}
 		}
-		$scope.speed = $scope.speed_default;
-		$scope.hint_stickers = $scope.hint_stickers_default;
-		$scope.hint_stickers_distance = $scope.hint_stickers_distance_default;
-		$scope.hollow = $scope.hollow_default;
-		$scope.picture = $scope.picture_default;
-		$scope.clear();
 	};
 
 	function initParameter(param, fallback, list) {
@@ -163,13 +154,14 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			custom: true,
 		},
 	]);
-	$scope.custom_scheme_default = "";
+	$scope.custom_scheme_default = "grobyw";
 	$scope.custom_scheme = $scope.custom_scheme_default;
 	if ("custom_scheme" in search) {
 		$scope.custom_scheme = search["custom_scheme"].slice(0, 6);
 	}
 
-	$scope.current_move = 0;
+	$scope.current_move_default = 0;
+	$scope.current_move = $scope.current_move_default;
 
 	$scope.setupStatus = "valid";
 	$scope.algStatus = "valid";
@@ -1523,6 +1515,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 		return url.href;
 	};
+	$scope.selected_example_group_default = "";
 	$scope.showExamples = function(group, puzzle, example) {
 		if (!puzzle && !example) {
 			$scope.selected_example_group = $scope.selected_example_group === group.name ? "" : group.name;
