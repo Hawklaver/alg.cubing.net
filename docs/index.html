@@ -206,15 +206,15 @@
 				<div>
 					<div id="share" class="section buttons">
 						<a class="button" href="{{share_twitter_url}}" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
-						<a class="button" data-ng-click="toggleEmbed();"><i class="fa fa-angle-left"></i> <i class="fa fa-angle-right"></i> Embed</a>
+						<a class="button" data-ng-click="toggleEmbed();" data-ng-class="{ selected: embed_visible }"><i class="fa fa-angle-left"></i> <i class="fa fa-angle-right"></i> Embed</a>
 					</div>
-					<div id="embed" class="section hidden">
+					<div id="embed" class="section hidden" data-ng-class="{ hidden: !embed_visible }">
 						<div ng-bind-html="embed_html"></div>
 						<div>
 							<div>
 								<a id="copyEmbed" class="button"><i class="fa fa-clipboard"></i> Copy</a>
 							</div>
-							<textarea data-ng-model="embed_text" data-ng-change="showEmbed();" data-ng-model-options="{ updateOn: 'change' }" data-msd-elastic></textarea>
+							<textarea data-ng-model="embed_text" data-ng-change="updateEmbed();" data-ng-model-options="{ updateOn: 'change' }" data-msd-elastic></textarea>
 						</div>
 					</div>
 				</div>

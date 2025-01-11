@@ -229,6 +229,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.setup_visible_default = false;
 	$scope.setup_visible = $scope.setup_visible_default;
 
+	$scope.embed_visible_default = false;
+	$scope.embed_visible = $scope.embed_visible_default;
+
 	function toBoolean(value) {
 		if (typeof value === "boolean") {
 			return value;
@@ -419,19 +422,19 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		url.search = url.search.replace(/=(?=&|$)/g, "");
 		$scope.embed_url = url.href;
 		$scope.embed_text = `<iframe src="${$scope.embed_url}" frameborder="0"></iframe>`;
-		showEmbedDebounce();
+		updateEmbedDebounce();
 	}
 
 	$scope.toggleEmbed = function() {
-		$("#embed").toggleClass("hidden");
-		$scope.showEmbed();
+		$scope.embed_visible = !$scope.embed_visible;
+		$scope.updateEmbed();
 	};
-	$scope.showEmbed = function() {
-		if (!$("#embed").is(".hidden")) {
+	$scope.updateEmbed = function() {
+		if ($scope.embed_visible) {
 			$scope.embed_html = $sce.trustAsHtml($scope.embed_text);
 		}
 	};
-	var showEmbedDebounce = debounce($scope.showEmbed, 1000);
+	var updateEmbedDebounce = debounce($scope.updateEmbed, 1000);
 	$("#copyEmbed").on("click", function() {
 		copyToClipboard($scope.embed_text);
 	});
