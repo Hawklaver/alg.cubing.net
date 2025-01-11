@@ -78,7 +78,7 @@
 			<h1>
 				<textarea id="title" data-msd-elastic data-ng-trim="false" data-ng-model="title" placeholder="alg.cubing.net [forked]"></textarea>
 			</h1>
-			<div>
+			<div data-ng-class="{ hidden: !setup && !setup_visible }">
 				<h2>
 					<label>
 						<input type="checkbox" class="toggle-button">
@@ -180,6 +180,7 @@
 						<div class="section buttons" id="tools">
 							<button class="button" data-ng-click="expand();">Expand</button>
 							<button class="button" data-ng-click="simplify();">Simplify</button>
+							<button class="button" data-ng-click="showSetup();">Setup</button>
 							<button class="button" data-ng-click="reset();"><i class="fa fa-xmark"></i> Reset</button>
 							<button class="button" data-ng-click="invert();"><i class="fa fa-backward"></i> Invert</button>
 							<button class="button" data-ng-click="mirror('M');"><i class="fa fa-arrows-h"></i> Mirror(M)</button>

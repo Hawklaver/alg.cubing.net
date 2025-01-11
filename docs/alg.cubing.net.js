@@ -226,6 +226,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.picture = toBoolean(search["picture"]);
 	}
 
+	$scope.setup_visible_default = false;
+	$scope.setup_visible = $scope.setup_visible_default;
+
 	function toBoolean(value) {
 		if (typeof value === "boolean") {
 			return value;
@@ -291,6 +294,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.simplify = function() {
 		$scope.alg = alg.cube.simplify($scope.alg);
 		$scope.addHistoryCheckpoint = true;
+	};
+
+	$scope.showSetup = function() {
+		$scope.setup_visible = true;
+		$("#setup").focus();
 	};
 
 	$scope.invert = function() {

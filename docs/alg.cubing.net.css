@@ -147,13 +147,6 @@ html, textarea {
 	align-items: center;
 	flex-direction: column;
 }
-#info .puzzles.section.buttons.hidden,
-#info .examples.section.buttons.hidden,
-#info #embed.hidden {
-	height: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-}
 
 #info #share.section.buttons .button,
 #info #info-section.section.buttons .button {
@@ -180,6 +173,12 @@ html, textarea {
 .section {
 	line-height: 2em;
 	padding: 10px 20px;
+}
+
+.hidden {
+	height: 0px !important;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
 }
 
 
