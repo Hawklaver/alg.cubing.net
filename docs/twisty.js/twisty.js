@@ -117,7 +117,6 @@ twisty.scene = function(options) {
 
 
   var iniDefaults = {
-    speed: 1, // qtps is 1.5*speed
     renderer: THREE.CanvasRenderer,
     allowDragging: true,
     stats: false,
@@ -130,7 +129,6 @@ twisty.scene = function(options) {
 
     view.initialize(options.renderer);
 
-    control.speed = options.speed;
     if (options.allowDragging) { that.startAllowDragging(); }
     if (options.stats) { startStats(); }
   }
@@ -473,11 +471,13 @@ twisty.scene = function(options) {
 
   var setupDefaults = {
     init: [],
-    type: "generator"
+    type: "generator",
+    speed: 1,
   }
 
   this.setupAnimation = function(algIn, options) {
     options = getOptions(options, setupDefaults);
+    control.speed = options.speed;
 
     setAnimating(false);
 

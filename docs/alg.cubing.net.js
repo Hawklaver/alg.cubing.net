@@ -578,6 +578,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		twistyScene.setupAnimation($scope.algo, {
 			init: init,
 			type: type,
+			speed: $scope.speed,
 		});
 
 		twistyScene.addListener("animating", function(animating) {
