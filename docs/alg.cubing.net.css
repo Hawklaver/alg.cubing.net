@@ -228,7 +228,6 @@ html, textarea {
 }
 
 #algorithm {
-	resize: vertical !important;
 	overflow-y: auto !important;
 	max-height: calc(50% - 34px);
 }
@@ -352,7 +351,7 @@ input[type="range"] {
 	background: #000;
 	word-break: break-all;
 	padding-bottom: 10px;
-	resize: vertical;
+	resize: none;
 }
 
 #toast {
@@ -379,7 +378,7 @@ input[type="range"] {
 
 @supports (field-sizing: content) {
 	[data-msd-elastic] {
-		min-height: min-content;
+		height: fit-content !important;
 		field-sizing: content;
 	}
 }
