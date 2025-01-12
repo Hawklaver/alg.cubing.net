@@ -165,9 +165,18 @@ html, textarea {
 	font-size: 0.75em;
 }
 
-#info select:is(:hover, :focus), #info .button:is(.selected, :hover) {
-	background: #444;
-	cursor: pointer;
+@media (hover: hover) {
+	#info select:is(:hover, :focus),
+	#info .button:is(:hover, .selected) {
+		cursor: pointer;
+		background: #444;
+	}
+}
+@media (hover: none) {
+	#info select:is(:active, :focus),
+	#info .button:is(:active, .selected) {
+		background: #444;
+	}
 }
 
 .section {
