@@ -353,12 +353,16 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.addHistoryCheckpoint = true;
 	};
 
-	$scope.image = function() {
-		var canvas = document.getElementsByTagName("canvas")[0];
-		var img = canvas.toDataURL("image/png");
-		$("#canvasPNG").fadeTo(0, 0);
-		$("#canvasPNG").html('<a href="' + img + '" target="blank"><img src="' + img + '"/></a>');
-		$("#canvasPNG").fadeTo("slow", 1);
+	$scope.image_src_default = "";
+	$scope.image_src = $scope.image_src_default;
+	$scope.drawImage = function() {
+		var src = $sce.trustAsUrl(twistyScene.getCanvas().toDataURL("image/png"));
+		if (String($scope.image_src) === String(src)) {
+			$scope.image_src = $scope.image_src_default;
+		} else {
+			$scope.image_src = src;
+			$("#canvasPNG img").fadeTo(0, 0).fadeTo("slow", 1);
+		}
 	};
 
 	function escape_alg(alg) {
