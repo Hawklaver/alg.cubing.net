@@ -204,13 +204,13 @@
 #controls .control {
 	color: #000;
 }
-#controls .control.disabled {
+#controls .control.disabled,
+#display-wrapper.invalid #controls .control {
 	color: #888;
 	pointer-events: none;
 }
 
 #speed span {
-	color: #000;
 	position: absolute;
 	font-size: 1em;
 	font-weight: bold;

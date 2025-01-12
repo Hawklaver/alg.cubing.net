@@ -48,19 +48,19 @@
 			<a class="control" title="Open Viewer" data-ng-show="view.embed" href="{{editor_url}}" target="_blank">
 				<i class="fa fa-up-right-from-square"></i>
 			</a>
-			<a class="control" title="Skip to Start" data-ng-click="init();" data-ng-class="{ disabled: current_move === 0 }">
+			<a class="control" title="Skip to Start" data-ng-click="init();" data-ng-class="{ disabled: !algo || current_move === 0 }">
 				<i class="fa fa-fast-backward"></i>
 			</a>
-			<a class="control" title="Step backward (1 move)" data-ng-click="prev();" data-ng-class="{ disabled: current_move === 0 }">
+			<a class="control" title="Step backward (1 move)" data-ng-click="prev();" data-ng-class="{ disabled: !algo || current_move === 0 }">
 				<i class="fa fa-mail-reply"></i>
 			</a>
-			<a class="control" title="Play" data-ng-click="play();" data-ng-class="{ disabled: !algo.length }">
+			<a class="control" title="Play" data-ng-click="play();" data-ng-class="{ disabled: !algo || !algo.length }">
 				<i class="fa fa-{{animating ? 'pause' : 'play'}}"></i>
 			</a>
-			<a class="control" title="Step forward (1 move)" data-ng-click="next();" data-ng-class="{ disabled: current_move === algo.length }">
+			<a class="control" title="Step forward (1 move)" data-ng-click="next();" data-ng-class="{ disabled: !algo || current_move === algo.length }">
 				<i class="fa fa-mail-forward"></i>
 			</a>
-			<a class="control" title="Skip to End" data-ng-click="skip();" data-ng-class="{ disabled: current_move === algo.length }">
+			<a class="control" title="Skip to End" data-ng-click="skip();" data-ng-class="{ disabled: !algo || current_move === algo.length }">
 				<i class="fa fa-fast-forward"></i>
 			</a>
 			<a class="control" id="speed" title="Speed" data-ng-click="toggleSpeedSlider($event);" data-ng-dblclick="initSpeedSlider($event);" data-ng-wheel="changeSpeed($event);">

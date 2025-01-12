@@ -351,7 +351,8 @@ input[type="range"] {
 	z-index: 1000;
 	padding: 20px 30px;
 	position: absolute;
-	max-width: 95%;
+	max-width: 90%;
+	text-align: center;
 	box-sizing: border-box;
 	background: #000c;
 	box-shadow: 0px 3px 6px #000c;
@@ -360,6 +361,10 @@ input[type="range"] {
 
 #toast.error {
 	background: #c00c;
+}
+
+#toast span {
+	display: inline-block;
 }
 
 @supports (field-sizing: content) {

@@ -500,6 +500,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			var canvas = document.createElement("canvas");
 			return !!window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
 		} catch (e) {
+			console.error(e);
 			return false;
 		}
 	})();
@@ -518,9 +519,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 				cachedRenderer: true,
 			});
 		} catch (e) {
-			($scope.play = () => {
-				displayToast("If nothing is displayed on the canvas, try restarting your browser.", true);
-			})();
+			console.error(e);
+			displayToast("<span>If nothing is displayed on the canvas,</span> <span>try restarting your browser.</span>", true, 60000);
 			return;
 		}
 
@@ -754,8 +754,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$("#algorithm_shadow").css("margin-top", -scrollTop);
 	});
 
-	function displayToast(message, isError = false) {
-		$("#toast").html(message).finish().toggleClass("error", isError).fadeIn(100).delay(3000).fadeOut(1000);
+	function displayToast(message, isError = false, duration = 3000) {
+		$("#toast").html(message).finish().toggleClass("error", isError).fadeIn(100).delay(duration).fadeOut(1000);
 	}
 
 	$scope.examples = [
