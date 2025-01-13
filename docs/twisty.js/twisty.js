@@ -285,7 +285,6 @@ twisty.scene = function(options) {
       control.mouseYLast = (kind == "mouse") ? event.clientY : event.touches[0].pageY;
 
       renderOnce();
-      event.preventDefault();
 
       for (listener in listeners[kind]) {
         window.addEventListener(listener, listeners[kind][listener], false);

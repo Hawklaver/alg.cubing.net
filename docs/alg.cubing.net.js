@@ -280,7 +280,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			$("#speed input").toggle();
 		}
 	};
-	$scope.initSpeedSlider = e => {
+	$scope.initSpeedSlider = () => {
 		$scope.speed = $scope.speed_default;
 		$("#speed input").hide();
 	};
@@ -671,12 +671,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.next = gettingCurrentMove(twistyScene.player.next);
 		$scope.skip = gettingCurrentMove(twistyScene.player.skip);
 
-		$("#viewer canvas").off("dblclick").dblclick(() => {
-			initCameraPosition();
-			twistyScene.redraw();
-		});
-
-		initCameraPosition();
+		$scope.initCameraPosition();
 
 		updateLocation();
 	}
@@ -739,9 +734,10 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		};
 	}
 
-	function initCameraPosition() {
+	$scope.initCameraPosition = () => {
 		twistyScene.setCameraPosition(0.65, 3);
-	}
+		twistyScene.redraw();
+	};
 
 	["setup", "selected_alg_index", "puzzle", "type"].map(function(prop) {
 		$scope.$watch(prop, initTwisty);

@@ -15,7 +15,6 @@ html, body {
 	width: 100%;
 	overflow: hidden;
 	background: #000;
-	touch-action: manipulation;
 }
 
 html, textarea {
