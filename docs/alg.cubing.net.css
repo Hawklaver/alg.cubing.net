@@ -165,20 +165,6 @@ html, textarea {
 	font-size: 0.75em;
 }
 
-@media (hover: hover) {
-	#info select:is(:hover, :focus),
-	#info .button:is(:hover, .selected) {
-		cursor: pointer;
-		background: #444;
-	}
-}
-@media (hover: none) {
-	#info select:is(:active, :focus),
-	#info .button:is(:active, .selected) {
-		background: #444;
-	}
-}
-
 .section {
 	line-height: 2em;
 	padding: 10px 20px;
@@ -222,7 +208,8 @@ html, textarea {
 .moves {
 	width: 100%;
 	font-size: 1.25em;
-	padding: 0.8em 1.4em 0.8em 1em;
+	padding: 0.8em 2em 0.8em 0.8em;
+	box-sizing: border-box;
 	font-family: "Ubuntu", Verdana, Helvetica, Tahoma, sans-serif;
 }
 
@@ -242,7 +229,7 @@ html, textarea {
 }
 
 .algorithm_wrapper.selected {
-	background: #111;
+	background: #333;
 }
 
 .algorithm_shadow {
@@ -272,17 +259,12 @@ html, textarea {
 }
 
 .algorithm_remove {
-	top: 16px;
-	right: 6px;
+	top: 0.7em;
+	right: 0.6em;
 	color: #666;
 	cursor: pointer;
 	position: absolute;
 	font-size: 1.4em;
-}
-
-.algorithm_add:hover,
-.algorithm_remove:hover {
-	color: #aaa;
 }
 
 #metrics {
@@ -293,7 +275,7 @@ html, textarea {
 	color: #888;
 	float: right;
 	right: 10;
-	position: relative;
+	position: absolute;
 }
 
 .moves.invalid {
@@ -408,7 +390,30 @@ input[type="range"] {
 	}
 }
 
-/******** For Mobile ********/
+/******** For Responsive ********/
+
+@media (hover: hover) {
+	.algorithm_add:hover,
+	.algorithm_remove:hover {
+		color: #aaa;
+	}
+	#info select:is(:hover, :focus),
+	#info .button:is(:hover, .selected) {
+		cursor: pointer;
+		background: #444;
+	}
+}
+
+@media (hover: none) {
+	.algorithm_add:active,
+	.algorithm_remove:active {
+		color: #aaa;
+	}
+	#info select:is(:active, :focus),
+	#info .button:is(:active, .selected) {
+		background: #444;
+	}
+}
 
 @media (max-width: 1080px) {
 	#info #tools.section.buttons .button,
