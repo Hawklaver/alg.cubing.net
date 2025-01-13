@@ -103,7 +103,7 @@ html, textarea {
 	margin: 0;
 }
 
-#info > div:has(#algorithm_wrapper) {
+#info > div:has(.algorithm) {
 	top: 0px;
 	z-index: 1;
 	position: sticky;
@@ -222,24 +222,30 @@ html, textarea {
 .moves {
 	width: 100%;
 	font-size: 1.25em;
-	/*margin: 4px 8px 4px;*/
-	padding: 0.8em 1em;
+	padding: 0.8em 1.4em 0.8em 1em;
 	font-family: "Ubuntu", Verdana, Helvetica, Tahoma, sans-serif;
 }
 
-#algorithm {
+.algorithm {
 	overflow-y: auto !important;
 	max-height: calc(50% - 34px);
 }
 
 #algorithm_wrapper {
-	position: relative;
-	background: #000;
 	margin-bottom: -1px;
 	border-bottom: 1px solid #888;
 }
 
-#algorithm_shadow {
+.algorithm_wrapper {
+	position: relative;
+	background: #000;
+}
+
+.algorithm_wrapper.selected {
+	background: #111;
+}
+
+.algorithm_shadow {
 	position: absolute;
 	color: transparent;
 
@@ -248,17 +254,35 @@ html, textarea {
 	pointer-events: none;
 }
 
-#algorithm_shadow span {
+.algorithm_shadow span {
 	display: inline;
 }
 
-#algorithm_shadow span.highlight {
+.algorithm_shadow span.highlight:not(:empty) {
 	background: #fff;
 	opacity: 0.3;
 	padding: 0.1em 0.2em;
 	margin: -0.1em -0.2em;
 	border-radius: 8px;
-	/*text-shadow: 0px 0px 2px #000;*/
+}
+
+.algorithm_add {
+	color: #666;
+	cursor: pointer;
+}
+
+.algorithm_remove {
+	top: 16px;
+	right: 6px;
+	color: #666;
+	cursor: pointer;
+	position: absolute;
+	font-size: 1.4em;
+}
+
+.algorithm_add:hover,
+.algorithm_remove:hover {
+	color: #aaa;
 }
 
 #metrics {
@@ -272,13 +296,13 @@ html, textarea {
 	position: relative;
 }
 
-.moves.invalid:not(:focus) {
+.moves.invalid {
 	border-top: 1px solid #f00;
 	border-bottom: 1px solid #f00;
 	background: #f003;
 }
 
-.moves.uncanonical:not(:focus) {
+.moves.uncanonical {
 	border-top: 1px solid #ff0;
 	border-bottom: 1px solid #ff0;
 	background: #ff03;

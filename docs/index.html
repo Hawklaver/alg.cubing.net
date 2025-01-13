@@ -27,7 +27,7 @@
 	<!-- alg.cubing.net libraries and code -->
 	<script src="lib/angular.js"></script>
 	<script src="lib/angular-debounce.js"></script>
-	<script src="lib/angular-ng-wheel.js"></script>
+	<script src="lib/angular-custom-directives.js"></script>
 	<script src="lib/clipboard.js"></script>
 	<script src="lib/elastic.js"></script>
 	<script src="alg.cubing.net.js"></script>
@@ -87,8 +87,11 @@
 						<span data-ng-bind="type.setup">Setup</span>
 					</label>
 				</h2>
-				<div>
+				<div class="algorithm_wrapper">
 					<textarea id="setup" class="moves" data-ng-model="setup" data-ng-trim="false" data-ng-class="[setupStatus]" data-msd-elastic placeholder="Enter {{type.setup_moves}}." data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
+					<a class="algorithm_remove" data-ng-click="removeSetup();">
+						<i class="fa fa-xmark"></i>
+					</a>
 				</div>
 			</div>
 			<div>
@@ -99,6 +102,9 @@
 						<i class="fa fa-caret-down"></i>
 						<span data-ng-bind="type.alg">Algorithm</span>
 					</label>
+					<a class="algorithm_add" data-ng-click="addAlg();">
+						<i class="fa fa-plus"></i>
+					</a>
 					<span title="h = obtm, q = obqtm, s = btm, e = etm" id="metrics">
 						(<span data-ng-bind="obtm">0</span>h,
 						<span data-ng-bind="obqtm">0</span>q,
@@ -107,8 +113,13 @@
 					</span>
 				</h2>
 				<div id="algorithm_wrapper">
-					<div id="algorithm_shadow" class="moves"><span id="start"></span><span id="middle" class="highlight" style="display: none;"></span><span id="end"></span></div>
-					<textarea id="algorithm" class="moves" data-ng-model="alg" data-ng-trim="false" data-ng-class="[algStatus]" data-msd-elastic placeholder="Enter {{type.alg_moves}}." data-ng-model-options="{ updateOn: 'change' }" spellcheck="false"></textarea>
+					<div class="algorithm_wrapper" data-ng-repeat="alg in algs track by $index" data-ng-class="{ selected: 1 < algs.length && selected_alg_index === $index }">
+						<div class="moves algorithm_shadow" data-ng-show="selected_alg_index === $index"><span class="before" data-ng-bind="before_alg"></span><span class="middle highlight" data-ng-bind="highlight_alg"></span><span class="after" data-ng-bind="after_alg"></span></div>
+						<textarea class="moves algorithm" data-ng-model="algs[$index]" data-ng-trim="false" data-ng-class="[algStatuses[$index]]" data-msd-elastic placeholder="Enter {{type.alg_moves}}." data-ng-model-options="{ updateOn: 'change' }" spellcheck="false" data-ng-click="changeSelectedAlg($index);" data-ng-scroll="syncAlgShadow($event);"></textarea>
+						<a class="algorithm_remove" data-ng-click="removeAlg($index);">
+							<i class="fa fa-xmark"></i>
+						</a>
+					</div>
 				</div>
 			</div>
 			<div>
