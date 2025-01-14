@@ -21,6 +21,7 @@
 	width: 100%;
 	z-index: 1;
 	position: absolute;
+	font-size: min(2em, 8vh);
 	text-align: center;
 	background: #0008;
 	display: none;
@@ -119,12 +120,18 @@
 }
 
 #counter {
-	right: 10px;
-	bottom: 20px;
+	right: 2%;
+	bottom: calc(10% + 16px);
+	height: 6%;
 	padding: 10px;
 	position: absolute;
+	font-size: min(1em, 6vh);
 	background: #000c;
-	border-radius: 10px;
+	border-radius: 20%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #currentMove {
@@ -231,7 +238,7 @@
 
 @media (max-width: 640px), (orientation: portrait) {
 	#display-wrapper h2 {
-		font-size: 18px;
+		font-size: min(1em, 8vh);
 	}
 	#speed input[type="range"] {
 		width: calc((50vh - 104px) * 0.7);
