@@ -125,7 +125,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			id: "boy",
 			name: "BOY",
 			type: "Color Scheme",
-			scheme: "grobyw",
+			scheme: "wogrby",
 			display: "BOY",
 			custom: false,
 		},
@@ -133,7 +133,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			id: "japanese",
 			name: "Japanese",
 			type: "Color Scheme",
-			scheme: "groybw",
+			scheme: "wogryb",
 			display: "Japanese",
 			custom: false,
 		},
@@ -141,7 +141,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			id: "white-face-down",
 			name: "White Face Down",
 			type: "Color Scheme",
-			scheme: "brogwy",
+			scheme: "yobrgw",
 			display: "White Face Down",
 			custom: false,
 		},
@@ -149,15 +149,43 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			id: "custom",
 			name: "Custom:",
 			type: "Color Scheme",
-			scheme: "grobyw",
+			scheme: "wogrby",
 			display: "",
 			custom: true,
 		},
 	]);
-	$scope.custom_scheme_default = "grobyw";
-	$scope.custom_scheme = $scope.custom_scheme_default;
-	if ("custom_scheme" in search) {
-		$scope.custom_scheme = search["custom_scheme"].slice(0, 6);
+
+	var colorMap = {
+		w: "#ffffff",
+		o: "#ff8800",
+		g: "#00ff00",
+		r: "#ff0000",
+		b: "#0000ff",
+		y: "#ffff00",
+		x: "#222222",
+	};
+
+	$scope.custom_scheme = [
+		{ side: "u", color: "#ffffff", default: "#ffffff" },
+		{ side: "l", color: "#ff8800", default: "#ff8800" },
+		{ side: "f", color: "#00ff00", default: "#00ff00" },
+		{ side: "r", color: "#ff0000", default: "#ff0000" },
+		{ side: "b", color: "#0000ff", default: "#0000ff" },
+		{ side: "d", color: "#ffff00", default: "#ffff00" },
+	];
+
+	if ($scope.scheme.custom) {
+		for (var scheme of $scope.custom_scheme) {
+			if (scheme.side in search) {
+				scheme.color = search[scheme.side];
+			}
+		}
+	}
+
+	function getColors() {
+		var colors = $scope.scheme.custom ? $scope.custom_scheme.map(v => v.color) : [...$scope.scheme.scheme].map(v => colorMap[v]);
+		colors.unshift(colorMap["x"]);
+		return colors;
 	}
 
 	$scope.current_move_default = 0;
@@ -427,8 +455,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		$scope.setup = $scope.setup_default;
 	};
 
-	function setWithDefault(name, value) {
-		var _default = $scope[name + "_default"];
+	function setWithDefault(name, value, _default) {
+		_default = _default ?? $scope[name + "_default"];
 		$location.search(name, JSON.stringify(value) === JSON.stringify(_default) ? null : value);
 	}
 
@@ -443,14 +471,17 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		setWithDefault("type", $scope.type.id);
 		setWithDefault("anchor", $scope.anchor.id);
 		setWithDefault("scheme", $scope.scheme.id);
-		setWithDefault("custom_scheme", $scope.custom_scheme);
+		if ($scope.scheme.custom) {
+			for (var scheme of $scope.custom_scheme) {
+				setWithDefault(scheme.side, scheme.color, scheme.default);
+			}
+		}
 		setWithDefault("hint_stickers", $scope.hint_stickers);
 		setWithDefault("hint_stickers_distance", $scope.hint_stickers_distance);
 		setWithDefault("hollow", $scope.hollow);
 		setWithDefault("picture", $scope.picture);
 		setWithDefault("speed", $scope.speed);
 		setWithDefault("view", $scope.view.id);
-		setWithDefault("fbclid", null); // Remove Facebook tracking ID
 		// Update sharing links
 		$scope.share_url = $location.absUrl();
 		var url = new URL($scope.share_url);
@@ -490,38 +521,6 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		} else {
 			displayToast("ERROR: Failed to copy link.", true);
 		}
-	}
-
-	var colorMap = {
-		y: 0xffff00,
-		w: 0xffffff,
-		b: 0x0000ff,
-		g: 0x00ff00,
-		o: 0xff8800,
-		r: 0xff0000,
-		x: 0x222222,
-	};
-
-	var lightColorMap = {
-		y: 0x444400,
-		w: 0x444444,
-		b: 0x000044,
-		g: 0x004400,
-		o: 0x442200,
-		r: 0x440000,
-		x: 0x111111,
-	};
-
-	function colorList(str) {
-		var out = [];
-		var outLight = [];
-		var str2 = ("x" + str + "xxxxxx").slice(0, 7).split("");
-		var reorder = [0, 6, 3, 1, 2, 4, 5];
-		for (var i in str2) {
-			out.push(colorMap[str2[reorder[i]]]);
-			outLight.push(lightColorMap[str2[reorder[i]]]);
-		}
-		return out.concat(outLight);
 	}
 
 	function locationToIndex(text, line, column) {
@@ -578,7 +577,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			cubies: !$scope.hollow,
 			picture: $scope.picture,
 			stickerBorder: false,
-			colors: colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme),
+			colors: getColors(),
 		});
 
 		var init;
@@ -678,7 +677,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 	function updateTwisty() {
 		twistyScene.setOption("stage", $scope.stage.id);
-		twistyScene.setOption("colors", colorList($scope.scheme.custom ? $scope.custom_scheme : $scope.scheme.scheme));
+		twistyScene.setOption("colors", getColors());
 		twistyScene.setOption("hintStickers", $scope.hint_stickers);
 		twistyScene.setOption("hintStickersDistance", $scope.hint_stickers_distance);
 		twistyScene.setOption("cubies", !$scope.hollow);
@@ -750,9 +749,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		initTwisty();
 	});
 
-	["stage", "scheme", "custom_scheme", "hint_stickers", "hint_stickers_distance", "hollow", "picture"].map(function(prop) {
+	["stage", "scheme", "hint_stickers", "hint_stickers_distance", "hollow", "picture"].map(function(prop) {
 		$scope.$watch(prop, updateTwisty);
 	});
+
+	$scope.$watch("custom_scheme", updateTwisty, true);
 
 	["title", "anchor"].map(function(prop) {
 		$scope.$watch(prop, updateLocation);
@@ -1415,12 +1416,12 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 							algs: ["(M' U)3 M' U2 (M' U)3 M'"],
 							stage: $scope.stage_map["custom"],
 							stageMap: [
-								[8, 1, 8, 8, 8, 8, 8, 1, 8],
-								[9, 9, 9, 9, 9, 9, 9, 9, 9],
-								[10, 3, 10, 10, 10, 10, 10, 10, 10],
-								[11, 11, 11, 11, 11, 11, 11, 11, 11],
-								[12, 5, 12, 12, 12, 12, 12, 12, 12],
-								[13, 13, 13, 13, 13, 13, 13, 13, 13],
+								[2, 1, 2, 2, 2, 2, 2, 1, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 1, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 1, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
 							],
 							type: $scope.type_map["alg"],
 						},
@@ -1430,12 +1431,12 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 							algs: ["(R U R' U)5"],
 							stage: $scope.stage_map["custom"],
 							stageMap: [
-								[8, 8, 8, 8, 1, 8, 8, 8, 8],
-								[9, 9, 9, 9, 9, 9, 9, 9, 9],
-								[10, 10, 10, 10, 10, 10, 10, 10, 10],
-								[11, 11, 11, 11, 11, 11, 11, 11, 11],
-								[12, 12, 12, 12, 12, 12, 12, 12, 12],
-								[13, 13, 13, 13, 13, 13, 13, 13, 13],
+								[2, 2, 2, 2, 1, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
 							],
 							type: $scope.type_map["alg"],
 							picture: true,
@@ -1446,12 +1447,12 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 							algs: ["(M' U' M U)5"],
 							stage: $scope.stage_map["custom"],
 							stageMap: [
-								[8, 8, 8, 8, 1, 8, 8, 8, 8],
-								[9, 9, 9, 9, 9, 9, 9, 9, 9],
-								[10, 10, 10, 10, 3, 10, 10, 10, 10],
-								[11, 11, 11, 11, 11, 11, 11, 11, 11],
-								[12, 12, 12, 12, 12, 12, 12, 12, 12],
-								[13, 13, 13, 13, 13, 13, 13, 13, 13],
+								[2, 2, 2, 2, 1, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 1, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
+								[2, 2, 2, 2, 2, 2, 2, 2, 2],
 							],
 							type: $scope.type_map["alg"],
 							picture: true,

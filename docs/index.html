@@ -158,24 +158,47 @@
 						<span>Settings</span>
 					</label>
 				</h2>
-				<div class="section">
+				<div class="section" id="settings">
 					<div>
-						<select data-ng-model="puzzle" data-ng-options="p.name group by p.group for p in puzzle_list"></select>
-						<select data-ng-model="stage" data-ng-options="s.name group by s.group disable when s.disabled for s in stage_list" data-ng-disabled="puzzle.name != '3x3x3'"></select>
-						<select data-ng-model="type" data-ng-options="a.name for a in type_list"></select>
-						<select data-ng-model="anchor" data-ng-options="a.name for a in anchor_list"></select>
+						<span>
+							<select data-ng-model="puzzle" data-ng-options="p.name group by p.group for p in puzzle_list"></select>
+							<select data-ng-model="stage" data-ng-options="s.name group by s.group disable when s.disabled for s in stage_list" data-ng-disabled="puzzle.name != '3x3x3'"></select>
+						</span>
+						<span>
+							<select data-ng-model="type" data-ng-options="a.name for a in type_list"></select>
+							<select data-ng-model="anchor" data-ng-options="a.name for a in anchor_list"></select>
+						</span>
 					</div>
 					<div>
-						<span>Color Scheme:</span>
-						<select data-ng-model="scheme" data-ng-options="s.name for s in scheme_list"></select>
-						<input class="current_scheme" type="text" data-ng-model="custom_scheme" data-ng-show="scheme.custom" data-ng-value="scheme.scheme" maxlength="6"/>
-						<input class="current_scheme" type="text" data-ng-show="!scheme.custom" data-ng-readonly="true" data-ng-value="scheme.scheme"/>
+						<span>
+							<span>Color Scheme:</span>
+							<select data-ng-model="scheme" data-ng-options="s.name for s in scheme_list"></select>
+						</span>
+						<span id="custom_scheme" data-ng-show="scheme.custom">
+							<label data-ng-repeat="scheme in custom_scheme">
+								<span>{{scheme.side.toUpperCase()}}:</span>
+								<input type="color" data-ng-model="scheme.color">
+							</label>
+						</span>
 					</div>
 					<div>
-						<label><input id="hint_stickers" type="checkbox" data-ng-model="hint_stickers" /> Hint Stickers</label>
-						<input type="range" min="0.1" max="1" step="0.1" data-ng-model="hint_stickers_distance" data-ng-wheel="onwheel($event);" data-ng-disabled="!hint_stickers">
-						<label><input id="hollow" type="checkbox" data-ng-model="hollow" /> Hollow</label>
-						<label><input id="picture" type="checkbox" data-ng-model="picture" /> Picture</label>
+						<span>
+							<label>
+								<input id="hint_stickers" type="checkbox" data-ng-model="hint_stickers" />
+								<span>Hint Stickers</span>
+								<input type="range" min="0.1" max="1" step="0.1" data-ng-model="hint_stickers_distance" data-ng-wheel="onwheel($event);" data-ng-disabled="!hint_stickers">
+							</label>
+						</span>
+						<span>
+							<label>
+								<input id="hollow" type="checkbox" data-ng-model="hollow" />
+								<span>Hollow</span>
+							</label>
+							<label>
+								<input id="picture" type="checkbox" data-ng-model="picture" />
+								<span>Picture</span>
+							</label>
+						</span>
 					</div>
 				</div>
 				<div>
