@@ -37,6 +37,7 @@
 	transition: 0.2s;
 	position: relative;
 	cursor: grab;
+	user-select: none;
 }
 
 #viewer:active {
