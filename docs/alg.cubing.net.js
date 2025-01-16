@@ -100,7 +100,6 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			type: "generator",
 			setup_moves: "setup moves",
 			alg_moves: "moves",
-			inverse: "alg",
 		},
 		{
 			id: "alg",
@@ -110,7 +109,6 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			type: "solve",
 			setup_moves: "setup moves for end position",
 			alg_moves: "algorithm moves",
-			inverse: "moves",
 		},
 	]);
 
@@ -332,12 +330,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	};
 
 	$scope.invert = function() {
-		// The setup stays the same. It's like magic!
 		$scope.setSelectedAlg(alg.cube.invert($scope.getSelectedAlg()));
-		var currentPosition = twistyScene.getPosition();
-		var maxPosition = twistyScene.getMaxPosition();
-		$scope.current_move = maxPosition - currentPosition;
-		$scope.type = $scope.type_map[$scope.type.inverse];
 	};
 
 	$scope.mirror = function(axis) {
