@@ -228,6 +228,7 @@
 	bottom: calc(10% + 10px);
 	width: calc(90vh - 30px);
 	max-width: 50vh;
+	min-width: 100px;
 	position: absolute;
 	transform: translateX(50%) rotate(-90deg);
 	transform-origin: left;
