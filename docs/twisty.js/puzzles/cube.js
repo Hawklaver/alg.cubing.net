@@ -100,6 +100,29 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 					case "full":
 						map[i][j] = 1;
 						break;
+					case "center":
+						if (j < d || j % d === 0 || j % d === d - 1 || d ** 2 < j + d) {
+							map[i][j] = 0;
+						} else {
+							map[i][j] = 1;
+						}
+						break;
+					case "edge":
+						if (j === 0 || j === d - 1 || j === d ** 2 - d || j === d ** 2 - 1) {
+							map[i][j] = 0;
+						} else if (j < d || j % d === 0 || j % d === d - 1 || d ** 2 < j + d) {
+							map[i][j] = 1;
+						} else {
+							map[i][j] = 0;
+						}
+						break;
+					case "corner":
+						if (j === 0 || j === d - 1 || j === d ** 2 - d || j === d ** 2 - 1) {
+							map[i][j] = 1;
+						} else {
+							map[i][j] = 0;
+						}
+						break;
 					case "cross":
 						if (i === 0) {
 							map[i][j] = 0;

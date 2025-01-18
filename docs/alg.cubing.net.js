@@ -77,6 +77,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 	initParameter("stage", "full", [
 		{ id: "full", name: "Full", group: "Stage" },
+		{ id: "center", name: "Center", group: "Stage" },
+		{ id: "edge", name: "Edge", group: "Stage" },
+		{ id: "corner", name: "Corner", group: "Stage" },
 		{ id: "cross", name: "Cross", group: "CFOP" },
 		{ id: "F2L", name: "F2L", group: "CFOP" },
 		{ id: "OLL", name: "OLL", group: "CFOP" },
