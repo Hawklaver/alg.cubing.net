@@ -162,7 +162,7 @@
 					<div>
 						<span>
 							<select data-ng-model="puzzle" data-ng-options="p.name group by p.group for p in puzzle_list"></select>
-							<select data-ng-model="stage" data-ng-options="s.name group by s.group disable when s.disabled for s in stage_list" data-ng-disabled="puzzle.name != '3x3x3'"></select>
+							<select data-ng-model="stage" data-ng-options="s.name group by s.group disable when s.disabled for s in stage_list"></select>
 						</span>
 						<span>
 							<select data-ng-model="type" data-ng-options="a.name for a in type_list"></select>

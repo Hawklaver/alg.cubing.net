@@ -90,109 +90,203 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	}
 
 	// Stickering for stages.
-	var stageStickers = {};
-	stageStickers.full = [
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-	];
-	stageStickers.cross = [
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 1, 0, 0, 1, 0],
-		[0, 0, 0, 0, 1, 0, 0, 1, 0],
-		[0, 0, 0, 0, 1, 0, 0, 1, 0],
-		[0, 0, 0, 0, 1, 0, 0, 1, 0],
-		[0, 1, 0, 1, 1, 1, 0, 1, 0],
-	];
-	stageStickers.F2L = [
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 1, 1, 1, 1, 1, 1],
-		[0, 0, 0, 1, 1, 1, 1, 1, 1],
-		[0, 0, 0, 1, 1, 1, 1, 1, 1],
-		[0, 0, 0, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-	];
-	stageStickers.OLL = [
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[2, 2, 2, 2, 2, 2, 2, 2, 2],
-	];
-	stageStickers.PLL = [
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[2, 2, 2, 2, 2, 2, 2, 2, 2],
-	];
-	stageStickers.CLS = [
-		[1, 2, 1, 2, 2, 2, 1, 2, 1],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[0, 0, 0, 2, 2, 2, 2, 2, 1],
-		[0, 0, 0, 2, 2, 2, 1, 2, 2],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[2, 2, 1, 2, 2, 2, 2, 2, 2],
-	];
-	stageStickers.ELS = [
-		[0, 1, 0, 1, 1, 1, 0, 1, 0],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[0, 0, 0, 2, 2, 1, 2, 2, 0],
-		[0, 0, 0, 1, 2, 2, 0, 2, 2],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[2, 2, 0, 2, 2, 2, 2, 2, 2],
-	];
-	stageStickers.L6E = [
-		[2, 1, 2, 1, 1, 1, 2, 1, 2],
-		[2, 1, 2, 2, 2, 2, 2, 2, 2],
-		[2, 1, 2, 2, 1, 2, 2, 1, 2],
-		[2, 1, 2, 2, 2, 2, 2, 2, 2],
-		[2, 1, 2, 2, 1, 2, 2, 1, 2],
-		[2, 1, 2, 2, 1, 2, 2, 1, 2],
-	];
-	stageStickers.CMLL = [
-		[1, 0, 1, 0, 0, 0, 1, 0, 1],
-		[1, 0, 1, 2, 2, 2, 2, 2, 2],
-		[1, 0, 1, 2, 0, 2, 2, 0, 2],
-		[1, 0, 1, 2, 2, 2, 2, 2, 2],
-		[1, 0, 1, 2, 0, 2, 2, 0, 2],
-		[1, 0, 1, 1, 0, 1, 1, 0, 1],
-	];
-	stageStickers.WV = [
-		[1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[0, 0, 0, 2, 2, 1, 2, 2, 1],
-		[0, 0, 0, 1, 2, 2, 1, 2, 2],
-		[0, 0, 0, 2, 2, 2, 2, 2, 2],
-		[2, 2, 1, 2, 2, 2, 2, 2, 2],
-	];
-	stageStickers.ZBLL = [
-		[1, 2, 1, 2, 2, 2, 1, 2, 1],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[1, 1, 1, 2, 2, 2, 2, 2, 2],
-		[2, 2, 2, 2, 2, 2, 2, 2, 2],
-	];
-	stageStickers.void = [
-		[1, 1, 1, 1, 0, 1, 1, 1, 1],
-		[1, 1, 1, 1, 0, 1, 1, 1, 1],
-		[1, 1, 1, 1, 0, 1, 1, 1, 1],
-		[1, 1, 1, 1, 0, 1, 1, 1, 1],
-		[1, 1, 1, 1, 0, 1, 1, 1, 1],
-		[1, 1, 1, 1, 0, 1, 1, 1, 1],
-	];
+	function createStageMap(stage) {
+		var map = [];
+		var d = cubeOptions.dimension;
+		for (var i = 0; i < numSides; i++) {
+			map[i] = [];
+			for (var j = 0; j < d ** 2; j++) {
+				switch (stage) {
+					case "full":
+						map[i][j] = 1;
+						break;
+					case "cross":
+						if (i === 0) {
+							map[i][j] = 0;
+						} else if (i === numSides - 1) {
+							map[i][j] = [0, d - 1, d ** 2 - d, d ** 2 - 1].includes(j) ? 0 : 1;
+						} else {
+							map[i][j] = j < d || [0, d-1].includes(j % d) ? 0 : 1;
+						}
+						break;
+					case "F2L":
+						if (i === 0) {
+							map[i][j] = 0;
+						} else if (i === numSides - 1) {
+							map[i][j] = 1;
+						} else {
+							map[i][j] = j < d ? 0 : 1;
+						}
+						break;
+					case "OLL":
+						if (i === 0) {
+							map[i][j] = 1;
+						} else if (i === numSides - 1) {
+							map[i][j] = 2;
+						} else {
+							map[i][j] = j < d ? 0 : 2;
+						}
+						break;
+					case "PLL":
+						if (i === 0) {
+							map[i][j] = 1;
+						} else if (i === numSides - 1) {
+							map[i][j] = 2;
+						} else {
+							map[i][j] = j < d ? 1 : 2;
+						}
+						break;
+					case "CLS":
+						if (i === 0) {
+							if (j === 0 || j === d - 1 || j === d ** 2 - d || j === d ** 2 - 1) {
+								map[i][j] = 1;
+							} else {
+								map[i][j] = 2;
+							}
+						} else if (i < numSides - 1) {
+							if (j < d) {
+								map[i][j] = 0;
+							} else if ((i === 2 && j === d ** 2 - 1) || (i === 3 && j === d ** 2 - d)) {
+								map[i][j] = 1;
+							} else {
+								map[i][j] = 2;
+							}
+						} else {
+							map[i][j] = j === d - 1 ? 1 : 2;
+						}
+						break;
+					case "ELS":
+						if (i === 0) {
+							if (j === 0 || j === d - 1 || j === d ** 2 - d || j === d ** 2 - 1) {
+								map[i][j] = 0;
+							} else {
+								map[i][j] = 1;
+							}
+						} else if (i < numSides - 1) {
+							if (j < d) {
+								map[i][j] = 0;
+							} else {
+								map[i][j] = 2;
+								if (i === 2 && j % d === d - 1) {
+									if (j === d ** 2 - 1) {
+										map[i][j] = 0;
+									} else {
+										map[i][j] = 1;
+									}
+								}
+								if (i === 3 && j % d === 0) {
+									if (j === d ** 2 - d) {
+										map[i][j] = 0;
+									} else {
+										map[i][j] = 1;
+									}
+								}
+							}
+						} else {
+							map[i][j] = j === d - 1 ? 0 : 2;
+						}
+						break;
+					case "L6E":
+						if (i === 0) {
+							if (j === 0 || j === d - 1 || j === d ** 2 - d || j === d ** 2 - 1) {
+								map[i][j] = 2;
+							} else {
+								map[i][j] = 1;
+							}
+						} else if (i === 1 || i === 3) {
+							if (j < d && j !== 0 && j !== d - 1) {
+								map[i][j] = 1;
+							} else {
+								map[i][j] = 2;
+							}
+						} else {
+							if (j % d === 0 || j % d === d - 1) {
+								map[i][j] = 2;
+							} else {
+								map[i][j] = 1;
+							}
+						}
+						break;
+					case "CMLL":
+						if (i === 0) {
+							if (j === 0 || j === d - 1 || j === d ** 2 - d || j === d ** 2 - 1) {
+								map[i][j] = 1;
+							} else {
+								map[i][j] = 0;
+							}
+						} else if (i < numSides - 1) {
+							if (j < d) {
+								if (j === 0 || j === d - 1) {
+									map[i][j] = 1;
+								} else {
+									map[i][j] = 0;
+								}
+							} else if ((i === 2 || i === 4) && j % d !== 0 && j % d !== d - 1) {
+								map[i][j] = 0;
+							} else {
+								map[i][j] = 2;
+							}
+						} else {
+							map[i][j] = j % d !== 0 && j % d !== d - 1 ? 0 : 1;
+						}
+						break;
+					case "WV":
+						if (i === 0) {
+							map[i][j] = 1;
+						} else if (i < numSides - 1) {
+							if (j < d) {
+								map[i][j] = 0;
+							} else {
+								map[i][j] = 2;
+								if (i === 2 && j % d === d - 1) {
+									map[i][j] = 1;
+								}
+								if (i === 3 && j % d === 0) {
+									map[i][j] = 1;
+								}
+							}
+						} else {
+							map[i][j] = j === d - 1 ? 1 : 2;
+						}
+						break;
+					case "ZBLL":
+						if (i === 0) {
+							if (j === 0 || j === d - 1 || j === d ** 2 - d || j === d ** 2 - 1) {
+								map[i][j] = 1;
+							} else {
+								map[i][j] = 2;
+							}
+						} else if (i < numSides - 1) {
+							if (j < d) {
+								map[i][j] = 1;
+							} else {
+								map[i][j] = 2;
+							}
+						} else {
+							map[i][j] = 2;
+						}
+						break;
+					case "void":
+						if (j < d || j % d === 0 || j % d === d - 1 || d ** 2 < j + d) {
+							map[i][j] = 1;
+						} else {
+							map[i][j] = 0;
+						}
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		return map;
+
+	}
 	var isVoidCube = cubeOptions.stage == "void";
-	var stickers = stageStickers.full;
+	var stickers = createStageMap("full");
 	if (cubeOptions.stage === "custom" && cubeOptions.stageMap) {
 		stickers = cubeOptions.stageMap;
-	} else if (cubeOptions.stage in stageStickers) {
-		stickers = stageStickers[cubeOptions.stage];
+	} else {
+		stickers = createStageMap(cubeOptions.stage);
 	}
 
 	// Cube Helper Linear Algebra
@@ -290,17 +384,15 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 				var sticker = stickerTemplate.clone();
 				var material = materials[side][i + 1];
 				var material2 = materials.singleSided[i + 1];
-				if (cubeOptions.dimension == 3) {
-					var material = materials[side][i+1].clone();
-					var material2 = materials.singleSided[i+1].clone();
-					if (stickers[i][su + sv * 3] === 0) {
-						material.color.set(0x222222);
-						material2.color.set(0x222222);
-					}
-					if (stickers[i][su + sv * 3] === 2) {
-						material.color.setHSL(material.color.getHSL().h, material.color.getHSL().s, material.color.getHSL().l / 2);
-						material2.color.setHSL(material2.color.getHSL().h, material2.color.getHSL().s, material2.color.getHSL().l / 2);
-					}
+				var material = materials[side][i+1].clone();
+				var material2 = materials.singleSided[i+1].clone();
+				if (stickers[i][su + sv * cubeOptions.dimension] === 0) {
+					material.color.set(0x222222);
+					material2.color.set(0x222222);
+				}
+				if (stickers[i][su + sv * cubeOptions.dimension] === 2) {
+					material.color.setHSL(material.color.getHSL().h, material.color.getHSL().s, material.color.getHSL().l / 2);
+					material2.color.setHSL(material2.color.getHSL().h, material2.color.getHSL().s, material2.color.getHSL().l / 2);
 				}
 				sticker.children[0].material = material;
 				if (cubeOptions.hintStickers) {
