@@ -813,7 +813,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			anchor: $scope.anchor_map["start"],
 			scheme: $scope.scheme_map["white-face-down"],
 			picture: false,
-			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=png&size=64&stage=f2l&bg=t",
+			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=svg&size=64&stage=f2l&bg=t",
 			list: [
 				{
 					name: "3x3x3",
@@ -889,7 +889,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			anchor: $scope.anchor_map["start"],
 			scheme: $scope.scheme_map["white-face-down"],
 			picture: false,
-			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=png&size=64&view=plan&stage=oll&bg=t",
+			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=svg&size=64&view=plan&stage=oll&bg=t",
 			list: [
 				{
 					name: "3x3x3",
@@ -960,7 +960,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			anchor: $scope.anchor_map["start"],
 			scheme: $scope.scheme_map["white-face-down"],
 			picture: false,
-			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=png&size=64&view=plan&stage=pll&bg=t&ac=black",
+			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=svg&size=64&view=plan&stage=pll&bg=t&ac=black",
 			list: [
 				{
 					name: "3x3x3",
@@ -1113,7 +1113,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			anchor: $scope.anchor_map["end"],
 			scheme: $scope.scheme_map["boy"],
 			picture: false,
-			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=png&size=64&bg=t&sch=wrgyob",
+			imageBaseUrl: "https://visualcube.api.cubing.net/visualcube.php?fmt=svg&size=64&bg=t&sch=wrgyob",
 			list: [
 				{
 					name: "2x2x2",
