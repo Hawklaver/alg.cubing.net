@@ -1486,8 +1486,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			url.searchParams.set("pzl", pzl);
 			if (!example) {
 				url.searchParams.set("view", "plan");
-				url.searchParams.set("sch", "nttttt");
-				url.searchParams.set("cc", "white");
+				url.searchParams.set("sch", "wttttt");
+				url.searchParams.set("cc", "transparent");
 			}
 		}
 		if (example) {
