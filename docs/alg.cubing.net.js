@@ -1474,14 +1474,20 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.createExampleImage = function(group, puzzle, example) {
 		if (!group.imageBaseUrl) {
 			return "";
+		} else if (example && example.image) {
+			return example.image;
+		} else if (!example && puzzle && puzzle.image) {
+			return puzzle.image;
 		}
 		var url = new URL(group.imageBaseUrl);
+		var pzl = 3;
 		if (puzzle) {
-			url.searchParams.set("pzl", puzzle.name.split("x")[0]);
+			pzl = puzzle.name.split("x")[0] * 1;
+			url.searchParams.set("pzl", pzl);
 			if (!example) {
 				url.searchParams.set("view", "plan");
 				url.searchParams.set("sch", "nttttt");
-				url.searchParams.set("cc", "w");
+				url.searchParams.set("cc", "white");
 			}
 		}
 		if (example) {
@@ -1494,7 +1500,13 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 				url.searchParams.set("arw", example.arw);
 			}
 		}
-		return url.href;
+		var src = window["sr-visualizer"].createSvgSrc(url.href);
+		if (example) {
+			example.image = src;
+		} else if (puzzle) {
+			puzzle.image = src;
+		}
+		return src;
 	};
 	$scope.selected_example_group_default = "";
 	$scope.showExamples = function(group, puzzle, example) {

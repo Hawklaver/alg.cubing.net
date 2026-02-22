@@ -874,10 +874,17 @@
 						}
 						algOut.push(move1, move2, move3);
 					} else if (patterns.single.test(move.base) && move.layer) {
-						algOut.push(cloneMove(move));
-						move.layer -= 1;
-						move.amount *= -1;
-						algOut.push(move);
+						var move1 = cloneMove(move);
+						var move2 = cloneMove(move);
+						move1.base += "w";
+						move1.endLayer = move1.layer;
+						move2.layer = move1.layer - 1;
+						move2.endLayer = move1.layer - 1;
+						move2.amount = -move1.amount;
+						if (1 < move2.endLayer) {
+							move2.base += "w";
+						}
+						algOut.push(move1, move2);
 					} else if (patterns.wide.test(move.base) && move.startLayer && move.endLayer) {
 						var move1 = cloneMove(move);
 						var move2 = cloneMove(move);
