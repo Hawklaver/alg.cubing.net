@@ -37,11 +37,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	var param_defaults = [];
 
 	$scope.reset = function() {
-		for (var key in $scope) {
+		for (var key of Object.keys($scope)) {
 			if (param_defaults[key]) {
-				$scope[key] = param_defaults[key];
+				$scope[key] = structuredClone(param_defaults[key]);
 			} else if (key + "_default" in $scope) {
-				$scope[key] = $scope[key + "_default"];
+				$scope[key] = structuredClone($scope[key + "_default"]);
 			}
 		}
 	};
@@ -1522,11 +1522,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		if (example) {
 			var keys = ["title", "setup", "algs", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
 			for (var key of keys) {
-				if (key === "algs") {
-					$scope[key] = [...example[key]];
-				} else {
-					$scope[key] = key in example ? example[key] : key in puzzle ? puzzle[key] : key in group ? group[key] : $scope[key];
-				}
+				$scope[key] = structuredClone(algorithm[key] ?? puzzle[key] ?? group[key]) ?? $scope[key];
 			}
 		}
 	};
