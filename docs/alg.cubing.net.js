@@ -1471,55 +1471,53 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			]
 		},
 	];
-	$scope.createExampleImage = function(group, puzzle, example) {
+	$scope.createExampleImage = function(group, puzzle, algorithm) {
 		if (!group.imageBaseUrl) {
 			return "";
-		} else if (example && example.image) {
-			return example.image;
-		} else if (!example && puzzle && puzzle.image) {
+		} else if (algorithm && algorithm.image) {
+			return algorithm.image;
+		} else if (!algorithm && puzzle && puzzle.image) {
 			return puzzle.image;
 		}
 		var url = new URL(group.imageBaseUrl);
-		var pzl = 3;
 		if (puzzle) {
-			pzl = puzzle.name.split("x")[0] * 1;
-			url.searchParams.set("pzl", pzl);
-			if (!example) {
+			url.searchParams.set("pzl", puzzle.puzzle.dimension);
+			if (!algorithm) {
 				url.searchParams.set("view", "plan");
 				url.searchParams.set("sch", "wttttt");
 				url.searchParams.set("cc", "transparent");
 			}
 		}
-		if (example) {
+		if (algorithm) {
 			if (group.type.id === "moves") {
-				url.searchParams.set("alg", alg.cube.toVisualCubeAlg(`${example.setup || ""} ${example.algs[0]}`));
+				url.searchParams.set("alg", alg.cube.toVisualCubeAlg(`${algorithm.setup || ""} ${algorithm.algs[0]}`));
 			} else if (group.type.id === "alg") {
-				url.searchParams.set("case", alg.cube.toVisualCubeAlg(`${example.algs[0]} ${alg.cube.invert(example.setup || "")}`));
+				url.searchParams.set("case", alg.cube.toVisualCubeAlg(`${algorithm.algs[0]} ${alg.cube.invert(algorithm.setup || "")}`));
 			}
-			if (example.arw) {
-				url.searchParams.set("arw", example.arw);
+			if (algorithm.arw) {
+				url.searchParams.set("arw", algorithm.arw);
 			}
 		}
 		var src = window["sr-visualizer"].createSvgSrc(url.href);
-		if (example) {
-			example.image = src;
+		if (algorithm) {
+			algorithm.image = src;
 		} else if (puzzle) {
 			puzzle.image = src;
 		}
 		return src;
 	};
 	$scope.selected_example_group_default = "";
-	$scope.showExamples = function(group, puzzle, example) {
-		if (!puzzle && !example) {
+	$scope.showExamples = function(group, puzzle, algorithm) {
+		if (!puzzle && !algorithm) {
 			$scope.selected_example_group = $scope.selected_example_group === group.name ? "" : group.name;
 			$scope.selected_example_puzzle = "";
 		}
 		if (group.list.length === 1) {
 			$scope.selected_example_puzzle = group.list[0].name;
 		} else if (puzzle) {
-			$scope.selected_example_puzzle = $scope.selected_example_puzzle === puzzle.name && !example ? "" : puzzle.name;
+			$scope.selected_example_puzzle = $scope.selected_example_puzzle === puzzle.name && !algorithm ? "" : puzzle.name;
 		}
-		if (example) {
+		if (algorithm) {
 			var keys = ["title", "setup", "algs", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
 			for (var key of keys) {
 				$scope[key] = structuredClone(algorithm[key] ?? puzzle[key] ?? group[key]) ?? $scope[key];
