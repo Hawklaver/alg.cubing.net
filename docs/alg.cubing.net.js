@@ -1506,22 +1506,27 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 		return src;
 	};
-	$scope.selected_example_group_default = "";
+	$scope.selected_example = {};
+	$scope.selected_example_default = {};
 	$scope.showExamples = function(group, puzzle, algorithm) {
-		if (!puzzle && !algorithm) {
-			$scope.selected_example_group = $scope.selected_example_group === group.name ? "" : group.name;
-			$scope.selected_example_puzzle = "";
-		}
-		if (group.list.length === 1) {
-			$scope.selected_example_puzzle = group.list[0].name;
-		} else if (puzzle) {
-			$scope.selected_example_puzzle = $scope.selected_example_puzzle === puzzle.name && !algorithm ? "" : puzzle.name;
-		}
-		if (algorithm) {
-			var keys = ["title", "setup", "algs", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
-			for (var key of keys) {
-				$scope[key] = structuredClone(algorithm[key] ?? puzzle[key] ?? group[key]) ?? $scope[key];
-			}
+		$scope.selected_example.algorithm = algorithm;
+		var target = algorithm ? "algorithm" : puzzle ? "puzzle" : "group";
+		switch (target) {
+			case "group":
+				$scope.selected_example.group = !group.selected ? group : null;
+				$scope.selected_example.puzzle = !group.selected && group.list.length === 1 ? group.list[0] : null;
+				break;
+			case "puzzle":
+				$scope.selected_example.puzzle = !puzzle.selected ? puzzle : null;
+				break;
+			case "algorithm":
+				var keys = ["title", "setup", "algs", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
+				for (var key of keys) {
+					$scope[key] = structuredClone(algorithm[key] ?? puzzle[key] ?? group[key]) ?? $scope[key];
+				}
+				break;
+			default:
+				break;
 		}
 	};
 
