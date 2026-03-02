@@ -94,6 +94,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		{ id: "custom", name: "Custom", group: "Stage", disabled: true },
 	]);
 
+	if ($scope.stage.id === "custom" && /^\d+$/.test(search["stageMap"])) {
+		var size = $scope.puzzle.dimension ** 2;
+		$scope.stageMap = [...search["stageMap"]].map(v => v * 1).flatMap((_, i, a) => i % size ? [] : [a.slice(i, i + size)]);
+	}
+
 	initParameter("type", "moves", [
 		{
 			id: "moves",
@@ -464,6 +469,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		setWithDefault("algs", $scope.algs.map(v => escape_alg(v)));
 		setWithDefault("puzzle", $scope.puzzle.id);
 		setWithDefault("stage", $scope.stage.id);
+		if ($scope.stage.id === "custom" && Array.isArray($scope.stageMap)) {
+			setWithDefault("stageMap", $scope.stageMap.flat().join(""));
+		}
 		setWithDefault("type", $scope.type.id);
 		setWithDefault("anchor", $scope.anchor.id);
 		setWithDefault("scheme", $scope.scheme.id);

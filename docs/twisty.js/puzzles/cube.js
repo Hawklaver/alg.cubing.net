@@ -409,11 +409,11 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 				var material2 = materials.singleSided[i + 1];
 				var material = materials[side][i+1].clone();
 				var material2 = materials.singleSided[i+1].clone();
-				if (stickers[i][su + sv * cubeOptions.dimension] === 0) {
+				if (stickers[i] && stickers[i][su + sv * cubeOptions.dimension] === 0) {
 					material.color.set(0x222222);
 					material2.color.set(0x222222);
 				}
-				if (stickers[i][su + sv * cubeOptions.dimension] === 2) {
+				if (stickers[i] && stickers[i][su + sv * cubeOptions.dimension] === 2) {
 					material.color.setHSL(material.color.getHSL().h, material.color.getHSL().s, material.color.getHSL().l / 2);
 					material2.color.setHSL(material2.color.getHSL().h, material2.color.getHSL().s, material2.color.getHSL().l / 2);
 				}
