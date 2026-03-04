@@ -512,10 +512,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		}
 	};
 	var updateEmbedDebounce = debounce($scope.updateEmbed, 1000);
-	$("#copyEmbed").on("click", function() {
-		copyToClipboard($scope.embed_text);
-	});
-	function copyToClipboard(text) {
+	$scope.copyToClipboard = function(text) {
 		if (navigator.clipboard) {
 			navigator.clipboard.writeText(text).then(() => {
 				displayToast("Link copied to clipboard.");
@@ -525,7 +522,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		} else {
 			displayToast("ERROR: Failed to copy link.", true);
 		}
-	}
+	};
 
 	function locationToIndex(text, line, column) {
 		var lines = text.split("\n");

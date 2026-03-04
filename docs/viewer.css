@@ -198,8 +198,9 @@
 	text-decoration: none;
 }
 @media (hover: hover) {
-	#controls .control:hover {
+	#controls .control:is(:hover, :focus-visible) {
 		cursor: pointer;
+		outline: none;
 		background: #ddd;
 	}
 }
@@ -212,7 +213,7 @@
 #controls .control {
 	color: #000;
 }
-#controls .control.disabled,
+#controls .control:disabled,
 #display-wrapper.invalid #controls .control {
 	color: #888;
 	pointer-events: none;
