@@ -219,6 +219,10 @@
 	pointer-events: none;
 }
 
+.fa.flip {
+	transform: scale(-1, 1);
+}
+
 #speed span {
 	position: absolute;
 	font-size: 1em;

@@ -638,6 +638,18 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			});
 		});
 
+		twistyScene.addListener("isStep", function(isStep) {
+			$scope.$evalAsync(() => {
+				$scope.isStep = isStep;
+			});
+		});
+
+		twistyScene.addListener("isBack", function(isBack) {
+			$scope.$evalAsync(() => {
+				$scope.isBack = isBack;
+			});
+		});
+
 		twistyScene.addListener("position", getCurrentMove);
 
 		if ($scope.anchor.id === "end") {
@@ -653,8 +665,21 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 		$("#currentMove").attr("max", $scope.algo.length);
 
+		var back = gettingCurrentMove(twistyScene.player.back);
 		var play = gettingCurrentMove(twistyScene.player.play);
 		$scope.init = gettingCurrentMove(twistyScene.player.init);
+		$scope.back = () => {
+			if ($scope.animating) {
+				twistyScene.player.pause();
+			} else {
+				var algEnded = $scope.current_move === 0;
+				if (algEnded) {
+					$("#viewer canvas").fadeOut(100, $scope.skip).fadeIn(400, back);
+				} else {
+					back();
+				}
+			}
+		};
 		$scope.play = () => {
 			if ($scope.animating) {
 				twistyScene.player.pause();

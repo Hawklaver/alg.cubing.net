@@ -52,13 +52,16 @@
 			<button type="button" class="control" title="Skip to Start" data-ng-click="init();" data-ng-disabled="!algo || current_move === 0">
 				<i class="fa fa-fast-backward"></i>
 			</button>
-			<button type="button" class="control" title="Step backward (1 move)" data-ng-click="prev();" data-ng-disabled="!algo || current_move === 0">
+			<button type="button" class="control" title="Step backward" data-ng-click="prev();" data-ng-disabled="!algo || current_move === 0 || animating">
 				<i class="fa fa-mail-reply"></i>
 			</button>
-			<button type="button" class="control" title="Play" data-ng-click="play();" data-ng-disabled="!algo || !algo.length">
-				<i class="fa fa-{{animating ? 'pause' : 'play'}}"></i>
+			<button type="button" class="control" title="{{animating && isBack ? 'Pause' : 'Play backward'}}" data-ng-click="back();" data-ng-disabled="!algo || !algo.length || (animating && !isBack)">
+				<i class="fa fa-{{animating && isBack ? 'pause' : 'play flip'}}"></i>
 			</button>
-			<button type="button" class="control" title="Step forward (1 move)" data-ng-click="next();" data-ng-disabled="!algo || current_move === algo.length">
+			<button type="button" class="control" title="{{animating && !isBack ? 'Pause' : 'Play forward'}}" data-ng-click="play();" data-ng-disabled="!algo || !algo.length || (animating && isBack)">
+				<i class="fa fa-{{animating && !isBack ? 'pause' : 'play'}}"></i>
+			</button>
+			<button type="button" class="control" title="Step forward" data-ng-click="next();" data-ng-disabled="!algo || current_move === algo.length || animating">
 				<i class="fa fa-mail-forward"></i>
 			</button>
 			<button type="button" class="control" title="Skip to End" data-ng-click="skip();" data-ng-disabled="!algo || current_move === algo.length">

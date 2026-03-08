@@ -86,13 +86,16 @@ twisty.scene = function(options) {
 		mouseYLast: null,
 		listeners: {
 			animating: [],
+			isStep: [],
+			isBack: [],
 			position: [],
 			moveStart: [],
 			moveAdvance: [],
 		},
 		speed: null,
 		animating: false,
-		stopAfterNextMove: false,
+		isStep: false,
+		isBack: false,
 	}
 
 	this.debug = {
@@ -346,7 +349,11 @@ twisty.scene = function(options) {
 		if (!control.animating) {
 			model.time = Date.now();
 			setAnimating(true);
-			animFrame();
+			if (control.isBack) {
+				animFrameBack();
+			} else {
+				animFrame();
+			}
 		}
 	}
 
@@ -373,8 +380,8 @@ twisty.scene = function(options) {
 				model.twisty["animateMoveCallback"](model.twisty, prevMove, 1);
 				model.twisty["advanceMoveCallback"](model.twisty, prevMove);
 				fireListener("moveAdvance");
-				if (control.stopAfterNextMove) {
-					control.stopAfterNextMove = false;
+				if (control.isStep) {
+					setStep(false);
 					setAnimating(false);
 				}
 			} else {
@@ -388,6 +395,45 @@ twisty.scene = function(options) {
 		}
 	}
 
+	function animFrameBack() {
+		if (model.position <= 0) {
+			model.position = 0;
+			setAnimating(false);
+		}
+		if (control.animating) {
+			var prevTime = model.time;
+			var prevPosition = model.position;
+			var currentMove = model.moveList[Math.ceil(model.position) - 1];
+			var amount = Math.abs(currentMove.amount);
+			if (currentMove.combination) {
+				amount = Math.max(amount, Math.abs(currentMove.combination.amount));
+			}
+			var speedCoef = 1 / (0.5 * (amount + 1));
+			model.time = Date.now();
+			model.position = prevPosition - (model.time - prevTime) * control.speed * speedCoef * 1.5 / 1000;
+			if (Number.isInteger(prevPosition) && prevPosition !== model.position) {
+				var invertedMove = alg.cube.invert([currentMove])[0];
+				model.twisty["advanceMoveCallback"](model.twisty, invertedMove);
+				model.twisty["animateMoveCallback"](model.twisty, currentMove, 1);
+			} else if (Math.ceil(model.position) < Math.ceil(prevPosition)) {
+				model.position = Math.ceil(prevPosition) - 1;
+				var prevMove = model.moveList[Math.ceil(prevPosition) - 1];
+				model.twisty["animateMoveCallback"](model.twisty, prevMove, 0);
+				if (control.isStep) {
+					setStep(false);
+					setAnimating(false);
+				}
+			} else {
+				model.twisty["animateMoveCallback"](model.twisty, currentMove, model.position % 1);
+			}
+		}
+		render();
+		fireListener("position", model.position);
+		if (control.animating) {
+			requestAnimationFrame(animFrameBack);
+		}
+	}
+
 	function totalLength() {
 		return model.moveList.length;
 	}
@@ -395,6 +441,16 @@ twisty.scene = function(options) {
 	function setAnimating(value) {
 		control.animating = value;
 		fireListener("animating", control.animating);
+	}
+
+	function setStep(value) {
+		control.isStep = value;
+		fireListener("isStep", control.isStep);
+	}
+
+	function setBack(value) {
+		control.isBack = value;
+		fireListener("isBack", control.isBack);
 	}
 
 
@@ -431,22 +487,26 @@ twisty.scene = function(options) {
 	};
 
 	this.player = {
+		back() {
+			setBack(true);
+			triggerAnimation();
+		},
 		play() {
+			setBack(false);
 			triggerAnimation();
 		},
 		pause() {
 			setAnimating(false);
 		},
 		prev() {
-			var index = Math.ceil(that.getPosition());
-			if (0 < index) {
-				setAnimating(false);
-				that.setIndex(index - 1);
-			}
+			setStep(true);
+			setBack(true);
+			triggerAnimation();
 		},
 		next() {
+			setStep(true);
+			setBack(false);
 			triggerAnimation();
-			control.stopAfterNextMove = true;
 		},
 		init() {
 			setAnimating(false);
