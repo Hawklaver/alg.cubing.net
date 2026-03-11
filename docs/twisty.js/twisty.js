@@ -260,7 +260,7 @@ twisty.scene = function(options) {
 			control.mouseXLast = (kind == "mouse") ? event.clientX : event.touches[0].pageX;
 			control.mouseYLast = (kind == "mouse") ? event.clientY : event.touches[0].pageY;
 			renderOnce();
-			for (listener in listeners[kind]) {
+			for (var listener in listeners[kind]) {
 				window.addEventListener(listener, listeners[kind][listener], false);
 			}
 		}
@@ -295,7 +295,7 @@ twisty.scene = function(options) {
 		} else if (control.cameraHeight <= -CONSTANTS.CAMERA_HEIGHT_STICKY_MIN) {
 			control.cameraHeight = -CONSTANTS.CAMERA_HEIGHT_STICKY_MAX;
 		}
-		for (listener in listeners[kind]) {
+		for (var listener in listeners[kind]) {
 			window.removeEventListener(listener, listeners[kind][listener], false);
 		}
 	}
@@ -477,7 +477,7 @@ twisty.scene = function(options) {
 	}
 
 	this.applyMoves = function(moves) {
-		for (i in moves) {
+		for (var i in moves) {
 			model.twisty["advanceMoveCallback"](model.twisty, moves[i]);
 		}
 	};
