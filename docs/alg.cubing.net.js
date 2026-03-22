@@ -1,9 +1,9 @@
 "use strict";
 
-var ss;
-var l;
+let ss;
+let l;
 
-var algxApp = angular.module("algxApp", ["algxControllers", "debounce", "ngWheel", "ngScroll"]);
+const algxApp = angular.module("algxApp", ["algxControllers", "debounce", "ngWheel", "ngScroll"]);
 
 algxApp.config(["$locationProvider", function($locationProvider) {
 	$locationProvider.html5Mode({
@@ -12,32 +12,28 @@ algxApp.config(["$locationProvider", function($locationProvider) {
 	});
 }]);
 
-algxApp.filter("title", function() {
-	return function(input, title) {
-		return [title, input].filter(v => v.trim()).join(" | ");
-	};
-});
+algxApp.filter("title", () => (input, title) => [title, input].filter(v => v.trim()).join(" | "));
 
-algxApp.filter("ceil", () => (input => Math.ceil(input)));
+algxApp.filter("ceil", () => input => Math.ceil(input));
 
-var algxControllers = angular.module("algxControllers", ["monospaced.elastic"]);
+const algxControllers = angular.module("algxControllers", ["monospaced.elastic"]);
 
 algxControllers.controller("algxController", ["$scope", "$sce", "$location", "debounce", function($scope, $sce, $location, debounce) {
 
-	var search = $location.search();
+	const search = $location.search();
 
 	function indexBy(list, key) {
-		var obj = {};
-		for (var i in list) {
+		const obj = {};
+		for (const i in list) {
 			obj[list[i][key]] = list[i];
 		}
 		return obj;
 	}
 
-	var param_defaults = [];
+	const param_defaults = [];
 
 	$scope.reset = function() {
-		for (var key of Object.keys($scope)) {
+		for (const key of Object.keys($scope)) {
 			if (param_defaults[key]) {
 				$scope[key] = structuredClone(param_defaults[key]);
 			} else if (key + "_default" in $scope) {
@@ -47,7 +43,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	};
 
 	function initParameter(param, fallback, list) {
-		var obj = indexBy(list, "id");
+		const obj = indexBy(list, "id");
 		$scope[param] = obj[search[param]] || obj[fallback];
 		$scope[param + "_map"] = obj;
 		$scope[param + "_list"] = list;
@@ -95,7 +91,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	]);
 
 	if ($scope.stage.id === "custom" && /^\d+$/.test(search["stageMap"])) {
-		var size = $scope.puzzle.dimension ** 2;
+		const size = $scope.puzzle.dimension ** 2;
 		$scope.stageMap = [...search["stageMap"]].map(v => v * 1).flatMap((_, i, a) => i % size ? [] : [a.slice(i, i + size)]);
 	}
 
@@ -161,7 +157,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		},
 	]);
 
-	var colorMap = {
+	const colorMap = {
 		w: "#ffffff",
 		o: "#ff8800",
 		g: "#00ff00",
@@ -181,7 +177,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	];
 
 	if ($scope.scheme.custom) {
-		for (var scheme of $scope.custom_scheme) {
+		for (const scheme of $scope.custom_scheme) {
 			if (scheme.side in search) {
 				scheme.color = search[scheme.side];
 			}
@@ -189,7 +185,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	}
 
 	function getColors() {
-		var colors = $scope.scheme.custom ? $scope.custom_scheme.map(v => v.color) : [...$scope.scheme.scheme].map(v => colorMap[v]);
+		const colors = $scope.scheme.custom ? $scope.custom_scheme.map(v => v.color) : [...$scope.scheme.scheme].map(v => colorMap[v]);
 		colors.unshift(colorMap["x"]);
 		return colors;
 	}
@@ -296,16 +292,16 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 	$scope.onwheel = function(e) {
 		e.preventDefault();
-		var { min, max } = e.target;
-		var model = e.target.dataset.ngModel;
-		var value = $scope[model] - e.target.step * Math.sign(e.originalEvent.deltaY);
+		const { min, max } = e.target;
+		const model = e.target.dataset.ngModel;
+		const value = $scope[model] - e.target.step * Math.sign(e.originalEvent.deltaY);
 		$scope[model] = Math.min(Math.max(min, value), max);
 	};
 	$scope.changeSpeed = e => {
 		e.preventDefault();
-		var slider = document.querySelector("#speed input");
-		var { min, max } = slider;
-		var value = $scope.speed - slider.step * Math.sign(e.originalEvent.deltaY);
+		const slider = document.querySelector("#speed input");
+		const { min, max } = slider;
+		const value = $scope.speed - slider.step * Math.sign(e.originalEvent.deltaY);
 		$scope.speed = Math.min(Math.max(min, value), max);
 		$("#speed input").show();
 	};
@@ -349,11 +345,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.rotate = function(axis) {
 		if ($scope.getSelectedAlg().trim()) {
 			$scope.setSelectedAlg(alg.cube.rotate($scope.getSelectedAlg(), axis));
-			var matcher = new RegExp(`^\\s*${axis}(\\d*)('?)\\s*`, "g");
+			const matcher = new RegExp(`^\\s*${axis}(\\d*)('?)\\s*`, "g");
 			if (matcher.test($scope.getSelectedAlg())) {
 				$scope.setSelectedAlg(
 					$scope.getSelectedAlg().replace(matcher, function(match, p1, p2) {
-						var amount = ((((p1 || 1) * (p2 ? -1 : 1) + 1) % 4) + 4) % 4;
+						const amount = ((((p1 || 1) * (p2 ? -1 : 1) + 1) % 4) + 4) % 4;
 						switch (amount) {
 							case 0:
 								return "";
@@ -382,7 +378,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.image_src_default = "";
 	$scope.image_src = $scope.image_src_default;
 	$scope.drawImage = function() {
-		var src = $sce.trustAsUrl(twistyScene.getCanvas().toDataURL("image/png"));
+		const src = $sce.trustAsUrl(twistyScene.getCanvas().toDataURL("image/png"));
 		if (String($scope.image_src) === String(src)) {
 			$scope.image_src = $scope.image_src_default;
 		} else {
@@ -395,7 +391,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		if (!alg) {
 			return alg;
 		}
-		var escaped = alg;
+		let escaped = alg;
 		escaped = escaped.replace(/_/g, "&#95;").replace(/ /g, "_");
 		escaped = escaped.replace(/-/g, "&#45;").replace(/'/g, "-");
 		return escaped;
@@ -405,7 +401,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		if (!alg) {
 			return alg;
 		}
-		var unescaped = alg;
+		let unescaped = alg;
 		unescaped = unescaped.replace(/-(?!\d)/g, "'").replace(/&#45;/g, "-");
 		unescaped = unescaped.replace(/_/g, " ").replace(/&#95;/g, "_");
 		return unescaped;
@@ -476,7 +472,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		setWithDefault("anchor", $scope.anchor.id);
 		setWithDefault("scheme", $scope.scheme.id);
 		if ($scope.scheme.custom) {
-			for (var scheme of $scope.custom_scheme) {
+			for (const scheme of $scope.custom_scheme) {
 				setWithDefault(scheme.side, scheme.color, scheme.default);
 			}
 		}
@@ -488,10 +484,10 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		setWithDefault("view", $scope.view.id);
 		// Update sharing links
 		$scope.share_url = $location.absUrl();
-		var url = new URL($scope.share_url);
+		const url = new URL($scope.share_url);
 		url.searchParams.delete("view");
 		$scope.editor_url = url.href;
-		var tweetUrl = new URL("https://twitter.com/intent/tweet");
+		const tweetUrl = new URL("https://twitter.com/intent/tweet");
 		tweetUrl.searchParams.set("text", document.title);
 		tweetUrl.searchParams.set("url", $scope.share_url);
 		$scope.share_twitter_url = tweetUrl.href;
@@ -511,7 +507,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			$scope.embed_html = $sce.trustAsHtml($scope.embed_text);
 		}
 	};
-	var updateEmbedDebounce = debounce($scope.updateEmbed, 1000);
+	const updateEmbedDebounce = debounce($scope.updateEmbed, 1000);
 	$scope.copyToClipboard = function(text) {
 		if (navigator.clipboard) {
 			navigator.clipboard.writeText(text).then(() => {
@@ -525,9 +521,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	};
 
 	function locationToIndex(text, line, column) {
-		var lines = text.split("\n");
-		var index = 0;
-		for (var i = 0; i < line - 1; i++) {
+		const lines = text.split("\n");
+		let index = 0;
+		for (let i = 0; i < line - 1; i++) {
 			index += lines[i].length + 1;
 		}
 		return index + column;
@@ -535,18 +531,18 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 	// We set this variable outside so that it will be overwritten.
 	// This currently helps with performance, presumably due to garbage collection.
-	var twistyScene;
+	let twistyScene;
 
-	var webgl = (function() {
+	const webgl = (function() {
 		try {
-			var canvas = document.createElement("canvas");
+			const canvas = document.createElement("canvas");
 			return !!window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
 		} catch (e) {
 			console.error(e);
 			return false;
 		}
 	})();
-	var Renderer = webgl ? THREE.WebGLRenderer : THREE.CanvasRenderer;
+	const Renderer = webgl ? THREE.WebGLRenderer : THREE.CanvasRenderer;
 
 	function initTwisty() {
 
@@ -581,13 +577,13 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			colors: getColors(),
 		});
 
-		var init;
+		let init;
 
 		try {
 			$scope.setupStatus = "valid";
 			$scope.setup = $scope.setup.replaceAll("’", "'");
 			init = alg.cube.fromString($scope.setup);
-			var setupCanonical = alg.cube.toString(init);
+			const setupCanonical = alg.cube.toString(init);
 			if (setupCanonical !== $scope.setup) {
 				$scope.setupStatus = "uncanonical";
 			}
@@ -599,11 +595,11 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 		$scope.algStatus = "valid";
 		$scope.algStatuses = $scope.algs.map(() => "valid");
-		for (var i = 0; i < $scope.algs.length; i++) {
+		for (let i = 0; i < $scope.algs.length; i++) {
 			try {
 				$scope.algs[i] = $scope.algs[i].replaceAll("’", "'");
-				var algoFull = alg.cube.fromString($scope.algs[i]);
-				var algoCanonical = alg.cube.toString(algoFull);
+				const algoFull = alg.cube.fromString($scope.algs[i]);
+				const algoCanonical = alg.cube.toString(algoFull);
 				if (algoCanonical !== $scope.algs[i].replace(/(?<!^)\s*\/\//g, " //")) {
 					$scope.algStatuses[i] = "uncanonical";
 				}
@@ -624,7 +620,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			return;
 		}
 
-		var type = $scope.type.type;
+		const type = $scope.type.type;
 
 		twistyScene.setupAnimation($scope.algo, {
 			init: init,
@@ -665,14 +661,14 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 
 		$("#currentMove").attr("max", $scope.algo.length);
 
-		var back = gettingCurrentMove(twistyScene.player.back);
-		var play = gettingCurrentMove(twistyScene.player.play);
+		const back = gettingCurrentMove(twistyScene.player.back);
+		const play = gettingCurrentMove(twistyScene.player.play);
 		$scope.init = gettingCurrentMove(twistyScene.player.init);
 		$scope.back = () => {
 			if ($scope.animating) {
 				twistyScene.player.pause();
 			} else {
-				var algEnded = $scope.current_move === 0;
+				const algEnded = $scope.current_move === 0;
 				if (algEnded) {
 					$("#viewer canvas").fadeOut(100, $scope.skip).fadeIn(400, back);
 				} else {
@@ -684,7 +680,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 			if ($scope.animating) {
 				twistyScene.player.pause();
 			} else {
-				var algEnded = parseFloat($scope.current_move) === $scope.algo.length;
+				const algEnded = parseFloat($scope.current_move) === $scope.algo.length;
 				if (algEnded) {
 					$("#viewer canvas").fadeOut(100, $scope.init).fadeIn(400, play);
 				} else {
@@ -712,25 +708,25 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		updateLocation();
 	}
 
-	var oldStart = 0;
-	var oldEnd = 0;
+	let oldStart = 0;
+	let oldEnd = 0;
 	$scope.highlight_alg_default = "";
 	function highlightCurrentMove(force) {
 		// TODO: Make a whole lot more efficient.
 		if ($scope.algo.length < Math.floor(parseFloat($scope.current_move))) {
 			return;
 		}
-		var idx = Math.ceil(parseFloat($scope.current_move)) - 1;
+		let idx = Math.ceil(parseFloat($scope.current_move)) - 1;
 		if (idx === -1) {
 			idx = 0;
 		}
-		var current_move = $scope.algo[idx];
+		const current_move = $scope.algo[idx];
 		if (!current_move) {
 			$scope.highlight_alg = $scope.highlight_alg_default;
 			return;
 		}
-		var newStart = locationToIndex($scope.alg, current_move.location.first_line, current_move.location.first_column);
-		var newEnd = locationToIndex($scope.alg, current_move.location.last_line, current_move.location.last_column);
+		const newStart = locationToIndex($scope.alg, current_move.location.first_line, current_move.location.first_column);
+		const newEnd = locationToIndex($scope.alg, current_move.location.last_line, current_move.location.last_column);
 		if (!force && newStart === oldStart && newEnd === oldEnd) {
 			return;
 		}
@@ -742,8 +738,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	}
 
 	function getCurrentMove() {
-		var idx = twistyScene.getPosition();
-		var val = parseFloat($scope.current_move);
+		const idx = twistyScene.getPosition();
+		const val = parseFloat($scope.current_move);
 		if (idx !== val) {
 			$scope.$evalAsync(() => {
 				$scope.current_move = idx;
@@ -791,9 +787,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	});
 
 	$scope.$watch("current_move", function() {
-		var percentage = $scope.current_move / $("#currentMove").attr("max") * 100;
+		const percentage = $scope.current_move / $("#currentMove").attr("max") * 100;
 		$("#currentMove").css("background", `linear-gradient(to right, #cc181e 0%, #cc181e ${percentage}%, #000 ${percentage}%, #000 100%)`);
-		var val = parseFloat($scope.current_move);
+		const val = parseFloat($scope.current_move);
 		// We need to parse the string.
 		// See https://github.com/angular/angular.js/issues/1189 and linked issue/discussion.
 		twistyScene.setPosition(val);
@@ -801,9 +797,9 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	});
 
 	$scope.$watch("alg", () => {
-		var algo = alg.cube.fromString($scope.alg);
-		var metrics = ["obtm", "btm", "obqtm", "etm"];
-		for (var metric of metrics) {
+		const algo = alg.cube.fromString($scope.alg);
+		const metrics = ["obtm", "btm", "obqtm", "etm"];
+		for (const metric of metrics) {
 			$scope[metric] = alg.cube.countMoves(algo, {
 				metric: metric,
 				dimension: $scope.puzzle.dimension,
@@ -826,7 +822,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	});
 
 	$scope.syncAlgShadow = function(e) {
-		var scrollTop = $(e.target).scrollTop();
+		const scrollTop = $(e.target).scrollTop();
 		$(e.target).prev(".algorithm_shadow").css("margin-top", -scrollTop);
 	};
 
@@ -1509,7 +1505,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 		} else if (!algorithm && puzzle && puzzle.image) {
 			return puzzle.image;
 		}
-		var url = new URL(group.imageBaseUrl);
+		const url = new URL(group.imageBaseUrl);
 		if (puzzle) {
 			url.searchParams.set("pzl", puzzle.puzzle.dimension);
 			if (!algorithm) {
@@ -1528,7 +1524,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 				url.searchParams.set("arw", algorithm.arw);
 			}
 		}
-		var src = window["sr-visualizer"].createSvgSrc(url.href);
+		const src = window["sr-visualizer"].createSvgSrc(url.href);
 		if (algorithm) {
 			algorithm.image = src;
 		} else if (puzzle) {
@@ -1540,7 +1536,7 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 	$scope.selected_example_default = {};
 	$scope.showExamples = function(group, puzzle, algorithm) {
 		$scope.selected_example.algorithm = algorithm;
-		var target = algorithm ? "algorithm" : puzzle ? "puzzle" : "group";
+		const target = algorithm ? "algorithm" : puzzle ? "puzzle" : "group";
 		switch (target) {
 			case "group":
 				$scope.selected_example.group = !group.selected ? group : null;
@@ -1550,8 +1546,8 @@ algxControllers.controller("algxController", ["$scope", "$sce", "$location", "de
 				$scope.selected_example.puzzle = !puzzle.selected ? puzzle : null;
 				break;
 			case "algorithm":
-				var keys = ["title", "setup", "algs", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
-				for (var key of keys) {
+				const keys = ["title", "setup", "algs", "puzzle", "stage", "stageMap", "type", "anchor", "scheme", "picture"];
+				for (const key of keys) {
 					$scope[key] = structuredClone(algorithm[key] ?? puzzle[key] ?? group[key]) ?? $scope[key];
 				}
 				break;

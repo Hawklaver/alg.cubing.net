@@ -4,30 +4,30 @@
 
 "use strict";
 
-twisty.puzzles.cube = function (twistyScene, twistyParameters) {
+twisty.puzzles.cube = function(twistyScene, twistyParameters) {
 
 	// Cube Variables
-	var cubeObject = new THREE.Object3D();
-	var cubePieces = [];
-	var easing = {};
-	easing.linear = function (x) {
+	const cubeObject = new THREE.Object3D();
+	const cubePieces = [];
+	const easing = {};
+	easing.linear = function(x) {
 		return x;
 	};
-	easing.smooth = function (x) {
+	easing.smooth = function(x) {
 		x = x * x; // Ease in.
 		return x * (2 - x); // Ease out.
 	};
-	easing.extra_smooth = function (x) {
+	easing.extra_smooth = function(x) {
 		return x * x * x * (10 - x * (15 - 6 * x));
 	};
-	easing.boingy_sproingy = function (x) {
+	easing.boingy_sproingy = function(x) {
 		// TODO: make this less jarring.
-		var y = x * x; // Ease in.
+		const y = x * x; // Ease in.
 		return 3 * (y * (2 - y) - x / 1.5); // Ease out.
 	};
 
 	// Defaults
-	var cubeOptions = {
+	const cubeOptions = {
 		stickerBorder: true,
 		borderWidth: 8,
 		cubies: false,
@@ -50,19 +50,19 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	};
 
 	// Passed Parameters
-	for (var option in cubeOptions) {
+	for (const option in cubeOptions) {
 		if (option in twistyParameters) {
 			cubeOptions[option] = twistyParameters[option];
 		}
 	}
 
 	// Cube Constants
-	var numSides = 6;
+	const numSides = 6;
 
 	// Create Picture Texture
 	if (!twisty.puzzles.pictureMap) {
-		var size = 256;
-		var ctx = document.createElement("canvas").getContext("2d");
+		const size = 256;
+		const ctx = document.createElement("canvas").getContext("2d");
 		ctx.canvas.width = size;
 		ctx.canvas.height = size;
 		ctx.fillStyle = "#fff";
@@ -74,13 +74,13 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		ctx.fillText("A", size / 2, size / 2);
 		twisty.puzzles.pictureMap = new THREE.TextureLoader().load(ctx.canvas.toDataURL());
 	}
-	var map = cubeOptions.picture ? twisty.puzzles.pictureMap : null;
+	const map = cubeOptions.picture ? twisty.puzzles.pictureMap : null;
 
 	// Cube Materials
-	var materials = { singleSided: [], doubleSided: [] };
-	for (var i = 0; i < cubeOptions.colors.length; i++) {
-		for (var side of ["singleSided", "doubleSided"]) {
-			var material = new THREE.MeshBasicMaterial({ color: cubeOptions.colors[i], overdraw: 0.5, map });
+	const materials = { singleSided: [], doubleSided: [] };
+	for (let i = 0; i < cubeOptions.colors.length; i++) {
+		for (const side of ["singleSided", "doubleSided"]) {
+			const material = new THREE.MeshBasicMaterial({ color: cubeOptions.colors[i], overdraw: 0.5, map });
 			if (side === "doubleSided") {
 				material.side = THREE.DoubleSide;
 			}
@@ -91,11 +91,11 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 
 	// Stickering for stages.
 	function createStageMap(stage) {
-		var map = [];
-		var d = cubeOptions.dimension;
-		for (var i = 0; i < numSides; i++) {
+		const map = [];
+		const d = cubeOptions.dimension;
+		for (let i = 0; i < numSides; i++) {
 			map[i] = [];
-			for (var j = 0; j < d ** 2; j++) {
+			for (let j = 0; j < d ** 2; j++) {
 				switch (stage) {
 					case "full":
 						map[i][j] = 1;
@@ -129,7 +129,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 						} else if (i === numSides - 1) {
 							map[i][j] = [0, d - 1, d ** 2 - d, d ** 2 - 1].includes(j) ? 0 : 1;
 						} else {
-							map[i][j] = j < d || [0, d-1].includes(j % d) ? 0 : 1;
+							map[i][j] = j < d || [0, d - 1].includes(j % d) ? 0 : 1;
 						}
 						break;
 					case "F2L":
@@ -304,8 +304,8 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		return map;
 
 	}
-	var isVoidCube = cubeOptions.stage == "void";
-	var stickers = createStageMap("full");
+	const isVoidCube = cubeOptions.stage === "void";
+	let stickers = createStageMap("full");
 	if (cubeOptions.stage === "custom" && cubeOptions.stageMap) {
 		stickers = cubeOptions.stageMap;
 	} else {
@@ -314,18 +314,18 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 
 	// Cube Helper Linear Algebra
 	function axify(v1, v2, v3) {
-		var ax = new THREE.Matrix4();
+		const ax = new THREE.Matrix4();
 		ax.set(v1.x, v2.x, v3.x, 0, v1.y, v2.y, v3.y, 0, v1.z, v2.z, v3.z, 0, 0, 0, 0, 1);
 		return ax;
 	}
-	var xx = new THREE.Vector3(1, 0, 0);
-	var yy = new THREE.Vector3(0, 1, 0);
-	var zz = new THREE.Vector3(0, 0, 1);
-	var xxi = new THREE.Vector3(-1, 0, 0);
-	var yyi = new THREE.Vector3(0, -1, 0);
-	var zzi = new THREE.Vector3(0, 0, -1);
-	var index_side = ["U", "L", "F", "R", "B", "D"];
-	var sidesRot = {
+	const xx = new THREE.Vector3(1, 0, 0);
+	const yy = new THREE.Vector3(0, 1, 0);
+	const zz = new THREE.Vector3(0, 0, 1);
+	const xxi = new THREE.Vector3(-1, 0, 0);
+	const yyi = new THREE.Vector3(0, -1, 0);
+	const zzi = new THREE.Vector3(0, 0, -1);
+	const index_side = ["U", "L", "F", "R", "B", "D"];
+	const sidesRot = {
 		U: axify(zz, yy, xxi),
 		L: axify(xx, zz, yyi),
 		F: axify(yyi, xx, zz),
@@ -333,7 +333,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		B: axify(yy, xxi, zz),
 		D: axify(zzi, yy, xx),
 	};
-	var sidesNorm = {
+	const sidesNorm = {
 		U: yy,
 		L: xxi,
 		F: zz,
@@ -341,7 +341,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		B: zzi,
 		D: yyi,
 	};
-	var sidesRotAxis = {
+	const sidesRotAxis = {
 		U: yyi,
 		L: xx,
 		F: zzi,
@@ -349,45 +349,45 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		B: zz,
 		D: yy,
 	};
-	var sidesUV = [axify(xx, zzi, yy), axify(zz, yy, xxi), axify(xx, yy, zz), axify(zzi, yy, xx), axify(xxi, yy, zzi), axify(xx, zz, yyi)];
-	var borderGeometry = new THREE.Geometry();
-	var c = cubeOptions.stickerWidth * 0.51;
+	const sidesUV = [axify(xx, zzi, yy), axify(zz, yy, xxi), axify(xx, yy, zz), axify(zzi, yy, xx), axify(xxi, yy, zzi), axify(xx, zz, yyi)];
+	const borderGeometry = new THREE.Geometry();
+	const c = cubeOptions.stickerWidth * 0.51;
 	borderGeometry.vertices.push(new THREE.Vector3(-c, -c, 0));
 	borderGeometry.vertices.push(new THREE.Vector3(+c, -c, 0));
 	borderGeometry.vertices.push(new THREE.Vector3(+c, +c, 0));
 	borderGeometry.vertices.push(new THREE.Vector3(-c, +c, 0));
 	borderGeometry.vertices.push(new THREE.Vector3(-c, -c, 0));
-	var borderMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: cubeOptions.borderWidth, opacity: cubeOptions.opacity });
-	var borderTemplate = new THREE.Line(borderGeometry, borderMaterial);
-	var innerGeometry = new THREE.PlaneGeometry(cubeOptions.stickerWidth, cubeOptions.stickerWidth);
-	var innerTemplate = new THREE.Mesh(innerGeometry);
-	var hintGeometry = innerGeometry.clone();
-	var hintTemplate = new THREE.Mesh(hintGeometry);
+	const borderMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: cubeOptions.borderWidth, opacity: cubeOptions.opacity });
+	const borderTemplate = new THREE.Line(borderGeometry, borderMaterial);
+	const innerGeometry = new THREE.PlaneGeometry(cubeOptions.stickerWidth, cubeOptions.stickerWidth);
+	const innerTemplate = new THREE.Mesh(innerGeometry);
+	const hintGeometry = innerGeometry.clone();
+	const hintTemplate = new THREE.Mesh(hintGeometry);
 	hintTemplate.rotateY(Math.PI);
 	hintTemplate.translateZ(-2.5 * cubeOptions.dimension * cubeOptions.hintStickersDistance);
-	var cubieTemplate = new THREE.Object3D();
-	var w = 2;
-	var cubieGeometry = new THREE.BoxGeometry(w, w, w);
-	var cubieMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, overdraw: 0.5 });
+	const cubieTemplate = new THREE.Object3D();
+	let w = 2;
+	let cubieGeometry = new THREE.BoxGeometry(w, w, w);
+	let cubieMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, overdraw: 0.5 });
 	cubieMaterial.side = THREE.BackSide; // Hack to get around z-fighting.
-	var cubieTemplate1 = new THREE.Mesh(cubieGeometry, cubieMaterial);
+	let cubieTemplate1 = new THREE.Mesh(cubieGeometry, cubieMaterial);
 	cubieTemplate1.translateZ(-1);
 	cubieTemplate.add(cubieTemplate1);
-	var w = 1.9;
-	var cubieGeometry = new THREE.BoxGeometry(w, w, w);
-	var cubieMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, overdraw: 0.5 });
+	w = 1.9;
+	cubieGeometry = new THREE.BoxGeometry(w, w, w);
+	cubieMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, overdraw: 0.5 });
 	cubieMaterial.side = THREE.BackSide; // Hack to get around z-fighting.
-	var cubieTemplate1 = new THREE.Mesh(cubieGeometry, cubieMaterial);
+	cubieTemplate1 = new THREE.Mesh(cubieGeometry, cubieMaterial);
 	cubieTemplate1.translateZ(-1);
 	cubieTemplate.add(cubieTemplate1);
-	var side = cubeOptions.hintStickers ? "singleSided" : "doubleSided";
+	const side = cubeOptions.hintStickers ? "singleSided" : "doubleSided";
 
 	// Cube Object Generation
-	for (var i = 0; i < numSides; i++) {
-		var facePieces = [];
+	for (let i = 0; i < numSides; i++) {
+		const facePieces = [];
 		cubePieces.push(facePieces);
-		var stickerTemplate = new THREE.Object3D();
-		var innerSticker = innerTemplate.clone();
+		const stickerTemplate = new THREE.Object3D();
+		const innerSticker = innerTemplate.clone();
 		stickerTemplate.add(innerSticker);
 		if (cubeOptions.hintStickers) {
 			stickerTemplate.add(hintTemplate);
@@ -399,16 +399,14 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 			// Easiest to make this one per sticker for now. Can be optimized later.
 			stickerTemplate.add(cubieTemplate);
 		}
-		for (var su = 0; su < cubeOptions.dimension; su++) {
-			for (var sv = 0; sv < cubeOptions.dimension; sv++) {
+		for (let su = 0; su < cubeOptions.dimension; su++) {
+			for (let sv = 0; sv < cubeOptions.dimension; sv++) {
 				if (isVoidCube && 0 < su && su < cubeOptions.dimension - 1 && 0 < sv && sv < cubeOptions.dimension - 1) {
 					continue;
 				}
-				var sticker = stickerTemplate.clone();
-				var material = materials[side][i + 1];
-				var material2 = materials.singleSided[i + 1];
-				var material = materials[side][i+1].clone();
-				var material2 = materials.singleSided[i+1].clone();
+				const sticker = stickerTemplate.clone();
+				const material = materials[side][i + 1].clone();
+				const material2 = materials.singleSided[i + 1].clone();
 				if (stickers[i] && stickers[i][su + sv * cubeOptions.dimension] === 0) {
 					material.color.set(0x222222);
 					material2.color.set(0x222222);
@@ -421,9 +419,9 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 				if (cubeOptions.hintStickers) {
 					sticker.children[1].material = material2;
 				}
-				var positionMatrix = new THREE.Matrix4();
+				const positionMatrix = new THREE.Matrix4();
 				positionMatrix.makeTranslation(su * 2 - cubeOptions.dimension + 1, -(sv * 2 - cubeOptions.dimension + 1), cubeOptions.dimension);
-				var x = sidesUV[i].clone();
+				const x = sidesUV[i].clone();
 				x.multiplyMatrices(x, positionMatrix);
 				sticker.applyMatrix(x);
 				facePieces.push([x, sticker]);
@@ -437,42 +435,42 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	}
 
 	function cameraScale() {
-		var actualScale = 2.2 * cubeOptions.dimension / cubeOptions.scale;
+		let actualScale = 2.2 * cubeOptions.dimension / cubeOptions.scale;
 		if (cubeOptions.hintStickers) {
 			actualScale *= (cubeOptions.hintStickersDistance + 0.9);
 		}
 		return actualScale;
 	}
 
-	var lastMoveProgress = 0;
-	var animateMoveCallback = function (twisty, currentMove, moveProgress) {
+	let lastMoveProgress = 0;
+	const animateMoveCallback = function(twisty, currentMove, moveProgress) {
 		// Easing
 		moveProgress = twisty.options.easing(moveProgress);
-		var moves = currentMove.combination ? [currentMove, currentMove.combination] : [currentMove];
-		for (var move of moves) {
-			var canonical = alg.cube.canonicalizeMove(move, twisty.options.dimension);
-			if (canonical.base == ".") {
+		const moves = currentMove.combination ? [currentMove, currentMove.combination] : [currentMove];
+		for (const move of moves) {
+			const canonical = alg.cube.canonicalizeMove(move, twisty.options.dimension);
+			if (canonical.base === ".") {
 				return; // Pause
 			}
-			var rott = new THREE.Matrix4();
+			const rott = new THREE.Matrix4();
 			lastMoveProgress = moveProgress;
 			rott.makeRotationAxis(sidesRotAxis[canonical.base], (moveProgress * canonical.amount * Math.PI) / 2);
-			var state = twisty.cubePieces;
-			for (var faceIndex = 0; faceIndex < state.length; faceIndex++) {
-				var faceStickers = state[faceIndex];
-				for (var stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
+			const state = twisty.cubePieces;
+			for (let faceIndex = 0; faceIndex < state.length; faceIndex++) {
+				const faceStickers = state[faceIndex];
+				for (let stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
 					// TODO - sticker isn't really a good name for this --jfly
-					var sticker = state[faceIndex][stickerIndex];
+					const sticker = state[faceIndex][stickerIndex];
 					// Support negative layer indices (e.g. for rotations)
 					// TODO: Bug 20110906, if negative index ends up the same as start index, the animation is iffy.
-					var layerStart = canonical.startLayer;
-					var layerEnd = canonical.endLayer;
+					const layerStart = canonical.startLayer;
+					let layerEnd = canonical.endLayer;
 					if (layerEnd < 0) {
 						layerEnd = twisty.options.dimension + 1 + layerEnd;
 					}
-					var layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
-					if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && layer > twisty.options.dimension - 2 * layerEnd - 0.5) {
-						var roty = rott.clone();
+					const layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
+					if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && twisty.options.dimension - 2 * layerEnd - 0.5 < layer) {
+						const roty = rott.clone();
 						roty.multiply(sticker[0]);
 						sticker[1].matrix.copy(sticker[0]);
 						sticker[1].applyMatrix(rott);
@@ -483,44 +481,44 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	};
 
 	function matrix4Power(inMatrix, power) {
-		var matrix = null;
+		let matrix = null;
 		if (power < 0) {
 			matrix = new THREE.Matrix4();
 			matrix.getInverse(inMatrix);
 		} else {
 			matrix = inMatrix.clone();
 		}
-		var out = new THREE.Matrix4();
-		for (var i = 0; i < Math.abs(power); i++) {
+		const out = new THREE.Matrix4();
+		for (let i = 0; i < Math.abs(power); i++) {
 			out.multiply(matrix);
 		}
 		return out;
 	}
 
-	var cumulativeAlgorithm = [];
+	const cumulativeAlgorithm = [];
 
-	var advanceMoveCallback = function (twisty, currentMove) {
-		var moves = currentMove.combination ? [currentMove, currentMove.combination] : [currentMove];
-		for (var move of moves) {
-			var canonical = alg.cube.canonicalizeMove(move, twisty.options.dimension);
+	const advanceMoveCallback = function(twisty, currentMove) {
+		const moves = currentMove.combination ? [currentMove, currentMove.combination] : [currentMove];
+		for (const move of moves) {
+			const canonical = alg.cube.canonicalizeMove(move, twisty.options.dimension);
 			if (canonical.base === ".") {
 				return; // Pause
 			}
-			var rott = matrix4Power(sidesRot[canonical.base], canonical.amount);
-			var state = twisty.cubePieces;
-			for (var faceIndex = 0; faceIndex < state.length; faceIndex++) {
-				var faceStickers = state[faceIndex];
-				for (var stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
+			const rott = matrix4Power(sidesRot[canonical.base], canonical.amount);
+			const state = twisty.cubePieces;
+			for (let faceIndex = 0; faceIndex < state.length; faceIndex++) {
+				const faceStickers = state[faceIndex];
+				for (let stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
 					// TODO - sticker isn't really a good name for this --jfly
-					var sticker = state[faceIndex][stickerIndex];
-					var layerStart = canonical.startLayer;
-					var layerEnd = canonical.endLayer;
+					const sticker = state[faceIndex][stickerIndex];
+					const layerStart = canonical.startLayer;
+					let layerEnd = canonical.endLayer;
 					if (layerEnd < 0) {
 						layerEnd = twisty.options.dimension + 1 + layerEnd;
 					}
-					var layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
-					if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && layer > twisty.options.dimension - 2 * layerEnd - 0.5) {
-						var roty = rott.clone();
+					const layer = matrixVector3Dot(sticker[1].matrix, sidesNorm[canonical.base]);
+					if (layer < twisty.options.dimension - 2 * layerStart + 2.5 && twisty.options.dimension - 2 * layerEnd - 0.5 < layer) {
+						const roty = rott.clone();
 						roty.multiply(sticker[0]);
 						sticker[1].matrix.identity();
 						sticker[1].applyMatrix(roty);
@@ -536,15 +534,15 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 	};
 
 	function generateScramble(twisty) {
-		var dim = twisty.options.dimension;
-		var n = 32;
-		var newMoves = [];
-		for (var i = 0; i < n; i++) {
-			var startLayer = 1 + Math.floor((Math.random() * dim) / 2);
-			var endLayer = startLayer + Math.floor((Math.random() * dim) / 2);
-			var side = Math.floor(Math.random() * 6);
-			var amount = [-2, -1, 1, 2][Math.floor(Math.random() * 4)];
-			var newMove = {
+		const dim = twisty.options.dimension;
+		const n = 32;
+		const newMoves = [];
+		for (let i = 0; i < n; i++) {
+			const startLayer = 1 + Math.floor((Math.random() * dim) / 2);
+			const endLayer = startLayer + Math.floor((Math.random() * dim) / 2);
+			const side = Math.floor(Math.random() * 6);
+			const amount = [-2, -1, 1, 2][Math.floor(Math.random() * 4)];
+			const newMove = {
 				type: "move",
 				base: ["u", "l", "f", "r", "b", "d"][side],
 				amount: amount,
@@ -556,17 +554,17 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		return newMoves;
 	}
 
-	var iS = 1;
-	var oS = 1;
-	var iSi = cubeOptions.dimension;
-	var cubeKeyMapping = {
+	const iS = 1;
+	const oS = 1;
+	const iSi = cubeOptions.dimension;
+	const cubeKeyMapping = {
 		73: "R", 75: "R'",
 		87: "B", 79: "B'",
 		83: "D", 76: "D'",
 		68: "L", 69: "L'",
 		74: "U", 70: "U'",
 		72: "F", 71: "F'", // Heise
-		78: "F", 86: "F'", //Kirjava
+		78: "F", 86: "F'", // Kirjava
 		67: "l", 82: "l'",
 		85: "r", 77: "r'",
 		84: "x", 89: "x", 66: "x'", // 84 (T) and 89 (Y) are alternatives.
@@ -575,13 +573,13 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		190: "M'",
 	};
 
-	var keydownCallback = function (twisty, e) {
+	const keydownCallback = function(twisty, e) {
 		if (e.altKey || e.ctrlKey) {
 			return null;
 		}
-		var keyCode = e.keyCode;
+		const keyCode = e.keyCode;
 		if (keyCode in cubeKeyMapping) {
-			var move = alg.cube.fromString(cubeKeyMapping[keyCode])[0];
+			const move = alg.cube.fromString(cubeKeyMapping[keyCode])[0];
 			twistyScene.queueMoves(move);
 			twistyScene.play.start();
 			return move;
@@ -589,30 +587,30 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		return null;
 	};
 
-	var ogCubePiecesCopy = [];
-	for (var faceIndex = 0; faceIndex < cubePieces.length; faceIndex++) {
-		var faceStickers = cubePieces[faceIndex];
-		var ogFaceCopy = [];
+	const ogCubePiecesCopy = [];
+	for (let faceIndex = 0; faceIndex < cubePieces.length; faceIndex++) {
+		const faceStickers = cubePieces[faceIndex];
+		const ogFaceCopy = [];
 		ogCubePiecesCopy.push(ogFaceCopy);
-		for (var i = 0; i < faceStickers.length; i++) {
+		for (let i = 0; i < faceStickers.length; i++) {
 			ogFaceCopy.push(cubePieces[faceIndex][i][0].clone());
 		}
 	}
 
 	function areMatricesEqual(m1, m2) {
-		var flatM1 = m1.flattenToArrayOffset(new Array(16), 0);
-		var flatM2 = m2.flattenToArrayOffset(new Array(16), 0);
-		for (var i = 0; i < flatM1.length; i++) {
-			if (flatM1[i] != flatM2[i]) {
+		const flatM1 = m1.flattenToArrayOffset(new Array(16), 0);
+		const flatM2 = m2.flattenToArrayOffset(new Array(16), 0);
+		for (let i = 0; i < flatM1.length; i++) {
+			if (flatM1[i] !== flatM2[i]) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	var isSolved = function () {
-		var state = cubePieces;
-		var dimension = cubeOptions.dimension;
+	const isSolved = function() {
+		const state = cubePieces;
+		const dimension = cubeOptions.dimension;
 		// This implementation of isSolved simply checks that
 		// all polygons have returned to their original locations.
 		// There are 2 problems with this scheme:
@@ -629,31 +627,31 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		//
 		// We deal with center stickers by apply all 4 rotations to the original location.
 		// If any of them match the new location, then we consider the sticker solved.
-		var faceIndex = 0;
-		var stickerIndex = 0;
-		var stickerState = state[faceIndex][stickerIndex][0];
-		var netCubeRotations = new THREE.Matrix4();
+		let faceIndex = 0;
+		let stickerIndex = 0;
+		const stickerState = state[faceIndex][stickerIndex][0];
+		const netCubeRotations = new THREE.Matrix4();
 		netCubeRotations.getInverse(ogCubePiecesCopy[faceIndex][stickerIndex]);
 		netCubeRotations.multiplyMatrices(stickerState, netCubeRotations);
-		for (var faceIndex = 0; faceIndex < state.length; faceIndex++) {
-			var faceStickers = state[faceIndex];
-			for (var stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
+		for (faceIndex = 0; faceIndex < state.length; faceIndex++) {
+			const faceStickers = state[faceIndex];
+			for (stickerIndex = 0; stickerIndex < faceStickers.length; stickerIndex++) {
 				// TODO - sticker isn't really a good name for this --jfly
-				var currSticker = state[faceIndex][stickerIndex];
-				var currState = currSticker[0];
-				var i = Math.floor(stickerIndex / dimension);
-				var j = stickerIndex % dimension;
-				if (i > 0 && i < dimension - 1 && j > 0 && j < dimension - 1) {
+				const currSticker = state[faceIndex][stickerIndex];
+				const currState = currSticker[0];
+				let i = Math.floor(stickerIndex / dimension);
+				let j = stickerIndex % dimension;
+				if (0 < i && i < dimension - 1 && 0 < j && j < dimension - 1) {
 					// Center stickers can still be solved even if they didn't make it
 					// back to their original location (unless we're solving a supercube!)
 					// We could skip the true centers on odd cubes, but I see no reason to do
 					// so.
-					var face = index_side[faceIndex];
-					var rott = matrix4Power(sidesRot[face], 1);
-					var rotatedOgState = ogCubePiecesCopy[faceIndex][stickerIndex].clone();
-					var centerMatches = false;
-					for (var i = 0; i < 4; i++) {
-						var transformedRotatedOgState = new THREE.Matrix4();
+					const face = index_side[faceIndex];
+					const rott = matrix4Power(sidesRot[face], 1);
+					const rotatedOgState = ogCubePiecesCopy[faceIndex][stickerIndex].clone();
+					let centerMatches = false;
+					for (i = 0; i < 4; i++) {
+						const transformedRotatedOgState = new THREE.Matrix4();
 						transformedRotatedOgState.multiplyMatrices(netCubeRotations, rotatedOgState);
 						if (areMatricesEqual(currState, transformedRotatedOgState)) {
 							centerMatches = true;
@@ -666,7 +664,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 					}
 				} else {
 					// Every non-center sticker should return to exactly where it was
-					var ogState = new THREE.Matrix4();
+					const ogState = new THREE.Matrix4();
 					ogState.multiplyMatrices(netCubeRotations, ogCubePiecesCopy[faceIndex][stickerIndex]);
 					if (!areMatricesEqual(currState, ogState)) {
 						return false;
@@ -677,7 +675,7 @@ twisty.puzzles.cube = function (twistyScene, twistyParameters) {
 		return true;
 	};
 
-	var isInspectionLegalMove = function (move) {
+	const isInspectionLegalMove = function(move) {
 		if (["x", "y", "z"].indexOf(move.base) !== -1) {
 			return true;
 		}

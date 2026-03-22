@@ -8,12 +8,12 @@
 
 "use strict";
 
-if (typeof(assert) == "undefined") {
+if (typeof(assert) === "undefined") {
 	// TODO - this is pretty lame, we could use something like stacktrace.js
 	// to get some useful information here.
 	var assert = function(cond, str) {
 		if (!cond) {
-			if(str) {
+			if (str) {
 				throw str;
 			} else {
 				throw "Assertion Error";
@@ -22,7 +22,7 @@ if (typeof(assert) == "undefined") {
 	};
 }
 
-var twisty = {};
+const twisty = {};
 
 (function() {
 
@@ -39,7 +39,7 @@ twisty.puzzles = {};
 
 
 // TODO: Find a better way to expose this for multiple twisties on a page.
-twisty.cachedRenderer = {}
+twisty.cachedRenderer = {};
 twisty.cachedRenderer[THREE.CanvasRenderer] = null;
 twisty.cachedRenderer[THREE.WebGLRenderer] = null;
 twisty.cachedRenderer[THREE.SVGRenderer] = null;
@@ -47,39 +47,39 @@ twisty.cachedRenderer[THREE.SVGRenderer] = null;
 twisty.scene = function(options) {
 
 	// that=this is a Crockford convention for accessing "this" inside of methods.
-	var that = this;
+	const that = this;
 
 
 	/******** Constants ********/
 
-	var CONSTANTS = {
+	const CONSTANTS = {
 		CAMERA_HEIGHT_STICKY_MIN: 2,
 		CAMERA_HEIGHT_STICKY_MAX: 4,
 		DRAG_RESISTANCE_X: 256,
 		DRAG_RESISTANCE_Y: 60,
 		SCROLL_RESISTANCE_X: 1024,
 		SCROLL_RESISTANCE_Y: 180,
-	}
+	};
 
 
 	/******** Instance Variables ********/
 
-	var model = {
+	const model = {
 		twisty: null,
 		preMoveList: [],
 		moveList: [],
 		time: null,
 		position: null,
-	}
+	};
 
-	var view = {
+	const view = {
 		camera: null,
 		container: null,
 		scene: null,
 		renderer: null,
-	}
+	};
 
-	var control = {
+	const control = {
 		cameraTheta: null,
 		cameraHeight: CONSTANTS.CAMERA_HEIGHT_STICKY_MAX,
 		mouseXLast: null,
@@ -96,7 +96,7 @@ twisty.scene = function(options) {
 		animating: false,
 		isStep: false,
 		isBack: false,
-	}
+	};
 
 	this.debug = {
 		stats: null,
@@ -104,18 +104,18 @@ twisty.scene = function(options) {
 		view: view,
 		control: control,
 		cachedRenderer: false,
-	}
+	};
 
 
 	/******** General Initialization ********/
 
 
-	var iniDefaults = {
+	const iniDefaults = {
 		renderer: THREE.CanvasRenderer,
 		allowDragging: true,
 		stats: false,
 		cachedRenderer: false,
-	}
+	};
 
 	function initialize(options) {
 		options = getOptions(options, iniDefaults);
@@ -139,13 +139,13 @@ twisty.scene = function(options) {
 		model.twisty = createTwisty(twistyType);
 		view.scene.add(model.twisty["3d"]);
 		that.resize();
-	}
+	};
 
 	this.resize = function() {
-		var width = $(view.container).width();
-		var height = $(view.container).height()
-		var min = Math.min(width, height);
-		view.camera.setViewOffset(min, min, (min - width)/2, (min - height)/2, width, height);
+		const width = $(view.container).width();
+		const height = $(view.container).height()
+		const min = Math.min(width, height);
+		view.camera.setViewOffset(min, min, (min - width) / 2, (min - height) / 2, width, height);
 		moveCameraDelta(0, 0);
 		view.renderer.setSize(width, height);
 		renderOnce();
@@ -156,7 +156,7 @@ twisty.scene = function(options) {
 
 	view.initialize = function(Renderer) {
 		view.scene = new THREE.Scene();
-		view.camera = new THREE.PerspectiveCamera( 30, 1, 0.001, 1000 );
+		view.camera = new THREE.PerspectiveCamera(30, 1, 0.001, 1000);
 		if (that.debug.cachedRenderer && twisty.cachedRenderer[Renderer]) {
 			view.renderer = twisty.cachedRenderer[Renderer]
 		} else {
@@ -173,12 +173,12 @@ twisty.scene = function(options) {
 		if (that.debug.cachedRenderer) {
 			twisty.cachedRenderer[Renderer] = view.renderer;
 		}
-		var canvas = view.renderer.domElement;
+		const canvas = view.renderer.domElement;
 		$(canvas).css("position", "absolute").css("top", 0).css("left", 0);
-		var container = $("<div>").css("width", "100%").css("height", "100%");
+		const container = $("<div>").css("width", "100%").css("height", "100%");
 		view.container = container[0];
 		container.append(canvas);
-	}
+	};
 
 
 	/******** View: Rendering ********/
@@ -207,13 +207,13 @@ twisty.scene = function(options) {
 			control.cameraHeight = Math.max(-CONSTANTS.CAMERA_HEIGHT_STICKY_MAX, Math.min(CONSTANTS.CAMERA_HEIGHT_STICKY_MAX, height));
 		}
 		// We allow the height to enter a buffer from 2 to 3, but clip the display at 2.
-		var actualHeight = Math.max(-CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, Math.min(CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, control.cameraHeight));
-		var scale = model.twisty.cameraScale() + 1 - Math.pow(Math.abs(actualHeight)/CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, 2);
-		view.camera.position.x = 2.5*Math.sin(theta) * scale;
+		const actualHeight = Math.max(-CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, Math.min(CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, control.cameraHeight));
+		const scale = model.twisty.cameraScale() + 1 - Math.pow(Math.abs(actualHeight) / CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, 2);
+		view.camera.position.x = 2.5 * Math.sin(theta) * scale;
 		view.camera.position.y = actualHeight * scale;
-		view.camera.position.z = 2.5*Math.cos(theta) * scale;
-		view.camera.lookAt(new THREE.Vector3(0, -0.075 * scale * (actualHeight)/CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, 0));
-	}
+		view.camera.position.z = 2.5 * Math.cos(theta) * scale;
+		view.camera.lookAt(new THREE.Vector3(0, -0.075 * scale * (actualHeight) / CONSTANTS.CAMERA_HEIGHT_STICKY_MIN, 0));
+	};
 
 	function moveCameraDelta(deltaTheta, deltaHeight) {
 		that.setCameraPosition(control.cameraTheta + deltaTheta, control.cameraHeight + deltaHeight);
@@ -221,7 +221,7 @@ twisty.scene = function(options) {
 
 	// Detect modern versions of IE.
 	// I try to write browser-agnostic code, but even IE11 manages to break the wheel event.
-	var isIE = navigator.userAgent.indexOf("Trident") > -1;
+	const isIE = -1 < navigator.userAgent.indexOf("Trident");
 
 	/******** Control: Mouse/Touch Dragging ********/
 
@@ -231,9 +231,9 @@ twisty.scene = function(options) {
 		if (!isIE) {
 			view.container.addEventListener("wheel", onWheel, false);
 		}
-	}
+	};
 
-	var listeners = {
+	const listeners = {
 		"mouse": {
 			"mousemove": onMove,
 			"mouseup": onEnd,
@@ -242,7 +242,7 @@ twisty.scene = function(options) {
 			"touchmove": onMove,
 			"touchend": onEnd,
 		}
-	}
+	};
 
 	function eventKind(event) {
 		if (event instanceof MouseEvent) {
@@ -254,24 +254,24 @@ twisty.scene = function(options) {
 	}
 
 	function onStart(event) {
-		var kind = eventKind(event);
+		const kind = eventKind(event);
 		// Ignore multi-finger touches (e.g. pinch to zoom).
 		if (kind !== "touch" || event.touches.length === 1) {
-			control.mouseXLast = (kind == "mouse") ? event.clientX : event.touches[0].pageX;
-			control.mouseYLast = (kind == "mouse") ? event.clientY : event.touches[0].pageY;
+			control.mouseXLast = (kind === "mouse") ? event.clientX : event.touches[0].pageX;
+			control.mouseYLast = (kind === "mouse") ? event.clientY : event.touches[0].pageY;
 			renderOnce();
-			for (var listener in listeners[kind]) {
+			for (const listener in listeners[kind]) {
 				window.addEventListener(listener, listeners[kind][listener], false);
 			}
 		}
 	}
 
 	function onMove(event) {
-		var kind = eventKind(event);
-		var mouseX = (kind == "mouse") ? event.clientX : event.touches[0].pageX;
-		var mouseY = (kind == "mouse") ? event.clientY : event.touches[0].pageY;
-		var deltaX = (control.mouseXLast - mouseX) / CONSTANTS.DRAG_RESISTANCE_X;
-		var deltaY = -(control.mouseYLast - mouseY) / CONSTANTS.DRAG_RESISTANCE_Y;
+		const kind = eventKind(event);
+		const mouseX = (kind === "mouse") ? event.clientX : event.touches[0].pageX;
+		const mouseY = (kind === "mouse") ? event.clientY : event.touches[0].pageY;
+		const deltaX = (control.mouseXLast - mouseX) / CONSTANTS.DRAG_RESISTANCE_X;
+		const deltaY = -(control.mouseYLast - mouseY) / CONSTANTS.DRAG_RESISTANCE_Y;
 		moveCameraDelta(deltaX, deltaY);
 		control.mouseXLast = mouseX;
 		control.mouseYLast = mouseY;
@@ -280,22 +280,22 @@ twisty.scene = function(options) {
 	}
 
 	function onWheel(event) {
-		var deltaX = -("wheelDeltaX" in event ? event.wheelDeltaX : -event.deltaX) / CONSTANTS.SCROLL_RESISTANCE_X;
-		var deltaY = ("wheelDeltaY" in event ? event.wheelDeltaY : -event.deltaY) / CONSTANTS.SCROLL_RESISTANCE_Y;
+		const deltaX = -("wheelDeltaX" in event ? event.wheelDeltaX : -event.deltaX) / CONSTANTS.SCROLL_RESISTANCE_X;
+		const deltaY = ("wheelDeltaY" in event ? event.wheelDeltaY : -event.deltaY) / CONSTANTS.SCROLL_RESISTANCE_Y;
 		moveCameraDelta(deltaX, deltaY);
 		renderOnce();
 		event.preventDefault();
 	}
 
 	function onEnd(event) {
-		var kind = eventKind(event);
+		const kind = eventKind(event);
 		// Snap camera height to end of sticky region.
-		if (control.cameraHeight >= CONSTANTS.CAMERA_HEIGHT_STICKY_MIN) {
+		if (CONSTANTS.CAMERA_HEIGHT_STICKY_MIN <= control.cameraHeight) {
 			control.cameraHeight = CONSTANTS.CAMERA_HEIGHT_STICKY_MAX;
 		} else if (control.cameraHeight <= -CONSTANTS.CAMERA_HEIGHT_STICKY_MIN) {
 			control.cameraHeight = -CONSTANTS.CAMERA_HEIGHT_STICKY_MAX;
 		}
-		for (var listener in listeners[kind]) {
+		for (const listener in listeners[kind]) {
 			window.removeEventListener(listener, listeners[kind][listener], false);
 		}
 	}
@@ -304,19 +304,19 @@ twisty.scene = function(options) {
 	/******** Control: Keyboard ********/
 
 	this.keydown = function(e) {
-		var keyCode = e.keyCode;
-		var move = model.twisty.keydownCallback(model.twisty, e);
-		if (move != null) {
+		const keyCode = e.keyCode;
+		const move = model.twisty.keydownCallback(model.twisty, e);
+		if (move !== null) {
 			fireListener("moveStart", move);
 		}
 		switch (keyCode) {
 			case 37: // Left
-				moveCameraDelta(Math.PI/24);
+				moveCameraDelta(Math.PI / 24);
 				e.preventDefault();
 				renderOnce();
 				break;
 			case 39: // Right
-				moveCameraDelta(-Math.PI/24);
+				moveCameraDelta(-Math.PI / 24);
 				e.preventDefault();
 				renderOnce();
 				break;
@@ -331,13 +331,13 @@ twisty.scene = function(options) {
 	};
 
 	this.removeListener = function(kind, listener) {
-		var index = control.listeners[kind].indexOf(listener);
-		assert(index >= 0);
+		const index = control.listeners[kind].indexOf(listener);
+		assert(0 <= index);
 		delete control.listeners[kind][index];
 	};
 
 	function fireListener(kind, data) {
-		for(var i = 0; i < control.listeners[kind].length; i++) {
+		for (let i = 0; i < control.listeners[kind].length; i++) {
 			control.listeners[kind][i](data);
 		}
 	}
@@ -358,25 +358,25 @@ twisty.scene = function(options) {
 	}
 
 	function animFrame() {
-		if (model.position >= totalLength()) {
+		if (totalLength() <= model.position) {
 			model.position = totalLength();
 			setAnimating(false);
 		}
 		if (control.animating) {
-			var prevTime = model.time;
-			var prevPosition = model.position;
-			var currentMove = model.moveList[Math.floor(model.position)];
-			var amount = Math.abs(currentMove.amount);
+			const prevTime = model.time;
+			const prevPosition = model.position;
+			const currentMove = model.moveList[Math.floor(model.position)];
+			let amount = Math.abs(currentMove.amount);
 			if (currentMove.combination) {
 				amount = Math.max(amount, Math.abs(currentMove.combination.amount));
 			}
-			var speedCoef = 1 / (0.5 * (amount + 1));
+			const speedCoef = 1 / (0.5 * (amount + 1));
 			model.time = Date.now();
 			model.position = prevPosition + (model.time - prevTime) * control.speed * speedCoef * 1.5 / 1000;
-			if (Math.floor(model.position) > Math.floor(prevPosition)) {
+			if (Math.floor(prevPosition) < Math.floor(model.position)) {
 				// If we finished a move, snap to the beginning of the next. (Will never skip a move.)
 				model.position = Math.floor(prevPosition) + 1;
-				var prevMove = model.moveList[Math.floor(prevPosition)];
+				const prevMove = model.moveList[Math.floor(prevPosition)];
 				model.twisty["animateMoveCallback"](model.twisty, prevMove, 1);
 				model.twisty["advanceMoveCallback"](model.twisty, prevMove);
 				fireListener("moveAdvance");
@@ -401,23 +401,23 @@ twisty.scene = function(options) {
 			setAnimating(false);
 		}
 		if (control.animating) {
-			var prevTime = model.time;
-			var prevPosition = model.position;
-			var currentMove = model.moveList[Math.ceil(model.position) - 1];
-			var amount = Math.abs(currentMove.amount);
+			const prevTime = model.time;
+			const prevPosition = model.position;
+			const currentMove = model.moveList[Math.ceil(model.position) - 1];
+			let amount = Math.abs(currentMove.amount);
 			if (currentMove.combination) {
 				amount = Math.max(amount, Math.abs(currentMove.combination.amount));
 			}
-			var speedCoef = 1 / (0.5 * (amount + 1));
+			const speedCoef = 1 / (0.5 * (amount + 1));
 			model.time = Date.now();
 			model.position = prevPosition - (model.time - prevTime) * control.speed * speedCoef * 1.5 / 1000;
 			if (Number.isInteger(prevPosition) && prevPosition !== model.position) {
-				var invertedMove = alg.cube.invert([currentMove])[0];
+				const invertedMove = alg.cube.invert([currentMove])[0];
 				model.twisty["advanceMoveCallback"](model.twisty, invertedMove);
 				model.twisty["animateMoveCallback"](model.twisty, currentMove, 1);
 			} else if (Math.ceil(model.position) < Math.ceil(prevPosition)) {
 				model.position = Math.ceil(prevPosition) - 1;
-				var prevMove = model.moveList[Math.ceil(prevPosition) - 1];
+				const prevMove = model.moveList[Math.ceil(prevPosition) - 1];
 				model.twisty["animateMoveCallback"](model.twisty, prevMove, 0);
 				if (control.isStep) {
 					setStep(false);
@@ -456,11 +456,11 @@ twisty.scene = function(options) {
 
 	/******** Control: Playback ********/
 
-	var setupDefaults = {
+	const setupDefaults = {
 		init: [],
 		type: "generator",
 		speed: 1,
-	}
+	};
 
 	this.setupAnimation = function(algIn, options) {
 		options = getOptions(options, setupDefaults);
@@ -468,16 +468,16 @@ twisty.scene = function(options) {
 		setAnimating(false);
 		model.preMoveList = options.init;
 		if (options.type === "solve") {
-			var algInverse = alg.cube.invert(algIn);
+			const algInverse = alg.cube.invert(algIn);
 			model.preMoveList = model.preMoveList.concat(algInverse);
 		}
 		that.applyMoves(model.preMoveList);
 		that.queueMoves(algIn);
 		renderOnce();
-	}
+	};
 
 	this.applyMoves = function(moves) {
-		for (var i in moves) {
+		for (const i in moves) {
 			model.twisty["advanceMoveCallback"](model.twisty, moves[i]);
 		}
 	};
@@ -522,8 +522,8 @@ twisty.scene = function(options) {
 		// If we're somewhere on the same move, don't recalculate position.
 		// Else, recalculate from the beginning, since we don't have something clever yet.
 		if (Math.floor(position) !== that.getIndex() || force) {
-			var preMoveListSaved = model.preMoveList;
-			var moveListSaved = model.moveList;
+			const preMoveListSaved = model.preMoveList;
+			const moveListSaved = model.moveList;
 			// Hack
 			view.scene.remove(model.twisty["3d"]);
 			that.initializePuzzle(model.twisty.type);
@@ -534,54 +534,54 @@ twisty.scene = function(options) {
 		}
 		model.position = position;
 		if (position < totalLength()) {
-			var currentMove = model.moveList[Math.floor(model.position)];
+			const currentMove = model.moveList[Math.floor(model.position)];
 			model.twisty["animateMoveCallback"](model.twisty, currentMove, model.position % 1);
 		}
 		renderOnce();
 		// fireAnimation();
-	}
+	};
 
 	this.getPosition = function() {
 		return model.position;
-	}
+	};
 
 	this.getIndex = function() {
 		return Math.floor(model.position);
-	}
+	};
 
 	this.setIndex = function(idx) {
 		this.setPosition(Math.floor(idx));
-	}
+	};
 
 	this.getMaxPosition = function() {
 		return model.moveList.length;
-	}
+	};
 
 
 	/******** Getters/setters ********/
 
 	this.getMoveList = function() {
 		return model.moveList;
-	}
+	};
 
 	this.getDomElement = function() {
 		return view.container;
-	}
+	};
 
 	this.setSpeed = function(speed) {
 		control.speed = speed;
-	}
+	};
 
 	this.getCanvas = function() {
 		return view.renderer.domElement;
-	}
+	};
 
 
 	/******** Twisty ********/
 
 	function createTwisty(twistyType) {
-		var twistyCreateFunction = twisty.puzzles[twistyType.type];
-		if(!twistyCreateFunction) {
+		const twistyCreateFunction = twisty.puzzles[twistyType.type];
+		if (!twistyCreateFunction) {
 			err('model.twisty type "' + twistyType.type + '" is not recognized!');
 			return null;
 		}
@@ -593,10 +593,10 @@ twisty.scene = function(options) {
 
 	function startStats() {
 		that.debug.stats = new Stats();
-		that.debug.stats.domElement.style.position = "absolute";
 		that.debug.stats.domElement.style.top = "0px";
 		that.debug.stats.domElement.style.left = "0px";
-		view.container.appendChild( that.debug.stats.domElement );
+		that.debug.stats.domElement.style.position = "absolute";
+		view.container.appendChild(that.debug.stats.domElement);
 		$(that.debug.stats.domElement).click();
 	}
 
@@ -604,8 +604,8 @@ twisty.scene = function(options) {
 	/******** Convenience Functions ********/
 
 	function getOptions(input, defaults) {
-		var output = {};
-		for (var key in defaults) {
+		const output = {};
+		for (const key in defaults) {
 			output[key] = (key in input) ? input[key] : defaults[key];
 		}
 		return output;
